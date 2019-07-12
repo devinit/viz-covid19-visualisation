@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin-top: 20px;">
+  <div class="container-fluid" style="margin-top: 20px;">
     <div>
       <h1>
         {{ activityData ? activityData[0]["reporting-org"].narrative._text : 'Loading...' }} IATI data
