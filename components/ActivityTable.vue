@@ -1,7 +1,7 @@
 <template>
   <b-card bg-variant="light" style="margin-bottom: 20px;">
     <h3>
-      {{ activity.title.narrative._text }} (Total spend: {{ activity._attributes["default-currency"] }} {{ getTotalExpenditure(activity).toLocaleString(undefined, {
+      {{ activity.title.narrative._text }} (Total {{ transactionTypeName }}: {{ activity._attributes["default-currency"] }} {{ getTotalExpenditure(activity).toLocaleString(undefined, {
           maximumFractionDigits: 2
         })
      }})
@@ -44,7 +44,7 @@
 export default {
   components: {
   },
-  props: ['activity'],
+  props: ['activity', 'transactionType'],
   data() {
     return {
       currentPage: 1,
@@ -76,10 +76,15 @@ export default {
         ]
     }
   },
+  computed: {
+    transactionTypeName() {
+      return this.transactionType === "4" ? "expenditure" : "revenue"
+    }
+  },
   methods: {
     getTotalExpenditure(activity) {
       const transactions = activity.transaction.filter(
-        transaction => transaction["transaction-type"]["_attributes"]["code"] === "4"
+        transaction => transaction["transaction-type"]["_attributes"]["code"] === this.transactionType
         )
       const total = transactions.reduce(
         (total, currentValue) => total + parseFloat(currentValue["value"]._text), 0
