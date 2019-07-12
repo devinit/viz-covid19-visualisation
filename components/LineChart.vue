@@ -21,6 +21,7 @@ export default {
         scales: {
           yAxes: [
             {
+              stacked: true,
               ticks: {
                 beginAtZero: true
               }
@@ -67,9 +68,9 @@ export default {
       const datasets = lineChartData.map((ds, i) => {
         return {
           label: ds.sector,
-          borderColor: colours[i],
-          backgroundColor: colours[i],
-          fill: false,
+          borderColor: i < colours.length ? colours[i] : "#eeeeee",
+          backgroundColor: i < colours.length ? colours[i] : "#eeeeee",
+          fill: true,
           data: years.map(year =>
             ({
               x: year,
