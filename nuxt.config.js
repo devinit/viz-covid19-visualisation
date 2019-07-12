@@ -58,5 +58,7 @@ export default {
     extend(config, ctx) {
     }
   },
-  ...routerBase
+  router: {
+    base: '/pwyf-visualisation/'
+  }
 }
