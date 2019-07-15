@@ -2,11 +2,12 @@
   <div class="container-fluid" style="margin-top: 20px;">
     <div>
       <h1>
-        {{ activityData ? activityData[0]["reporting-org"].narrative._text : 'Loading...' }} IATI data
+        Publish What You Fund IATI Data Visualisation <span class="loading-text" v-if="activityData == null">(Loading...)</span>
       </h1>
       <div class="alert alert-warning">
-        <b>Disclaimer:</b> This site is unofficial, based on {{ activityData ? activityData[0]["reporting-org"].narrative._text : '' }} <a href="http://iatiregistry.org">IATI data</a>.
+        <b>Disclaimer:</b> This site is unofficial, based on <a href="http://publishwhatyoufund.org">Publish What You Fund</a>'s <a href="http://iatiregistry.org/publisher/pwyf">IATI data</a>.
       </div>
+      <p>The idea for this site was sparked by some debates about the appropriate granularity of open data and the limits of transparency. It can hopefully be seen as a contribution to those debates. The data published by Publish What You Fund about its own finances is possibly the most detailed and granular data released by any organisation. Presented here unchanged from the organisation's own IATI publication, it contains personnel costs aggregated by month, but otherwise every line item from the financial system is published. Revenue data is also published. The detailed expense classification (e.g. classification by salaries vs flights or hotel costs) is quite unique to Publish What You Fund's data; most other organisations publish much more aggregate data. The extent to which this approach could or should be replicated by other organisations is of course open for discussion.</p>
       <h3>Summary</h3>
       <b-form-group>
         <b-form-radio-group
@@ -44,9 +45,25 @@
         :activity="activity"
         :transactionType="transactionType" />
     </div>
+    <footer>
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <p>By <a href="http://twitter.com/mark_brough">@mark_brough</a></p>
+          <p><a href="http://github.com/markbrough/pwyf-visualisation">Source code on Github</a></p>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
-
+<style>
+.loading-text {
+  font-style: italic;
+  color: #cccccc;
+}
+#displaySummaryControls label, #transactionTypeControls label {
+  cursor: pointer;
+}
+</style>
 <script>
 import xmlJs from 'xml-js'
 import SummaryTable from '~/components/SummaryTable.vue'
@@ -69,7 +86,11 @@ export default {
           a["transaction-date"]["_attributes"]["iso-date"] < b["transaction-date"]["_attributes"]["iso-date"] ? -1 : 1
       ).reverse()
       transactions = transactions.filter(
-        transaction => transaction["transaction-type"]["_attributes"]["code"] === _this.transactionType
+        transaction => (
+          transaction["transaction-type"]["_attributes"]["code"] === _this.transactionType
+        ) && (
+          parseInt(transaction["transaction-date"]["_attributes"]["iso-date"].slice(0,4)) >= 2009
+        )
       )
       return transactions.map(transaction => ({
         'description': transaction.description.narrative._text,
