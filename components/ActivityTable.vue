@@ -68,6 +68,7 @@ export default {
           },
           {
             key: 'value',
+            label: `Value (${this.activity._attributes["default-currency"]})`,
             sortable: true,
             thStyle: "width: 20px;",
             thClass: "text-right",
@@ -84,8 +85,12 @@ export default {
   methods: {
     getTotalExpenditure(activity) {
       const transactions = activity.transaction.filter(
-        transaction => transaction["transaction-type"]["_attributes"]["code"] === this.transactionType
+        transaction => (
+          transaction["transaction-type"]["_attributes"]["code"] === this.transactionType
+        ) && (
+          parseInt(transaction["transaction-date"]["_attributes"]["iso-date"].slice(0,4)) >= 2009
         )
+      )
       const total = transactions.reduce(
         (total, currentValue) => total + parseFloat(currentValue["value"]._text), 0
         )
