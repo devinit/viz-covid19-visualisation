@@ -13,7 +13,13 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: "A simple (unofficial) visualisation to demonstrate the detail in Publish What You Fund's IATI data." }
+      { hid: 'description', name: 'description', content: "A simple (unofficial) visualisation to demonstrate the detail in Publish What You Fund's IATI data." },
+      { name: 'twitter:card', content: 'summary' },
+      { name: 'twitter:site', content: '@mark_brough' },
+      { name: 'twitter:title', content: 'Publish What You Fund IATI Visualisation' },
+      { name: 'twitter:description', content: "A simple (unofficial) visualisation to demonstrate the detail in Publish What You Fund's IATI data." },
+      { name: 'twitter:image', content: 'http://brough.io/pwyf-visualisation/visualisation.jpeg' },
+      { name: 'twitter:image:alt', content: 'Detailed expenditure data from 2009' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
