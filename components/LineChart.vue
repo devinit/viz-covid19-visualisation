@@ -23,7 +23,16 @@ export default {
             {
               stacked: true,
               ticks: {
-                beginAtZero: true
+                beginAtZero: true,
+                callback: function(value, index, values) {
+                  return value.toLocaleString(undefined, {
+                    maximumFractionDigits: 2
+                  })
+                }
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Value (GBP)'
               }
             }
           ],
