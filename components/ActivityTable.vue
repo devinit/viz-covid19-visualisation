@@ -1,11 +1,20 @@
 <template>
   <b-card bg-variant="light" style="margin-bottom: 20px;">
+    <b-btn
+      variant="secondary"
+      class="float-right"
+      size="sm"
+      :href="`http://d-portal.org/q.html?aid=${activity['iati-identifier']._text}`">View on D-Portal</b-btn>
     <h3>
       {{ activity.title.narrative._text }} (Total {{ transactionTypeName }}: {{ activity._attributes["default-currency"] }} {{ getTotalExpenditure(activity).toLocaleString(undefined, {
           maximumFractionDigits: 2
         })
      }})
     </h3>
+    <p class="lead">
+      {{ activity.description.narrative._text }}
+    </p>
+   </p>
     <no-ssr>
       <b-form-group
         label="Transactions per page"
