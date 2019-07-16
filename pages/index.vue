@@ -122,6 +122,8 @@ export default {
             activity.transactionsTable = this.makeTransactionsTable(activity.transaction, _this)
             return activity
           }
+        ).sort(
+          (a,b) => a["iati-identifier"]._text > b["iati-identifier"]._text ? 1 : -1
         )
         this.$nuxt.$loading.finish()
       }).catch(error => {
