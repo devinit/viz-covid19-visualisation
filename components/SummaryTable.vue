@@ -1,9 +1,11 @@
 <template>
   <div>
-    <LineChart
+    <BarChart
       v-if="displaySummary==='chart'"
-      :lineChartData="summaryData"
-      :years="years"
+      :barChartData="summaryData"
+      :labelField="summaryLabelField"
+      valueLabel="Number of projects"
+      valueField="number_of_projects"
       />
     <b-table
       v-if="displaySummary==='table'"
@@ -18,70 +20,61 @@
   </div>
 </template>
 <script>
-import LineChart from '~/components/LineChart.vue'
+import BarChart from '~/components/BarChart.vue'
 export default {
   components: {
-    LineChart
+    BarChart
   },
   data() {
     return {
-      years: []
     }
   },
-  props: ['activityData', 'displaySummary'],
+  props: ['activityData', 'displaySummary', 'summaryLabelField', 'codelists', 'getNarrative'],
   computed: {
     summaryData() {
-      const _years = new Set([])
       const _data = Object.values(this.activityData.reduce((summary, activity) => {
-        return activity.transactionsTable.reduce((summaryT, transaction) => {
-          const year = transaction.date.slice(0,4)
-          _years.add(year)
-          const target = summaryT[transaction.sector] ? summaryT[transaction.sector] : summaryT[transaction.sector] = {}
-          const createSummaryEntry = (target, transaction) => {
-            target.sector = transaction.sector
-            target.total_value = parseFloat(transaction.value)
-            target[`value_${year}`] = parseFloat(transaction.value)
-            return target
-          }
-          const updateSummaryEntry = (target, transaction) => {
-            target.total_value += parseFloat(transaction.value)
-            target[`value_${year}`] ? target[`value_${year}`] += parseFloat(transaction.value) : target[`value_${year}`] = parseFloat(transaction.value)
-            return target
-          }
-          target.total_value ? updateSummaryEntry(target, transaction) : createSummaryEntry(target, transaction)
-          return summaryT
-        }, summary)
+        const getOrg = (activity) => {
+          if (!activity.processed.reporting_org) { return "Unspecified" }
+          return activity.processed.reporting_org
+        }
+        const getCountry = (activity) => {
+          if (!activity.processed.recipient_country) { return "Unspecified" }
+          return activity.processed.recipient_country
+        }
+        if (this.summaryLabelField == "organisation") {
+          var target = summary[getOrg(activity)] ?
+            summary[getOrg(activity)] :
+            summary[getOrg(activity)] = {
+              'organisation': getOrg(activity)
+            }
+        } else if (this.summaryLabelField == "country") {
+          var target = summary[getCountry(activity)] ?
+            summary[getCountry(activity)] :
+            summary[getCountry(activity)] = {
+              'country': getCountry(activity)
+            }
+        }
+        target.number_of_projects ? target.number_of_projects += 1 : target.number_of_projects = 1
+        return summary
       }, {})
-      ).sort((a,b) => a.total_value > b.total_value ? 1 : -1
+      ).sort((a,b) => a.number_of_projects > b.number_of_projects ? 1 : -1
       ).reverse()
-      this.years = Array.from(_years).sort().reverse()
       return _data
     },
     summaryFields() {
       const out = [
         {
-          key: 'sector',
+          key: this.summaryLabelField,
           sortable: true
         },
         {
-          key: 'total_value',
+          key: 'number_of_projects',
           sortable: true,
           thClass: "text-right",
           tdClass: "text-right",
           formatter: 'valueFormatter'
         }
       ]
-      this.years.forEach((i) =>
-        {
-          out.push({
-          key: `value_${i}`,
-          sortable: true,
-          thClass: "text-right",
-          tdClass: "text-right",
-          formatter: 'valueFormatter'
-        })
-        }
-      )
 
       return out
     }

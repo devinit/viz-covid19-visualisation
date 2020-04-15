@@ -1,38 +1,37 @@
 <template>
-  <LineChart :data="makeDatasets(lineChartData)" :options="lineChartOptions" class="line-chart" />
+  <div>
+    <BarChart :data="makeDatasets(barChartData)" :options="barChartOptions" class="bar-chart" />
+  </div>
 </template>
 <style scoped>
-.line-chart {
-  height: 600px;
+.bar-chart {
+  height: 300px;
 }
 </style>
 <script>
-import LineChart from '~/components/Charts/line-chart'
+import BarChart from '~/components/Charts/bar-chart'
 export default {
-  name: 'SummaryLineChart',
+  name: 'SummaryBarChart',
   components: {
-    LineChart
+    BarChart
   },
-  props: ['lineChartData', 'years'],
+  props: ['barChartData', 'labelField', 'valueField', 'valueLabel'],
   data() {
     return {
-      lineChartOptions: {
+      barChartOptions: {
         maintainAspectRatio: false,
+        legend: {
+          display: false
+        },
         scales: {
           yAxes: [
             {
-              stacked: true,
               ticks: {
-                beginAtZero: true,
-                callback: function(value, index, values) {
-                  return value.toLocaleString(undefined, {
-                    maximumFractionDigits: 2
-                  })
-                }
+                beginAtZero: true
               },
               scaleLabel: {
                 display: true,
-                labelString: 'Value (GBP)'
+                labelString: this.valueLabel
               }
             }
           ],
@@ -58,14 +57,8 @@ export default {
       }
     }
   },
-  computed: {
-    lineChartYears() {
-      return [...this.years].reverse()
-    }
-  },
   methods: {
     makeDatasets(lineChartData) {
-      const years = this.lineChartYears
       const colours = [
         '#CF3D1E', '#F15623', '#F68B1F', '#FFC60B',
         '#DFCE21', '#BCD631', '#95C93D', '#48B85C',
@@ -74,21 +67,24 @@ export default {
         '#6E3F7C', '#6A246D', '#8A4873', '#EB0080',
         '#EF58A0', '#C05A89'
       ]
-      const datasets = lineChartData.map((ds, i) => {
-        return {
-          label: ds.organisation,
-          borderColor: i < colours.length ? colours[i] : "#eeeeee",
-          backgroundColor: i < colours.length ? colours[i] : "#eeeeee",
+
+      return {
+        datasets: [{
+          label: this.labelField,
           fill: true,
-          data: years.map(year =>
-            ({
-              x: year,
-              y: ds[`value_${year}`] ? Math.round(ds[`value_${year}`], 2) : 0.00
-            })
-          )
-        }
-      })
-      return { datasets: datasets, labels: years }
+          data: lineChartData.map((ds) => { return ds[this.valueField] }),
+          backgroundColor: colours
+        }],
+        labels: lineChartData.map((ds) => { return ds[this.labelField] }),
+      }
+      return {
+        label: this.labelField,
+        borderColor: i < colours.length ? colours[i] : "#eeeeee",
+        backgroundColor: i < colours.length ? colours[i] : "#eeeeee",
+        fill: true,
+        data: lineChartData.map((ds) => { return ds[this.valueField] })
+      }
+      return { datasets: datasets, labels: [`${this.labelField}`] }
     }
   }
 }

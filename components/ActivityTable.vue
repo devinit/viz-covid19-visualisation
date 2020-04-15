@@ -15,20 +15,6 @@
       {{ activity.description.narrative._text }}
     </p>
    </p>
-    <no-ssr>
-      <b-form-group
-        label="Transactions per page"
-        :label-for="`perPage_${activity['iati-identifier']._text}`"
-        label-cols-sm="4"
-        label-cols-lg="3"
-      >
-        <b-form-select
-          :id="`perPage_${activity['iati-identifier']._text}`"
-          v-model="perPage"
-          :options="perPageOptions"
-          />
-      </b-form-group>
-    </no-ssr>
     <b-table
       :id="`table_${activity['iati-identifier']._text}`"
       :items="activity.transactionsTable"
@@ -53,7 +39,7 @@
 export default {
   components: {
   },
-  props: ['activity', 'transactionType'],
+  props: ['activity', 'transactionType', 'transactionTypes'],
   data() {
     return {
       currentPage: 1,
@@ -88,11 +74,19 @@ export default {
   },
   computed: {
     transactionTypeName() {
-      return this.transactionType === "4" ? "expenditure" : "revenue"
+      return this.transactionTypes[this.transactionType]
+    },
+    transactionTypeOptions() {
+      return Object.entries(this.transactionTypes).map(tt => {
+        return {'value': tt[0], 'text': tt[1]}
+      })
     }
   },
   methods: {
     getTotalExpenditure(activity) {
+      if (!activity.transaction) {
+        return 0.00
+      }
       const transactions = activity.transaction.filter(
         transaction => (
           transaction["transaction-type"]["_attributes"]["code"] === this.transactionType

@@ -1,6 +1,6 @@
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
   router: {
-    base: '/pwyf-visualisation/'
+    base: '/visualisation/'
   }
 } : {}
 export default {
@@ -9,17 +9,19 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: 'Publish What You Fund IATI Visualisation',
+    title: 'COVID-19 Response Visualisation',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: "A simple (unofficial) visualisation to demonstrate the detail in Publish What You Fund's IATI data." },
+      { hid: 'description', name: 'description', content: "A simple (unofficial) visualisation of COVID-19 response data." },
+      /*
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:site', content: '@mark_brough' },
-      { name: 'twitter:title', content: 'Publish What You Fund IATI Visualisation' },
-      { name: 'twitter:description', content: "A simple (unofficial) visualisation to demonstrate the detail in Publish What You Fund's IATI data." },
+      { name: 'twitter:title', content: 'COVID-19 Response Visualisation' },
+      { name: 'twitter:description', content: "A simple (unofficial) visualisation of COVID-19 response data" },
       { name: 'twitter:image', content: 'http://brough.io/pwyf-visualisation/visualisation.jpeg' },
       { name: 'twitter:image:alt', content: 'Detailed expenditure data from 2009' }
+      */
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
