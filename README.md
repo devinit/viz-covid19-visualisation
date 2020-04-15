@@ -1,6 +1,6 @@
-# PWYF IATI Data Visualisation
+# COVID 19 visualisation
 
-> A simple visualisation using Publish What You Fund's published IATI data. Uses the detailed sector coding found in the data to visualise a nice graph over time.
+> A simple visualisation using published IATI data on COVID-19. Can optionally be used with a cache or using live data.
 
 ## Build Setup
 
