@@ -4,21 +4,21 @@
       <div class="alert alert-warning">
         <b>Notice:</b> This site is based on <a href="https://iatistandard.org">IATI data</a>.
       </div>
-      <template v-if="activities == null">
+      <template v-if="isBusy">
         <div class="text-center text-secondary">
           <b-spinner class="align-middle"></b-spinner>
           <strong>Loading...</strong>
         </div>
       </template>
       <template
-          v-if="activities != null">
+          v-if="!isBusy">
         <h3>Summary</h3>
         <b-row>
           <b-col>
             <b-form inline>
               <b-form-group>
                 <b-form-radio-group
-                  id="displaySummaryControls"
+                  class="displaySummaryControls"
                   v-model="displaySummary"
                   :options="[
                     {'value': 'chart', 'text': 'Chart'},{'value': 'table', 'text': 'Table'}
@@ -28,7 +28,7 @@
                   button-variant="outline-primary"
                 ></b-form-radio-group>
                 <b-form-radio-group
-                  id="displaySummaryControls"
+                  class="displaySummaryControls"
                   v-model="summaryLabelField"
                   :options="summaryLabelFields"
                   buttons
@@ -94,7 +94,7 @@
   </div>
 </template>
 <style>
-#displaySummaryControls label, #transactionTypeControls label {
+.displaySummaryControls label {
   cursor: pointer;
 }
 </style>
@@ -110,6 +110,7 @@ export default {
   },
   data() {
     return {
+      isBusy: true,
       title: config.head.title,
       description: config.description,
       activities: null,
@@ -137,19 +138,31 @@ export default {
   computed: {
     urls() {
       if (this.$store.state.useCache) {
-        return {
-          COUNTRIES_CODELIST_URL: `/cache/codelists/Country.json`,
-          V2_DATASTORE_API_URL: '/cache/data/datastore.xml',
-          DPORTAL_URL_1: `/cache/data/dportal-1.xml`,
-          DPORTAL_URL_2: `/cache/data/dportal-2.xml`
+        var urls = {
+          COUNTRIES_CODELIST_URL: `https://test.brough.io/covid19/cache/codelists/Country.json`,
+          V2_DATASTORE_API_URL: 'https://test.brough.io/covid19/cache/data/datastore.xml',
+          DPORTAL_URL_1: `https://test.brough.io/covid19/cache/data/dportal-1.xml`,
+          DPORTAL_URL_2: `https://test.brough.io/covid19/cache/data/dportal-2.xml`
         }
+        if (this.IATISource == 'dportal') {
+          urls.IATI_DATA_URLS = [urls.DPORTAL_URL_1, urls.DPORTAL_URL_2]
+        } else {
+          urls.IATI_DATA_URLS = [urls.V2_DATASTORE_API_URL]
+        }
+        return urls
       } else {
-        return {
+        var urls = {
           COUNTRIES_CODELIST_URL: `${this.CORS_ANYWHERE}https://codelists.codeforiati.org/api/json/en/Country.json`,
           V2_DATASTORE_API_URL: 'https://iati.cloud/search/activity?q=(title_narrative:%22COVID%22%20OR%20description_narrative:%22COVID%22%20OR%20humanitarian_scope_code:%22EP-2020-000012-001%22%20OR%20humanitarian_scope_code:%22HCOVD20%22%20OR%20tag_code:%22EP-2020-000012-001%22)&wt=xslt&tr=activity-xml.xsl&rows=500000',
           DPORTAL_URL_1: `${this.CORS_ANYWHERE}http://www.d-portal.org/q.xml?from=act&limit=-1distincton=aid&%2Fhumanitarian-scope@code=EP-2020-000012-001&view=active`,
           DPORTAL_URL_2: `${this.CORS_ANYWHERE}http://www.d-portal.org/q.xml?from=act&limit=-1distincton=aid&text_search=COVID&view=active`
         }
+        if (this.IATISource == 'dportal') {
+          urls.IATI_DATA_URLS = [urls.DPORTAL_URL_1, urls.DPORTAL_URL_2]
+        } else {
+          urls.IATI_DATA_URLS = [urls.V2_DATASTORE_API_URL]
+        }
+        return urls
       }
     },
     fields() {
@@ -192,6 +205,9 @@ export default {
     },
     useCache() {
       return this.$store.state.useCache
+    },
+    IATISource() {
+      return this.$store.state.IATISource
     }
   },
   methods: {
@@ -308,23 +324,21 @@ export default {
         }, {}))
       }
 
-      let _data = await Promise.all([
-        this.$axios.$get(`${this.urls.DPORTAL_URL_1}`, {
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-          }
-        }),
-        this.$axios.$get(`${this.urls.DPORTAL_URL_2}`, {
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-          }
+      let _data = await Promise.all(
+        this.urls.IATI_DATA_URLS.map(url=> {
+          return this.$axios.$get(`${url}`, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+            }
+          })
         })
-        ])
+      )
 
       var data = appendActivities(_data)
       this.originalActivityData = data
       this.activities = this.originalActivityData
       this.applyFilters()
+      this.isBusy = false
       this.$nuxt.$loading.finish()
     },
     applyFilters() {
@@ -347,6 +361,11 @@ export default {
   },
   watch: {
     useCache() {
+      this.isBusy = true
+      this.loadData()
+    },
+    IATISource() {
+      this.isBusy = true
       this.loadData()
     },
     selectedCountry() {
