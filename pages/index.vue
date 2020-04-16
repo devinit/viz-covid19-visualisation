@@ -85,9 +85,9 @@ export default {
     urls() {
       if (this.$store.state.useCache) {
         return {
-          EMERGENCY_URL: `cache/data/fts-emergency-${this.emergencyID}.json`,
-          PLAN_URL: `/cache/data/fts-plan-${this.planID}.json`,
-          FLOW_URL: `/cache/data/fts-flow-plan-${this.planID}.json`
+          EMERGENCY_URL: `https://test.brough.io/covid19/cache/data/fts-emergency-${this.emergencyID}.json`,
+          PLAN_URL: `https://test.brough.io/covid19/cache/data/fts-plan-${this.planID}.json`,
+          FLOW_URL: `https://test.brough.io/covid19/cache/data/fts-flow-plan-${this.planID}.json`
         }
       } else {
         return {
