@@ -7,12 +7,17 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item :to="{name: 'index'}" exact-active-class="active">Contributions</b-nav-item>
-          <b-nav-item :to="{name: 'activities'}" active-class="active">Activities</b-nav-item>
+          <b-nav-item :to="{name: 'index'}" exact-active-class="active">
+            Contributions
+          </b-nav-item>
+          <b-nav-item :to="{name: 'activities'}" active-class="active">
+            Activities
+          </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-form inline>
             <b-form-radio-group
+              v-if="$route.name && $route.name.match('activities')"
               v-model="IATISource"
               :options="[
                 {'value': 'dportal', 'text': 'D-Portal'},
@@ -21,6 +26,7 @@
               buttons
               button-variant="outline-dark"
               style="margin-right: 10px;"
+              class="displaySummaryControls"
             ></b-form-radio-group>
             <b-form-radio-group
               v-model="useCache"
@@ -30,6 +36,7 @@
               ]"
               buttons
               button-variant="outline-light"
+              class="displaySummaryControls"
             ></b-form-radio-group>
           </b-form>
         </b-navbar-nav>
@@ -66,6 +73,9 @@ html {
 }
 .settings {
   width:300px;
+}
+.displaySummaryControls label {
+  cursor: pointer;
 }
 </style>
 
