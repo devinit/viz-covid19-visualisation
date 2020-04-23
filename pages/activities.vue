@@ -12,51 +12,17 @@
       </template>
       <template
           v-if="!isBusy">
-        <h3>Summary</h3>
-        <b-row>
-          <b-col>
-            <b-form inline>
-              <b-form-group>
-                <b-form-radio-group
-                  class="displaySummaryControls"
-                  v-model="displaySummary"
-                  :options="[
-                    {'value': 'chart', 'text': 'Chart'},{'value': 'table', 'text': 'Table'}
-                  ]"
-                  name="displaySummaryControls"
-                  buttons
-                  button-variant="outline-primary"
-                ></b-form-radio-group>
-                <b-form-radio-group
-                  class="displaySummaryControls"
-                  v-model="summaryLabelField"
-                  :options="summaryLabelFields"
-                  buttons
-                  button-variant="outline-secondary"
-                ></b-form-radio-group>
-              </b-form-group>
-            </b-form>
-          </b-col>
-          <b-col  class="ml-auto text-right">
-            <b-form inline>
-              <b-form-group class="ml-auto">
-                <b-form-select
-                v-model="selectedCountry"
-                :options="countries"
-                :state="selectedCountry ? true : null"
-                style="max-width: 250px"></b-form-select>
-                <b-form-select
-                v-model="selectedReportingOrg"
-                :options="reportingOrgs"
-                :state="selectedReportingOrg ? true : null"
-                style="max-width: 250px"></b-form-select>
-              </b-form-group>
-            </b-form>
-          </b-col>
-        </b-row>
+        <h2>Activities</h2>
         <hr />
-
-        <SummaryTable
+        <IATISummaryPaneControls
+          :display-summary.sync="displaySummary"
+          :summary-label-field.sync="summaryLabelField"
+          :selected-country.sync="selectedCountry"
+          :countries="countries"
+          :selected-reporting-org.sync="selectedReportingOrg"
+          :reporting-orgs="reportingOrgs" />
+        <hr />
+        <IATISummaryPane
           v-if="activities"
           :activityData="activities"
           :displaySummary="displaySummary"
@@ -73,20 +39,8 @@
           sortable
         >
           <template v-slot:cell(title)="data">
-            <a :href="`http://d-portal.org/q.html?aid=${data.item['iati-identifier']._text}`"
-            target="_blank">{{ data.item.processed.title }}</a>
-          </template>
-          <template v-slot:cell(reported_by)="data">
-            {{ data.item.processed.reporting_org }}
-          </template>
-          <template v-slot:cell(implemented_by)="data">
-            {{ data.item.processed.implementing_orgs }}
-          </template>
-          <template v-slot:cell(recipient_country)="data">
-            {{ data.item.processed.recipient_country }}
-          </template>
-          <template v-slot:cell(committed)="data">
-            {{ data.item.processed.total_amounts }}
+            <a :href="`http://d-portal.org/q.html?aid=${data.item.iati_identifier}`"
+            target="_blank">{{ data.item.title }}</a>
           </template>
         </b-table>
       </template>
@@ -94,27 +48,23 @@
   </div>
 </template>
 <style>
-.displaySummaryControls label {
-  cursor: pointer;
-}
 </style>
 <script>
 import xmlJs from 'xml-js'
-import SummaryTable from '~/components/SummaryTable.vue'
+import IATISummaryPane from '~/components/SummaryPanes/IATI.vue'
+import IATISummaryPaneControls from '~/components/SummaryPanes/Controls/IATI.vue'
 import ActivityTable from '~/components/ActivityTable.vue'
 import config from '../nuxt.config'
 export default {
   components: {
-    ActivityTable,
-    SummaryTable
+    IATISummaryPaneControls,
+    IATISummaryPane,
+    ActivityTable
   },
   data() {
     return {
-      isBusy: true,
       title: config.head.title,
       description: config.description,
-      activities: null,
-      originalActivityData: null,
       displaySummary: 'chart',
       summaryLabelField: 'organisation',
       summaryLabelFields: [
@@ -128,14 +78,13 @@ export default {
         "4": "Expenditure"
       },
       selectedCountry: null,
-      selectedReportingOrg: null,
-      codelists: {
-        countries: {}
-      },
-      CORS_ANYWHERE: this.$store.state.CORSAnywhere
+      selectedReportingOrg: null
     }
   },
   computed: {
+    isBusy() {
+      return this.$store.state.originalActivityData.length == 0
+    },
     urls() {
       if (this.$store.state.useCache) {
         var urls = {
@@ -152,10 +101,10 @@ export default {
         return urls
       } else {
         var urls = {
-          COUNTRIES_CODELIST_URL: `${this.CORS_ANYWHERE}https://codelists.codeforiati.org/api/json/en/Country.json`,
+          COUNTRIES_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Country.json`, //`https://test.brough.io/covid19/cache/codelists/Country.json`,
           V2_DATASTORE_API_URL: 'https://iati.cloud/search/activity?q=(title_narrative:%22COVID%22%20OR%20description_narrative:%22COVID%22%20OR%20humanitarian_scope_code:%22EP-2020-000012-001%22%20OR%20humanitarian_scope_code:%22HCOVD20%22%20OR%20tag_code:%22EP-2020-000012-001%22)&wt=xslt&tr=activity-xml.xsl&rows=500000',
-          DPORTAL_URL_1: `${this.CORS_ANYWHERE}http://www.d-portal.org/q.xml?from=act&limit=-1distincton=aid&%2Fhumanitarian-scope@code=EP-2020-000012-001&view=active`,
-          DPORTAL_URL_2: `${this.CORS_ANYWHERE}http://www.d-portal.org/q.xml?from=act&limit=-1distincton=aid&text_search=COVID&view=active`
+          DPORTAL_URL_1: `https://d-portal.org/q.xml?from=act&limit=-1distincton=aid&%2Fhumanitarian-scope@code=EP-2020-000012-001`,
+          DPORTAL_URL_2: `https://d-portal.org/q.xml?from=act&limit=-1distincton=aid&text_search=COVID`
         }
         if (this.IATISource == 'dportal') {
           urls.IATI_DATA_URLS = [urls.DPORTAL_URL_1, urls.DPORTAL_URL_2]
@@ -166,16 +115,38 @@ export default {
       }
     },
     fields() {
-      return ["title", "reported_by", "implemented_by", "recipient_country", "committed"].map(field => {
-        return {
-          "key": field,
+      return [
+        {
+          "key": "title",
           "sortable": true
-        }
-      })
+        },
+        {
+          "key": "reporting_org",
+          "label": "Reported by",
+          "sortable": true
+        },
+        {
+          "key": "implementing_orgs",
+          "label": "Implemented by",
+          "sortable": true
+        },
+        {
+          "key": "recipient_country",
+          "sortable": true
+        },
+        {
+          "key": "committed",
+          "sortable": true,
+          formatter: "numberFormatter"
+        }]
+    },
+    codelists() {
+      return this.$store.state.codelists
     },
     countries() {
       var seenCountries = []
-      return this.originalActivityData.reduce((summary, activity) => {
+      return [{value: null, text: "All countries"}].concat(
+        this.originalActivityData.reduce((summary, activity) => {
         if (activity["recipient-country"] && !seenCountries.includes(activity["recipient-country"]._attributes.code)) {
           summary.push({value: activity["recipient-country"]._attributes.code, text: this.getCountryName(activity["recipient-country"])})
           seenCountries.push(activity["recipient-country"]._attributes.code)
@@ -186,31 +157,61 @@ export default {
           }
         }
         return summary
-      }, [{value: null, text: "All countries"}]).sort((a,b) =>
-          a.value < b.value ? -1 : 1
-      )
+      }, []).sort((a,b) =>
+          a.text < b.text ? -1 : 1
+      ))
     },
     reportingOrgs() {
       var seenReportingOrgs = []
-      return this.originalActivityData.reduce((summary, activity) => {
+      return [{value: null, text: "All reporting organisations"}].concat(
+        this.originalActivityData.reduce((summary, activity) => {
         if (activity["reporting-org"] && !seenReportingOrgs.includes(activity["reporting-org"]._attributes.ref)) {
           summary.push({value: activity["reporting-org"]._attributes.ref, text: this.getNarrative(activity["reporting-org"]) })
           seenReportingOrgs.push(activity["reporting-org"]._attributes.ref)
         }
         return summary
-      }, [{value: null, text: "All reporting organisations"}]).sort((a,b) =>
-          a.value < b.value ? -1 : 1
-      )
-
+      }, []).sort((a,b) =>
+          a.text < b.text ? -1 : 1
+      ))
     },
     useCache() {
       return this.$store.state.useCache
     },
     IATISource() {
       return this.$store.state.IATISource
+    },
+    originalActivityData() {
+      return this.$store.state.originalActivityData
+    },
+    activities() {
+      if (this.originalActivityData == []) { [] }
+      if ((this.selectedCountry == null) && (this.selectedReportingOrg == null)) {
+        return this.originalActivityData.map(activity=> {
+          return activity.processed
+        })
+      } else {
+        return this.originalActivityData.filter(activity => {
+          if ((this.selectedReportingOrg != null) && (this.selectedCountry != null)) {
+            return (activity.processed.reporting_org_ref == this.selectedReportingOrg) &&
+            (activity.processed.recipient_country_code == this.selectedCountry)
+          } else if (this.selectedReportingOrg != null) {
+            return activity.processed.reporting_org_ref == this.selectedReportingOrg
+          } else if (this.selectedCountry != null) {
+            return activity.processed.recipient_country_code == this.selectedCountry
+          }
+        }).map(activity=> {
+          return activity.processed
+        })
+      }
     }
   },
   methods: {
+    numberFormatter(value) {
+      return value ? value.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+      }) : ""
+    },
     getImplementingOrgs(participatingOrgs) {
       if (participatingOrgs == undefined) { return "" }
       var participatingOrgs = this.getArray(participatingOrgs)
@@ -238,16 +239,16 @@ export default {
     },
     getCountryName(recipient_country) {
       if (recipient_country == undefined) { return undefined }
-      return recipient_country.narrative ? this.getNarrative(recipient_country) : this.codelists.countries[recipient_country._attributes.code]
+      return this.codelists.countries[recipient_country._attributes.code] ? this.codelists.countries[recipient_country._attributes.code] : recipient_country.narrative ? this.getNarrative(recipient_country) : ''
     },
-    getTotalAmounts(activity) {
+    getTotalAmounts(activity, transactionType) {
       if (!activity.transaction) {
         return 0.00
       }
       if (activity.transaction.value) { activity.transaction = [activity.transaction] }
       const transactions = activity.transaction.filter(
         transaction => (
-          transaction["transaction-type"]["_attributes"]["code"] === this.transactionType
+          transaction["transaction-type"]["_attributes"]["code"] === transactionType
         ) && (
           parseInt(transaction["transaction-date"]["_attributes"]["iso-date"].slice(0,4)) >= 2009
         )
@@ -258,17 +259,16 @@ export default {
       return total
     },
     async setup() {
-      await this.$axios.$get(`${this.urls.COUNTRIES_CODELIST_URL}`, {
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-          }
-        }).then(data => {
-          this.codelists.countries = data.data.reduce((countries, country) => {
-            countries[country.code] = country.name
-            return countries
-          }, {})
-        })
-      this.loadData()
+     await this.$axios.$get(`${this.urls.COUNTRIES_CODELIST_URL}`, {
+        headers: {
+        }
+      }).then(data => {
+        this.$store.commit('setCodelists', data.data.reduce((countries, country) => {
+          countries[country.code] = country.name
+          return countries
+        }, {}))
+      })
+    this.loadData()
     },
     async loadData() {
       const anyRA = (activity, raType) => {
@@ -300,13 +300,15 @@ export default {
               activity.transaction = this.getArray(activity.transaction)
               activity["participating-org"] = this.getArray(activity["participating-org"])
               activity.processed = {
+                iati_identifier: activity['iati-identifier']._text,
                 title: getOrBlank(this.getNarrative(activity["title"])),
                 reporting_org: getOrBlank(this.getNarrative(activity["reporting-org"])),
                 reporting_org_ref: activity["reporting-org"] ? activity["reporting-org"]._attributes.ref : "",
                 recipient_country: getOrBlank(this.getCountryName(activity["recipient-country"])),
                 recipient_country_code: activity["recipient-country"] ? activity["recipient-country"]._attributes.code : "",
                 implementing_orgs: getOrBlank(this.getImplementingOrgs(activity["participating-org"])),
-                total_amounts: getOrBlank(this.getTotalAmounts(activity))
+                total_amounts: getOrBlank(this.getTotalAmounts(activity, "2")),
+                committed: getOrBlank(this.getTotalAmounts(activity, "2"))
               }
               return activity
             }
@@ -328,60 +330,45 @@ export default {
         this.urls.IATI_DATA_URLS.map(url=> {
           return this.$axios.$get(`${url}`, {
             headers: {
-              'X-Requested-With': 'XMLHttpRequest',
             }
           })
         })
       )
 
       var data = appendActivities(_data)
-      this.originalActivityData = data
-      this.activities = this.originalActivityData
-      this.applyFilters()
-      this.isBusy = false
+      this.$store.commit('setOriginalActivityData', data)
       this.$nuxt.$loading.finish()
-    },
-    applyFilters() {
-      if (this.originalActivityData == null) { return }
-      if ((this.selectedCountry == null) && (this.selectedReportingOrg == null)) {
-        this.activities = this.originalActivityData
-      } else {
-        this.activities = this.originalActivityData.filter(activity => {
-          if ((this.selectedReportingOrg != null) && (this.selectedCountry != null)) {
-            return (activity.processed.reporting_org_ref == this.selectedReportingOrg) &&
-            (activity.processed.recipient_country_code == this.selectedCountry)
-          } else if (this.selectedReportingOrg != null) {
-            return activity.processed.reporting_org_ref == this.selectedReportingOrg
-          } else if (this.selectedCountry != null) {
-            return activity.processed.recipient_country_code == this.selectedCountry
-          }
-        })
-      }
     }
   },
   watch: {
     useCache() {
-      this.isBusy = true
+      this.$store.commit('setOriginalActivityData', [])
       this.loadData()
     },
     IATISource() {
-      this.isBusy = true
+      this.$store.commit('setOriginalActivityData', [])
       this.loadData()
     },
-    selectedCountry() {
-      this.applyFilters()
+    selectedCountry(value) {
+      if (value) {
+        this.summaryLabelField = 'organisation'
+      }
     },
-    selectedReportingOrg() {
-      this.applyFilters()
+    selectedReportingOrg(value) {
+      if (value) {
+        this.summaryLabelField = 'country'
+      }
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this.$nuxt.$loading.start()
       if ("organisation" in this.$route.query) {
         this.selectedReportingOrg = this.$route.query.organisation
       }
-      this.setup()
+      if (Object.values(this.codelists.countries).length == 0) {
+        this.$nuxt.$loading.start()
+        this.setup()
+      }
     })
   }
 }

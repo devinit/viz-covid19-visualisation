@@ -4,27 +4,37 @@
       <div class="alert alert-warning">
         <b>Notice:</b> This site is based on <a href="https://fts.unocha.org/">UNOCHA FTS data</a>.
       </div>
-      <template>
-        <h3>Summary</h3>
+      <h2>Contributions</h2>
+      <hr />
+
+      <HRPSummaryPane :urls="urls" />
+
+      <template v-if="busy">
+        <div class="text-center text-secondary mb-4">
+          <b-spinner class="align-middle"></b-spinner>
+          <strong>Loading...</strong>
+        </div>
+      </template>
+      <template v-else>
+        <ContributionsSummaryPaneControls
+          :display-summary.sync="displaySummary"
+          :summary-label-field.sync="summaryLabelField"
+          :funding-organisation.sync="fundingOrganisation"
+          :funding-organisations="fundingOrganisations"
+          :implementing-organisation.sync="implementingOrganisation"
+          :implementing-organisations="implementingOrganisations" />
+        <hr />
         <ContributionsSummaryPane
-          :planID="planID"
-          :emergencyID="emergencyID"
-          :contributions-summary="contributionsSummary"
-          :urls="urls" />
+          :display-summary="displaySummary"
+          :summary-label-field="summaryLabelField"
+          :contributions="contributions" />
         <b-table :items="contributions" :fields="fields"
           sort-by="date"
-          :sort-desc="true"
-          :busy="busy">
-          <template v-slot:table-busy>
-            <div class="text-center text-secondary">
-              <b-spinner class="align-middle"></b-spinner>
-              <strong>Loading...</strong>
-            </div>
-          </template>
-          <template v-slot:cell(sourceObjects)="data">
+          :sort-desc="true">
+          <template v-slot:cell(source)="data">
             {{ data.item.source }}
           </template>
-          <template v-slot:cell(destinationObjects)="data">
+          <template v-slot:cell(destination)="data">
             <template v-if="data.item.destination in organisations">
               <nuxt-link
               :to="{name:'activities', query: { organisation: organisations[data.item.destination] }}"
@@ -57,31 +67,65 @@
 <style>
 </style>
 <script>
-import SummaryTable from '~/components/SummaryTable.vue'
 import ActivityTable from '~/components/ActivityTable.vue'
-import ContributionsSummaryPane from '~/components/ContributionsSummaryPane.vue'
+import ContributionsSummaryPane from '~/components/SummaryPanes/Contributions.vue'
+import HRPSummaryPane from '~/components/SummaryPanes/HRP.vue'
+import ContributionsSummaryPaneControls from '~/components/SummaryPanes/Controls/Contributions.vue'
 import config from '../nuxt.config'
 export default {
   components: {
     ActivityTable,
-    SummaryTable,
-    ContributionsSummaryPane
+    ContributionsSummaryPane,
+    ContributionsSummaryPaneControls,
+    HRPSummaryPane
   },
   data() {
     return {
       title: config.head.title,
       description: config.description,
-      contributions: [],
       organisations: {
-        'United Nations Development Programme': 'XM-DAC-41114'
+        'United Nations Development Programme': 'XM-DAC-41114',
+        'United Nations High Commissioner for Refugees': 'XM-DAC-41121'
       },
       planID: 952,
       emergencyID: 911,
-      busy: true,
-      CORS_ANYWHERE: this.$store.state.CORSAnywhere
+      CORS_ANYWHERE: this.$store.state.CORSAnywhere,
+      displaySummary: 'chart',
+      summaryLabelField: "fundingOrganisation",
+      fundingOrganisation: null,
+      implementingOrganisation: null
     }
   },
   computed: {
+    busy() {
+      return this.$store.state.contributions.length == 0
+    },
+    fundingOrganisations() {
+      var seenOrganisations = []
+      return [{value: null, text: "All funders"}].concat(
+        this.originalContributions.reduce((summary, contribution) => {
+        if (!seenOrganisations.includes(contribution.source)) {
+          summary.push({value: contribution.source, text: contribution.source })
+          seenOrganisations.push(contribution.source)
+        }
+        return summary
+      }, []).sort((a,b) =>
+          a.text < b.text ? -1 : 1
+      ))
+    },
+    implementingOrganisations() {
+      var seenOrganisations = []
+      return [{value: null, text: "All implementers"}].concat(
+        this.originalContributions.reduce((summary, contribution) => {
+        if (!seenOrganisations.includes(contribution.destination)) {
+          summary.push({value: contribution.destination, text: contribution.destination })
+          seenOrganisations.push(contribution.destination)
+        }
+        return summary
+      }, []).sort((a,b) =>
+          a.text < b.text ? -1 : 1
+      ))
+    },
     urls() {
       if (this.$store.state.useCache) {
         return {
@@ -91,49 +135,62 @@ export default {
         }
       } else {
         return {
-          EMERGENCY_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/fts/flow?emergencyId=${this.emergencyID}`,
+          EMERGENCY_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/fts/flow?emergencyId=${this.emergencyID}&limit=1000`,
           PLAN_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/plan/id/${this.planID}`,
-          FLOW_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/fts/flow?planId=${this.planID}`
+          FLOW_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/fts/flow?planId=${this.planID}&limit=1000`
         }
       }
     },
     fields() {
       return [
-      { key: "sourceObjects", "label": "Funder", sortable: true },
-      { key: "destinationObjects", "label": "Implementer", sortable: true },
+      { key: "id", "label": "ID", sortable: true },
+      { key: "source", "label": "Funder", sortable: true },
+      { key: "destination", "label": "Implementer", sortable: true },
       { key: "status", "label": "Status", sortable: true },
       { key: "date", "label": "Date", sortable: true },
-      { key: "amountUSD", "label": "Amount (USD)", sortable: true },
+      { key: "amountUSD", "label": "Amount (USD)", sortable: true, formatter: "numberFormatter"
+      },
       { key: "details", "label": "Details" }
       ]
     },
-    contributionsSummary() {
-      return Object.values(this.contributions.map(item => {
-        return {
-          organisation: item.source,
-          value: item.amountUSD
-        }
-      }).reduce((summary, item)=> {
-        if (!(item.organisation in summary)) {
-          summary[item.organisation] = {value: 0.0, organisation: item.organisation}
-        }
-        summary[item.organisation].value += item.value
-        return summary
-      }, {}))
-      .sort((a,b) => a.value > b.value ? 1 : -1
-      ).reverse().slice(0,10)
+    originalContributions() {
+      return this.$store.state.contributions
+    },
+    contributions() {
+      if (this.originalContributions == []) { [] }
+      if ((this.fundingOrganisation == null) && (this.implementingOrganisation == null)) {
+        return this.originalContributions
+      } else {
+        return this.originalContributions.filter(contribution => {
+          if ((this.fundingOrganisation != null) && (this.implementingOrganisation != null)) {
+            return (contribution.source == this.fundingOrganisation) &&
+            (contribution.destination == this.implementingOrganisation)
+          } else if (this.fundingOrganisation != null) {
+            return contribution.source == this.fundingOrganisation
+          } else if (this.implementingOrganisation != null) {
+            return contribution.destination == this.implementingOrganisation
+          }
+        })
+      }
     },
     useCache() {
       return this.$store.state.useCache
     }
   },
   methods: {
+    numberFormatter(value) {
+      return value ? value.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+      }) : ""
+    },
     getOrganisationName(organisation) {
-      return organisation.filter(item => {
+      var organisations = organisation.filter(item => {
         return item.type=="Organization"
       }).map(item=>{
         return item.name
-      }).join()
+      })
+      return organisations ? organisations.join() : ""
     },
     async loadData() {
       await this.$axios.$get(`${this.urls.EMERGENCY_URL}`, {
@@ -141,49 +198,39 @@ export default {
           'X-Requested-With': 'XMLHttpRequest',
         }
       }).then(response => {
-        this.contributions = this.processContributions(response.data.flows)
-        this.$nuxt.$loading.finish()
+        this.$store.commit('setContributions', this.processContributions(response.data.flows))
       })
-      this.busy=false
     },
     processContributions(contributions) {
-      return contributions.map(contribution => {
+      return contributions.filter(contribution=> {
+          return ((contribution.boundary == "incoming") && (contribution.onBoundary == "single"))
+        }).map(contribution => {
         contribution.source = this.getOrganisationName(contribution.sourceObjects)
         contribution.destination = this.getOrganisationName(contribution.destinationObjects)
         return contribution
       })
-    },
-    applyFilters() {
-      if ((this.selectedCountry == null) && (this.selectedReportingOrg == null)) {
-        this.activities = this.originalActivityData
-      } else {
-        this.activities = this.originalActivityData.filter(activity => {
-          if (this.selectedReportingOrg && this.selectedCountry) {
-            return (activity["reporting-org"]._attributes.ref == this.selectedReportingOrg) &&
-            (activity["recipient-country"] ? activity["recipient-country"]._attributes.code == this.selectedCountry : false)
-          } else if (this.selectedReportingOrg) {
-            return activity["reporting-org"]._attributes.ref == this.selectedReportingOrg
-          } else if (this.selectedCountry) {
-            return activity["recipient-country"] ? activity["recipient-country"]._attributes.code == this.selectedCountry : false
-          }
-        })
-      }
     }
   },
   watch: {
     useCache() {
       this.loadData()
     },
-    selectedCountry() {
-      this.applyFilters()
+    fundingOrganisation(value) {
+      if (value) {
+        this.summaryLabelField = 'implementingOrganisation'
+      } else {
+        this.summaryLabelField = 'fundingOrganisation'
+      }
     },
-    selectedReportingOrg() {
-      this.applyFilters()
+    implementingOrganisation(value) {
+      if (value) {
+        this.summaryLabelField = 'fundingOrganisation'
+      }
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this.$nuxt.$loading.start()
+      if (this.contributions.length) { return }
       this.loadData()
     })
   }

@@ -6,6 +6,7 @@
       :labelField="summaryLabelField"
       valueLabel="Number of projects"
       valueField="number_of_projects"
+      valuePrecision="0"
       />
     <b-table
       v-if="displaySummary==='table'"
@@ -34,12 +35,12 @@ export default {
     summaryData() {
       const _data = Object.values(this.activityData.reduce((summary, activity) => {
         const getOrg = (activity) => {
-          if (!activity.processed.reporting_org) { return "Unspecified" }
-          return activity.processed.reporting_org
+          if (!activity.reporting_org) { return "Unspecified" }
+          return activity.reporting_org
         }
         const getCountry = (activity) => {
-          if (!activity.processed.recipient_country) { return "Unspecified" }
-          return activity.processed.recipient_country
+          if (!activity.recipient_country) { return "Unspecified" }
+          return activity.recipient_country
         }
         if (this.summaryLabelField == "organisation") {
           var target = summary[getOrg(activity)] ?
