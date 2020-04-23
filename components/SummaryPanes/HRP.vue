@@ -65,7 +65,6 @@ export default {
       })
     },
     async loadData() {
-      console.log("loading contributions data")
       await Promise.all([this.loadRequirements(), this.loadFunded()])
     },
     formatNumber(number) {
