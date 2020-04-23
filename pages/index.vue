@@ -28,6 +28,8 @@
           :display-summary="displaySummary"
           :summary-label-field="summaryLabelField"
           :contributions="contributions" />
+          <hr />
+        <h3>{{ contributions.length }} Contributions</h3>
         <b-table :items="contributions" :fields="fields"
           sort-by="date"
           :sort-desc="true">
