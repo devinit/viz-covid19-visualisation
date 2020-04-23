@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>Summary</h3>
     <p class="text-muted">Funding against  <b>Coronavirus disease Outbreak - COVID -19</b></p>
     <BarChart
       v-if="displaySummary==='chart'"
