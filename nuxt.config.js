@@ -1,6 +1,6 @@
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
   router: {
-    base: '/visualisation/'
+    base: '/covid19/'
   }
 } : {}
 export default {
@@ -13,7 +13,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: "A simple (unofficial) visualisation of COVID-19 response data." },
+      { hid: 'description', name: 'description', content: "A simple visualisation of COVID-19 response data." },
       /*
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:site', content: '@mark_brough' },
