@@ -1,6 +1,7 @@
 <template>
   <div>
-    <BarChart :data="makeDatasets(barChartData)" :options="barChartOptions" class="bar-chart" />
+    <BarChart :data="chartData" :options="barChartOptions" class="bar-chart" v-if="barChartData" />
+    <p class="text-muted" v-if="barChartData.length > 20">Showing the top 20 entries. Click <b>Table</b> above to view all entries.</p>
   </div>
 </template>
 <style scoped>
@@ -15,7 +16,7 @@ export default {
   components: {
     BarChart
   },
-  props: ['barChartData', 'labelField', 'valueField', 'valueLabel'],
+  props: ['barChartData', 'labelField', 'valueField', 'valueLabel', 'valuePrecision', 'step'],
   data() {
     return {
       barChartOptions: {
@@ -23,11 +24,36 @@ export default {
         legend: {
           display: false
         },
+        tooltips: {
+          callbacks: {
+            title: ((tooltipItem, data) => {
+              return this.chartData.labels[tooltipItem[0].index]
+            }),
+            label: ((tooltipItem, data) => {
+              var label = this.valueLabel || '';
+
+              if (label) {
+                  label += ': ';
+              }
+              if (this.valuePrecision) {
+                label += tooltipItem.yLabel.toLocaleString(undefined, {
+                  maximumFractionDigits: this.valuePrecision,
+                  minimumFractionDigits: this.valuePrecision
+                })
+              } else {
+                label += tooltipItem.yLabel
+              }
+              return label;
+            })
+          }
+        },
         scales: {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true
+                beginAtZero: true,
+                precision: this.valuePrecision,
+                stepSize: this.step ? this.step : undefined
               },
               scaleLabel: {
                 display: true,
@@ -57,34 +83,22 @@ export default {
       }
     }
   },
-  methods: {
-    makeDatasets(lineChartData) {
+  computed: {
+    chartData() {
       const colours = [
-        '#CF3D1E', '#F15623', '#F68B1F', '#FFC60B',
-        '#DFCE21', '#BCD631', '#95C93D', '#48B85C',
-        '#00833D', '#00B48D', '#60C4B1', '#27C4F4',
-        '#478DCB', '#3E67B1', '#4251A3', '#59449B',
-        '#6E3F7C', '#6A246D', '#8A4873', '#EB0080',
-        '#EF58A0', '#C05A89'
+        "#6e40aa", "#6849b9", "#6153c7", "#585fd2", "#4e6cda", "#4479df", "#3988e1", "#2f96e0", "#26a5db", "#1fb3d3", "#1bc1c8", "#19cdbb", "#1bd9ac", "#20e29d", "#28ea8d", "#34f07e", "#44f470", "#56f665", "#6bf75c", "#81f558",
+        "#98f357", "#aff05b"
       ]
 
       return {
         datasets: [{
           label: this.labelField,
           fill: true,
-          data: lineChartData.map((ds) => { return ds[this.valueField] }),
+          data: this.barChartData.map((ds) => { return ds[this.valueField] }).slice(0,20),
           backgroundColor: colours
         }],
-        labels: lineChartData.map((ds) => { return ds[this.labelField] }),
+        labels: this.barChartData.map((ds) => { return ds[this.labelField] }).slice(0,20),
       }
-      return {
-        label: this.labelField,
-        borderColor: i < colours.length ? colours[i] : "#eeeeee",
-        backgroundColor: i < colours.length ? colours[i] : "#eeeeee",
-        fill: true,
-        data: lineChartData.map((ds) => { return ds[this.valueField] })
-      }
-      return { datasets: datasets, labels: [`${this.labelField}`] }
     }
   }
 }
