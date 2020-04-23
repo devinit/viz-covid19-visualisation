@@ -1,7 +1,7 @@
 {
-  "name": "pwyf-visualisation",
+  "name": "covid19-visualisation",
   "version": "1.0.0",
-  "description": "My splendid Nuxt.js project",
+  "description": "A simple visualisation of COVID-19 response data.",
   "author": "Mark Brough",
   "private": true,
   "scripts": {
