@@ -1,7 +1,9 @@
 <template>
   <div>
     <BarChart :data="chartData" :options="barChartOptions" class="bar-chart" v-if="barChartData" />
-    <p class="text-muted" v-if="barChartData.length > 20">Showing the top 20 entries. Click <b>Table</b> above to view all entries.</p>
+    <p class="text-muted mb-3 mt-3" v-if="barChartData.length > 20">
+      Showing the top 20 entries. Click <b>Table</b> above to view all entries.
+    </p>
   </div>
 </template>
 <style scoped>
