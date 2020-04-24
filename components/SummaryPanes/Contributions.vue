@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-muted">Funding against  <b>Coronavirus disease Outbreak - COVID -19</b></p>
+    <p class="text-muted">Funding against Emergency <b>Coronavirus disease Outbreak - COVID -19</b></p>
     <BarChart
       v-if="displaySummary==='chart'"
       :barChartData="contributionsSummary"
