@@ -13,6 +13,9 @@
           <b-nav-item :to="{name: 'activities'}" active-class="active">
             Activities
           </b-nav-item>
+          <b-nav-item :to="{name: 'about'}" active-class="active">
+            About
+          </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <b-form inline>
