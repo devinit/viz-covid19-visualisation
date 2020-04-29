@@ -52,6 +52,7 @@
 </style>
 <script>
 import xmlJs from 'xml-js'
+import axios from 'axios'
 import IATISummaryPane from '~/components/SummaryPanes/IATI.vue'
 import IATISummaryPaneControls from '~/components/SummaryPanes/Controls/IATI.vue'
 import ActivityTable from '~/components/ActivityTable.vue'
@@ -102,7 +103,7 @@ export default {
         return urls
       } else {
         var urls = {
-          COUNTRIES_CODELIST_URL: `http://brough.io/covid19/cache/codelists/Country.json`,
+          COUNTRIES_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Country.json`,
           V2_DATASTORE_API_URL: 'https://iati.cloud/search/activity?q=(title_narrative:%22COVID%22%20OR%20description_narrative:%22COVID%22%20OR%20humanitarian_scope_code:%22EP-2020-000012-001%22%20OR%20humanitarian_scope_code:%22HCOVD20%22%20OR%20tag_code:%22EP-2020-000012-001%22)&wt=xslt&tr=activity-xml.xsl&rows=500000',
           DPORTAL_URL_1: `https://d-portal.org/q.xml?from=act&limit=-1distincton=aid&%2Fhumanitarian-scope@code=EP-2020-000012-001`,
           DPORTAL_URL_2: `https://d-portal.org/q.xml?from=act&limit=-1distincton=aid&text_search=COVID`
@@ -260,10 +261,8 @@ export default {
       return total
     },
     async setup() {
-     await this.$axios.$get(`${this.urls.COUNTRIES_CODELIST_URL}`, {
-        headers: {
-        }
-      }).then(data => {
+     await axios.get(`${this.urls.COUNTRIES_CODELIST_URL}`).then(response => {
+        var data = response.data
         this.$store.commit('setCodelists', data.data.reduce((countries, country) => {
           countries[country.code] = country.name
           return countries
