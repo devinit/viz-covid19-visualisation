@@ -37,6 +37,7 @@
           :items="activities"
           :fields="fields"
           sortable
+          responsive
         >
           <template v-slot:cell(title)="data">
             <a :href="`http://d-portal.org/q.html?aid=${data.item.iati_identifier}`"
