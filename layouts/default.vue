@@ -45,7 +45,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-container style="min-width:600px;">
+    <b-container>
       <nuxt />
     </b-container>
   </div>
