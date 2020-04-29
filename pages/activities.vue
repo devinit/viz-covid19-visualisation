@@ -105,8 +105,8 @@ export default {
         var urls = {
           COUNTRIES_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Country.json`,
           V2_DATASTORE_API_URL: 'https://iati.cloud/search/activity?q=(title_narrative:%22COVID%22%20OR%20description_narrative:%22COVID%22%20OR%20humanitarian_scope_code:%22EP-2020-000012-001%22%20OR%20humanitarian_scope_code:%22HCOVD20%22%20OR%20tag_code:%22EP-2020-000012-001%22)&wt=xslt&tr=activity-xml.xsl&rows=500000',
-          DPORTAL_URL_1: `https://d-portal.org/q.xml?from=act&limit=-1distincton=aid&%2Fhumanitarian-scope@code=EP-2020-000012-001`,
-          DPORTAL_URL_2: `https://d-portal.org/q.xml?from=act&limit=-1distincton=aid&text_search=COVID`
+          DPORTAL_URL_1: `https://d-portal.org/q.xml?from=act&limit=-1&distincton=aid&%2Fhumanitarian-scope@code=EP-2020-000012-001`,
+          DPORTAL_URL_2: `https://d-portal.org/q.xml?from=act&limit=-1&distincton=aid&text_search=COVID`
         }
         if (this.IATISource == 'dportal') {
           urls.IATI_DATA_URLS = [urls.DPORTAL_URL_1, urls.DPORTAL_URL_2]
