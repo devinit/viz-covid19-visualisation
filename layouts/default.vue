@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="primary">
-      <b-navbar-brand :to="'/'">{{ title }}</b-navbar-brand>
+      <b-navbar-brand :to="'/'">COVID-19 Response</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
