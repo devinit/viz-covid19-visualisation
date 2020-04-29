@@ -2,7 +2,7 @@
   <div class="container-fluid" style="margin-top: 20px;">
     <div>
       <div class="alert alert-warning">
-        <b>Notice:</b> This site is based on <a href="https://iatistandard.org">IATI data</a>.
+        This is a prototype visualisation to track the COVID-19 response. Read more on the <nuxt-link :to="{name: 'index'}">about page</nuxt-link>.
       </div>
       <template v-if="isBusy">
         <div class="text-center text-secondary">
