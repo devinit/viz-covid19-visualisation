@@ -32,7 +32,8 @@
         <h3>{{ contributions.length }} Contributions</h3>
         <b-table :items="contributions" :fields="fields"
           sort-by="date"
-          :sort-desc="true">
+          :sort-desc="true"
+          responsive>
           <template v-slot:cell(source)="data">
             {{ data.item.source }}
           </template>
