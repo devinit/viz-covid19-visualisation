@@ -6,18 +6,18 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col>
+      <b-col md="6">
         <b-form inline>
           <b-form-group>
             <b-form-radio-group
-              class="displaySummaryControls"
+              class="displaySummaryControls mb-1"
               v-model="summary"
               :options="summaryDisplayOptions"
               buttons
               button-variant="outline-primary"
             ></b-form-radio-group>
             <b-form-radio-group
-              class="displaySummaryControls"
+              class="displaySummaryControls mb-1"
               v-model="summaryLabel"
               :options="summaryLabelOptions"
               buttons
@@ -26,18 +26,20 @@
           </b-form-group>
         </b-form>
       </b-col>
-      <b-col class="ml-auto text-right">
+      <b-col md="6" class="ml-lg-auto text-md-right">
         <b-form inline>
-          <b-form-group class="ml-auto">
+          <b-form-group class="ml-lg-auto">
             <b-form-select
             v-model="country"
             :options="countries"
             :state="country ? true : null"
+            class="mb-1"
             style="max-width: 250px"></b-form-select>
             <b-form-select
             v-model="organisation"
             :options="reportingOrgs"
             :state="organisation ? true : null"
+            class="mb-1"
             style="max-width: 250px"></b-form-select>
           </b-form-group>
         </b-form>
