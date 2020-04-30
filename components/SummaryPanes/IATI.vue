@@ -30,7 +30,7 @@ export default {
     return {
     }
   },
-  props: ['activityData', 'displaySummary', 'summaryLabelField', 'codelists', 'getNarrative'],
+  props: ['activityData', 'displaySummary', 'summaryLabelField', 'codelists'],
   computed: {
     summaryData() {
       const _data = Object.values(this.activityData.reduce((summary, activity) => {
