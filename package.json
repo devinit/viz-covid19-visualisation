@@ -22,8 +22,7 @@
     "popper.js": "^1.14.7",
     "push-dir": "^0.4.1",
     "vue": "^2.5.18",
-    "vue-chartjs": "^3.4.2",
-    "xml-js": "^1.6.11"
+    "vue-chartjs": "^3.4.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.9"
