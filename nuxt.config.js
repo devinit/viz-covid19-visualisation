@@ -8,15 +8,13 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: "A simple visualisation of COVID-19 response data." },
-      /*
+      { hid: 'description', name: 'description', content: "A prototype visualisation to track the COVID-19 response." },
       { name: 'twitter:card', content: 'summary' },
-      { name: 'twitter:site', content: '@mark_brough' },
+      { name: 'twitter:site', content: '@devinit' },
       { name: 'twitter:title', content: 'COVID-19 Response Visualisation' },
-      { name: 'twitter:description', content: "A simple (unofficial) visualisation of COVID-19 response data" },
-      { name: 'twitter:image', content: 'http://brough.io/pwyf-visualisation/visualisation.jpeg' },
-      { name: 'twitter:image:alt', content: 'Detailed expenditure data from 2009' }
-      */
+      { name: 'twitter:description', content: "A prototype visualisation to track the COVID-19 response" },
+      { name: 'twitter:image', content: 'https://covid19.humportal.org/visualisation.png' },
+      { name: 'twitter:image:alt', content: 'Coontributions to the COVID-19 emergency.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -25,7 +23,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#ffffff' },
+  loading: { color: '#ffffff', height: '5px' },
   /*
   ** Global CSS
   */
