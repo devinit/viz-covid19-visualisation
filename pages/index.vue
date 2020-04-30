@@ -186,9 +186,11 @@ export default {
       return organisations ? organisations.join() : ""
     },
     async loadData() {
+      this.$nuxt.$loading.start()
       await axios.get(`${this.urls.EMERGENCY_URL}`).then(response => {
         this.$store.commit('setContributions', this.processContributions(response.data.data.flows))
       })
+      this.$nuxt.$loading.finish()
     },
     processContributions(contributions) {
       return contributions.filter(contribution=> {
