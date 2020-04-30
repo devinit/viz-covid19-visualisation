@@ -172,12 +172,6 @@ export default {
           a.text < b.text ? -1 : 1
       ))
     },
-    useCache() {
-      return this.$store.state.useCache
-    },
-    IATISource() {
-      return this.$store.state.IATISource
-    },
     originalActivityData() {
       return this.$store.state.originalActivityData
     },
@@ -248,14 +242,6 @@ export default {
     }
   },
   watch: {
-    useCache() {
-      this.$store.commit('setOriginalActivityData', [])
-      this.loadData()
-    },
-    IATISource() {
-      this.$store.commit('setOriginalActivityData', [])
-      this.loadData()
-    },
     selectedCountry(value) {
       if (value) {
         this.summaryLabelField = 'organisation'

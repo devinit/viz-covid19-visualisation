@@ -20,6 +20,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   components: {
   },
@@ -47,21 +48,14 @@ export default {
   },
   methods: {
     async loadRequirements() {
-      return this.$axios.$get(`${this.urls.PLAN_URL}`, {
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      }).then(response => {
-        this.$store.commit('setPlanRequirements', response.data.revisedRequirements)
+      return axios.get(`${this.urls.PLAN_URL}`).then(response => {
+        this.$store.commit('setPlanRequirements', response.data.data.revisedRequirements)
       })
     },
     async loadFunded() {
-      return this.$axios.$get(`${this.urls.FLOW_URL}`, {
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      }).then(response => {
-        this.$store.commit('setPlanFunded', response.data.incoming.fundingTotal)
+      return axios.get(`${this.urls.FLOW_URL}`).then(response => {
+        console.log(response)
+        this.$store.commit('setPlanFunded', response.data.data.incoming.fundingTotal)
       })
     },
     async loadData() {

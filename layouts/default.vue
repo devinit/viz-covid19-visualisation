@@ -17,32 +17,6 @@
             About
           </b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav class="ml-auto">
-          <b-form inline>
-            <b-form-radio-group
-              v-if="$route.name && $route.name.match('activities')"
-              v-model="IATISource"
-              :options="[
-                {'value': 'dportal', 'text': 'D-Portal'},
-                {'value': 'datastore', 'text': 'Datastore'}
-              ]"
-              buttons
-              button-variant="outline-dark"
-              style="margin-right: 10px;"
-              class="displaySummaryControls"
-            ></b-form-radio-group>
-            <b-form-radio-group
-              v-model="useCache"
-              :options="[
-                {'value': false, 'text': 'Live'},
-                {'value': true, 'text': 'Cached'}
-              ]"
-              buttons
-              button-variant="outline-light"
-              class="displaySummaryControls"
-            ></b-form-radio-group>
-          </b-form>
-        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <b-container>
@@ -90,28 +64,6 @@ export default {
   data() {
     return {
       title: config.head.title
-    }
-  },
-  computed: {
-    useCache: {
-      // getter
-      get: function () {
-        return this.$store.state.useCache
-      },
-      // setter
-      set: function (newValue) {
-        this.$store.commit('toggleUseCache')
-      }
-    },
-    IATISource: {
-      // getter
-      get: function () {
-        return this.$store.state.IATISource
-      },
-      // setter
-      set: function (newValue) {
-        this.$store.commit('setIATISource', newValue)
-      }
     }
   }
 }

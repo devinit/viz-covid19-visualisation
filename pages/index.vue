@@ -75,6 +75,7 @@ import ContributionsSummaryPane from '~/components/SummaryPanes/Contributions.vu
 import HRPSummaryPane from '~/components/SummaryPanes/HRP.vue'
 import ContributionsSummaryPaneControls from '~/components/SummaryPanes/Controls/Contributions.vue'
 import config from '../nuxt.config'
+import axios from 'axios'
 export default {
   components: {
     ActivityTable,
@@ -130,18 +131,10 @@ export default {
       ))
     },
     urls() {
-      if (this.$store.state.useCache) {
-        return {
-          EMERGENCY_URL: `https://test.brough.io/covid19/cache/data/fts-emergency-${this.emergencyID}.json`,
-          PLAN_URL: `https://test.brough.io/covid19/cache/data/fts-plan-${this.planID}.json`,
-          FLOW_URL: `https://test.brough.io/covid19/cache/data/fts-flow-plan-${this.planID}.json`
-        }
-      } else {
-        return {
-          EMERGENCY_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/fts/flow?emergencyId=${this.emergencyID}&limit=1000`,
-          PLAN_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/plan/id/${this.planID}`,
-          FLOW_URL: `${this.CORS_ANYWHERE}https://api.hpc.tools/v1/public/fts/flow?planId=${this.planID}&limit=1000`
-        }
+      return {
+        EMERGENCY_URL: `https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-emergency-${this.emergencyID}.json`,
+        PLAN_URL: `https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-plan-${this.planID}.json`,
+        FLOW_URL: `https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-flow-plan-${this.planID}.json`
       }
     },
     fields() {
@@ -175,9 +168,6 @@ export default {
           }
         })
       }
-    },
-    useCache() {
-      return this.$store.state.useCache
     }
   },
   methods: {
@@ -196,12 +186,8 @@ export default {
       return organisations ? organisations.join() : ""
     },
     async loadData() {
-      await this.$axios.$get(`${this.urls.EMERGENCY_URL}`, {
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        }
-      }).then(response => {
-        this.$store.commit('setContributions', this.processContributions(response.data.flows))
+      await axios.get(`${this.urls.EMERGENCY_URL}`).then(response => {
+        this.$store.commit('setContributions', this.processContributions(response.data.data.flows))
       })
     },
     processContributions(contributions) {
@@ -215,9 +201,6 @@ export default {
     }
   },
   watch: {
-    useCache() {
-      this.loadData()
-    },
     fundingOrganisation(value) {
       if (value) {
         this.summaryLabelField = 'implementingOrganisation'
