@@ -35,12 +35,11 @@ export default {
     summaryData() {
       const _data = Object.values(this.activityData.reduce((summary, activity) => {
         const getOrg = (activity) => {
-          if (!activity.reporting_org) { return "Unspecified" }
-          return activity.reporting_org
+          return activity.reportingOrg.text
         }
         const getCountry = (activity) => {
           if (!activity.recipient_country) { return "Unspecified" }
-          return activity.recipient_country
+          return activity.recipient_country[0].text
         }
         if (this.summaryLabelField == "organisation") {
           var target = summary[getOrg(activity)] ?
