@@ -27,7 +27,8 @@
           :activityData="activities"
           :displaySummary="displaySummary"
           :summaryLabelField="summaryLabelField"
-          :codelists="codelists" />
+          :codelists="codelists"
+          :getCountryName="getCountryName" />
         <hr />
         <h3>{{ activities.length }} Activities</h3>
         <b-table
@@ -203,7 +204,7 @@ export default {
       }) : ""
     },
     getCountryName(recipient_country) {
-      return this.codelists.countries[recipient_country.code] ? this.codelists.countries[recipient_country.code] : recipient_country.text
+      return this.codelists.countries[recipient_country.code] ? this.codelists.countries[recipient_country.code] : "Unknown"
     },
     async setup() {
      await axios.get(`${this.urls.COUNTRIES_CODELIST_URL}`).then(response => {

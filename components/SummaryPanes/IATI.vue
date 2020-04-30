@@ -30,7 +30,7 @@ export default {
     return {
     }
   },
-  props: ['activityData', 'displaySummary', 'summaryLabelField', 'codelists'],
+  props: ['activityData', 'displaySummary', 'summaryLabelField', 'codelists', 'getCountryName'],
   computed: {
     summaryData() {
       const _data = Object.values(this.activityData.reduce((summary, activity) => {
@@ -38,8 +38,8 @@ export default {
           return activity.reportingOrg.text
         }
         const getCountry = (activity) => {
-          if (!activity.recipient_country) { return "Unspecified" }
-          return activity.recipient_country[0].text
+          if (activity.countriesRegions.length==0) { return "Unspecified" }
+          return this.getCountryName(activity.countriesRegions[0])
         }
         if (this.summaryLabelField == "organisation") {
           var target = summary[getOrg(activity)] ?
