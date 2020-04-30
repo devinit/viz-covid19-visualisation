@@ -27,8 +27,7 @@
           :activityData="activities"
           :displaySummary="displaySummary"
           :summaryLabelField="summaryLabelField"
-          :codelists="codelists"
-          :getNarrative="getNarrative" />
+          :codelists="codelists" />
         <hr />
         <h3>{{ activities.length }} Activities</h3>
         <b-table
@@ -63,7 +62,6 @@
 <style>
 </style>
 <script>
-import xmlJs from 'xml-js'
 import axios from 'axios'
 import IATISummaryPane from '~/components/SummaryPanes/IATI.vue'
 import IATISummaryPaneControls from '~/components/SummaryPanes/Controls/IATI.vue'
@@ -231,12 +229,8 @@ export default {
       })
     },
     async loadData() {
-      console.log("dataURL is", this.urls.DATA_URL)
-      let _data = await this.$axios.$get(`${this.urls.DATA_URL}`, {
-        headers: {
-        }
-      })
-      let data = this.processActivityData(_data)
+      let _data = await axios.get(`${this.urls.DATA_URL}`)
+      let data = this.processActivityData(_data.data)
       this.$store.commit('setOriginalActivityData', data)
       this.$nuxt.$loading.finish()
     }
