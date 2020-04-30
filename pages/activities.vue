@@ -140,7 +140,7 @@ export default {
       var seenCountries = []
       return [{value: null, text: "All countries"}].concat(
         this.originalActivityData.reduce((summary, activity) => {
-          if (activity.countriesRegions) {
+          if (activity.countriesRegions.length>0) {
             activity.countriesRegions.forEach(countryRegion=> {
               if (!seenCountries.includes(countryRegion.code)) {
                 summary.push({value: countryRegion.code, text: this.getCountryName(countryRegion)})
@@ -188,6 +188,7 @@ export default {
           } else if (this.selectedReportingOrg != null) {
             return activity.reportingOrg.ref == this.selectedReportingOrg
           } else if (this.selectedCountry != null) {
+            if (this.selectedCountry == "") { return activity.countriesRegions.length == 0 }
             return activity.countriesRegions.map(cr=> { return cr.code}).includes(this.selectedCountry)
           }
         }).map(activity=> {
@@ -204,7 +205,7 @@ export default {
       }) : ""
     },
     getCountryName(recipient_country) {
-      return this.codelists.countries[recipient_country.code] ? this.codelists.countries[recipient_country.code] : "Unknown"
+      return this.codelists.countries[recipient_country.code] ? this.codelists.countries[recipient_country.code] : `Unknown: ${recipient_country.code}`
     },
     async setup() {
      await axios.get(`${this.urls.COUNTRIES_CODELIST_URL}`).then(response => {
