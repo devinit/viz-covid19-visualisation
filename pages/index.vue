@@ -2,7 +2,7 @@
   <div class="container-fluid" style="margin-top: 20px;">
     <div>
       <div class="alert alert-warning">
-        This is a prototype visualisation to track the COVID-19 response. Read more on the <nuxt-link :to="{name: 'index'}">about page</nuxt-link>.
+        This is a prototype visualisation to track the COVID-19 response. Read more on the <nuxt-link :to="{name: 'about'}">about page</nuxt-link>.
       </div>
       <h2>Contributions</h2>
       <hr />
