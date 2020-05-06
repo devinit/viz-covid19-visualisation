@@ -131,6 +131,12 @@ export default {
           "label": "Total Amount (USD)",
           "sortable": true,
           formatter: "numberFormatter"
+        },
+        {
+          "key": "commitmentsCOVID",
+          "label": "COVID-specific (USD)",
+          "sortable": true,
+          formatter: "numberFormatter"
         }]
     },
     codelists() {
@@ -227,6 +233,7 @@ export default {
     processActivityData(data) {
       return data.map(activity=> {
         activity.totalAmountUSD = activity.commitmentsUSD ? activity.commitmentsUSD : activity.budgetsUSD
+        activity._cellVariants = { 'commitmentsCOVID': activity.COVIDComponent ? 'info' : null }
         return activity
       })
     },
