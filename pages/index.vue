@@ -29,7 +29,20 @@
           :summary-label-field="summaryLabelField"
           :contributions="contributions" />
           <hr />
-        <h3>{{ contributions.length }} Contributions</h3>
+        <b-row>
+          <b-col sm="7" md="9">
+            <h3>{{ contributions.length }} Contributions</h3>
+          </b-col>
+          <b-col sm="5" md="3" class="text-sm-right">
+            <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
+              <b-dropdown-item
+                v-for="downloadURL in downloadURLs"
+                v-bind:key="downloadURL.format"
+                :href="downloadURL.url"
+                target="_blank">{{ downloadURL.format }}</b-dropdown-item>
+            </b-dropdown>
+          </b-col>
+        </b-row>
         <b-table :items="contributions" :fields="fields"
           sort-by="date"
           :sort-desc="true"
@@ -97,7 +110,17 @@ export default {
       displaySummary: 'chart',
       summaryLabelField: "fundingOrganisation",
       fundingOrganisation: null,
-      implementingOrganisation: null
+      implementingOrganisation: null,
+      downloadURLs: [
+        {
+          "format": "Excel",
+          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/contributions.xlsx?raw=true"
+        },
+        {
+          "format": "JSON",
+          "url": "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-emergency-911.json"
+        }
+      ]
     }
   },
   computed: {
