@@ -54,6 +54,9 @@ html {
 .displaySummaryControls label {
   cursor: pointer;
 }
+.number-value {
+  text-align: right;
+}
 </style>
 
 <script>
