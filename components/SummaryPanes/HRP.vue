@@ -50,16 +50,11 @@ export default {
     async loadRequirements() {
       return axios.get(`${this.urls.PLAN_URL}`).then(response => {
         this.$store.commit('setPlanRequirements', response.data.data.revisedRequirements)
-      })
-    },
-    async loadFunded() {
-      return axios.get(`${this.urls.FLOW_URL}`).then(response => {
-        console.log(response)
-        this.$store.commit('setPlanFunded', response.data.data.incoming.fundingTotal)
+        this.$store.commit('setPlanFunded', response.data.data.fundedRequirements)
       })
     },
     async loadData() {
-      await Promise.all([this.loadRequirements(), this.loadFunded()])
+      await Promise.all([this.loadRequirements()])
     },
     formatNumber(number) {
       if (number > 1000000000) {
