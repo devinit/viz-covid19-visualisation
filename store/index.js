@@ -10,9 +10,11 @@ export const state = () => ({
   planRequirements: 0,
   planFunded: 0,
   codelists: {
-    countries: {}
+    countries: {},
+    organisationTypes: {}
   },
-  originalActivityData: []
+  originalActivityData: [],
+  originalFlows: []
 })
 
 export const mutations = {
@@ -31,11 +33,17 @@ export const mutations = {
   setPlanFunded(state, value) {
     state.planFunded = value
   },
-  setCodelists(state, codelists) {
+  setCodelistsCountry(state, codelists) {
     Vue.set(state.codelists, 'countries', codelists)
+  },
+  setCodelistsOrganisationType(state, codelists) {
+    Vue.set(state.codelists, 'organisationTypes', codelists)
   },
   setOriginalActivityData(state, activities) {
     state.originalActivityData = activities
+  },
+  setOriginalFlows(state, flows) {
+    state.originalFlows = flows
   }
 }
 
