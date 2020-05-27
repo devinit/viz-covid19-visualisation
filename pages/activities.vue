@@ -243,14 +243,14 @@ export default {
     async setup() {
      await axios.get(`${this.urls.COUNTRIES_CODELIST_URL}`).then(response => {
         var data = response.data
-        this.$store.commit('setCodelists', data.data.reduce((countries, country) => {
+        this.$store.commit('setCodelistsCountry', data.data.reduce((countries, country) => {
           countries[country.code] = country.name
           return countries
         }, {}))
       })
      await axios.get(`${this.urls.REGIONS_CODELIST_URL}`).then(response => {
         var data = response.data
-        this.$store.commit('setCodelists', data.data.reduce((countries, country) => {
+        this.$store.commit('setCodelistsCountry', data.data.reduce((countries, country) => {
           countries[country.code] = country.name
           return countries
         }, this.$store.state.codelists.countries))
