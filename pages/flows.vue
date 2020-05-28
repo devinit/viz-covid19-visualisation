@@ -18,7 +18,7 @@
           </b-form-select>
         </b-form-group>
         <hr />
-        <h3>Summary of disbursements and expenditure</h3>
+        <h3>Summary of disbursements and direct expenditure</h3>
         <b-alert show>
           Some organisations disburse on to other organisations, whereas others
           spend money directly. The below table shows the proportion of funds each
@@ -63,7 +63,10 @@
         <h3>Flows for each organisation</h3>
         <b-alert show>
           The below visualisation allows you to see the flows reported by each
-          organisation.
+          organisation. Select a reporting organisation from the drop down list below.
+          You will then see all of the organisations that they disburse money to on the
+          right hand side (generally, their implementing organisation). The greater the size
+          of the implementing organisation, the more money is being disbursed to that organisation.
         </b-alert>
         <b-form-group label="Reporting organisation">
           <b-form-select
@@ -81,7 +84,9 @@
         <h4>Data</h4>
         <b-table
           :fields="fieldsOrganisations"
-          :items="flowsOrganisations">
+          :items="flowsOrganisations"
+          sort-by="reporting_org_text"
+          fixed>
         </b-table>
       </template>
     </div>
@@ -108,7 +113,29 @@ export default {
         "4": "Expenditure"
       },
       downloadURLs: [],
-      fieldsOrganisations: ['reporting_org_text', 'provider_text', 'receiver_text', 'value_USD'],
+      fieldsOrganisations: [
+        {
+          key: 'reporting_org_text',
+          label: 'Reported by',
+          sortable: true
+        },
+        {
+          key: 'provider_text',
+          label: 'Provider',
+          sortable: true
+        },
+        {
+          key: 'receiver_text',
+          label: 'Receiver',
+          sortable: true
+        },
+        {
+          key: 'value_USD',
+          label: 'Value (USD)',
+          formatter: 'numberFormatter',
+          class: 'number-value',
+          sortable: true
+        }],
       selectedOrganisation: 'US-GOV-1',
       selectedReportingOrgType: '10'
     }
@@ -146,7 +173,7 @@ export default {
         },
         {
           "key": "expenditure_pct",
-          "label": "Expenditure %",
+          "label": "Direct Expenditure %",
           "sortable": true,
           formatter: "numberFormatter",
           class: 'number-value'
@@ -229,7 +256,7 @@ export default {
                 transaction_type: "Expenditure",
                 transaction_type_code: "4",
                 value_USD: 0.0,
-                receiver_text: "Expenditure",
+                receiver_text: "Direct Expenditure",
                 receiver_ref: null,
                 receiver_type: null
               }
@@ -266,10 +293,9 @@ export default {
   },
   methods: {
     numberFormatter(value) {
-      if (value == 0) { return "0.00" }
+      if (value == 0) { return "0" }
       return value ? value.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2
+        maximumFractionDigits: 0
       }) : ""
     },
     processFlows(flows) {
