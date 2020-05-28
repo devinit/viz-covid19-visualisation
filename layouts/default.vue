@@ -13,6 +13,9 @@
           <b-nav-item :to="{name: 'activities'}" active-class="active">
             Activities
           </b-nav-item>
+          <b-nav-item :to="{name: 'flows'}" active-class="active">
+            Flows
+          </b-nav-item>
           <b-nav-item :to="{name: 'about'}" active-class="active">
             About
           </b-nav-item>
