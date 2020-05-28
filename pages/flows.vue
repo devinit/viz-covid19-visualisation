@@ -146,7 +146,7 @@ export default {
     },
     urls() {
       return  {
-        DATA_URL: "/traceability_test.json",
+        DATA_URL: "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/traceability/traceability.json",
         ORGANISATION_TYPES: "https://codelists.codeforiati.org/api/json/en/OrganisationType.json"
       }
     },
