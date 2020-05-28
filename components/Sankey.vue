@@ -2,7 +2,9 @@
   <div>
     <template v-if="chartData.links.length>0">
       <div class='chart'>
-        <chart-sankey :data='chartData' :config='chartConfig'></chart-sankey>
+        <client-only>
+          <sankey-chart :chart-data="chartData"></sankey-chart>
+        </client-only>
       </div>
     </template>
     <template v-else>
@@ -20,33 +22,22 @@
   .chart{
     width: 100%;
     height: 500px;
-    overflow-y: scroll;
   }
 </style>
 
 <script>
-  import { ChartSankey } from 'vue-d2b'
+import SankeyChart from '~/components/Charts/sankey-chart.vue'
 
   export default {
     props: ['items'],
     data () {
       return {
-        maximumVisibleItems: 10,
-        chartConfig (config) {
-          config
-            .sankey()
-            .sankey()
-            .nodePadding(5)
-
-          config
-            .sankey()
-            .nodeDraggableY(true)
-        }
+        maximumVisibleItems: 10
       }
     },
 
     components: {
-      ChartSankey
+      SankeyChart
     },
     computed: {
       chartData() {
@@ -95,7 +86,6 @@
           nodes: nodes,
           links: links
         }
-        console.log("out", out)
         return out
       }
     }
