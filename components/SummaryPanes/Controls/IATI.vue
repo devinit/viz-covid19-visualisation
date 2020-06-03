@@ -27,22 +27,39 @@
         </b-form>
       </b-col>
       <b-col md="6" class="ml-lg-auto text-md-right">
-        <b-form inline>
-          <b-form-group class="ml-lg-auto">
-            <b-form-select
-            v-model="country"
-            :options="countries"
-            :state="country ? true : null"
-            class="mb-1"
-            style="max-width: 250px"></b-form-select>
-            <b-form-select
-            v-model="organisation"
-            :options="reportingOrgs"
-            :state="organisation ? true : null"
-            class="mb-1"
-            style="max-width: 250px"></b-form-select>
-          </b-form-group>
-        </b-form>
+        <b-row>
+          <b-form inline class="ml-lg-auto">
+            <b-form-group class="ml-lg-auto">
+              <b-form-select
+              v-model="country"
+              :options="countries"
+              :state="country ? true : null"
+              class="mb-1"
+              style="max-width: 250px"></b-form-select>
+              <b-form-select
+              v-model="organisation"
+              :options="reportingOrgs"
+              :state="organisation ? true : null"
+              class="mb-1"
+              style="max-width: 250px"></b-form-select>
+            </b-form-group>
+          </b-form>
+        </b-row>
+        <b-row>
+          <b-dropdown text="Humanitarian / development" variant="secondary" class="ml-lg-auto" size="sm">
+            <b-dropdown-form>
+              <b-form-group>
+                <b-form-checkbox-group
+                  v-model="humanitarianDevelopment"
+                  :options="humanitarianDevelopmentOptions"
+                  size="sm"
+                  stacked
+                  switches
+                ></b-form-checkbox-group>
+              </b-form-group>
+            </b-dropdown-form>
+          </b-dropdown>
+        </b-row>
       </b-col>
     </b-row>
   </div>
@@ -53,7 +70,7 @@ export default {
   },
   props: ["displaySummary", "summaryLabelField",
     "selectedCountry", "countries",
-    "selectedReportingOrg", "reportingOrgs"],
+    "selectedReportingOrg", "reportingOrgs", "selectedHumanitarianDevelopment"],
   data() {
     return {
       summaryLabelOptions: [
@@ -63,10 +80,26 @@ export default {
       summaryDisplayOptions: [
         {'value': 'chart', 'text': 'Chart'},
         {'value': 'table', 'text': 'Table'}
+      ],
+      humanitarianDevelopmentOptions: [
+        {'value': 'humanitarian', 'text': 'Humanitarian'},
+        {'value': 'humanitarian / development', 'text': 'Humanitarian / Development'},
+        {'value': 'development', 'text': 'Development'},
+        {'value': 'unspecified', 'text': 'Unspecified'}
       ]
     }
   },
   computed: {
+    humanitarianDevelopment: {
+     // getter
+      get: function () {
+        return this.selectedHumanitarianDevelopment
+      },
+      // setter
+      set: function (newValue) {
+        this.$emit('update:selectedHumanitarianDevelopment', newValue)
+      }
+    },
     summary: {
      // getter
       get: function () {
