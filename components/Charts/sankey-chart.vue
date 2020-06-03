@@ -67,25 +67,25 @@
           @mouseleave="mouseleaveLink(link.index)"
           v-bind:key="`${link.index}-label`">
             <text
-            :x="(width/2)"
+            :x="link.source.x1+(link.target.x0-link.source.x1)/2"
             :y="(link.y1 + link.y0) / 2"
-            :width="(width/2)"
+            :width="link.width"
             dy="0.35em"
             text-anchor="middle">
               From {{ link.source.name }}<br />
             </text>
             <text
-            :x="(width/2)"
+            :x="link.source.x1+(link.target.x0-link.source.x1)/2"
             :y="((link.y1 + link.y0) / 2)+15"
-            :width="(width/2)"
+            :width="link.width"
             dy="0.35em"
             text-anchor="middle">
               To {{ link.target.name }}<br />
             </text>
             <text
-            :x="(width/2)"
+            :x="link.source.x1+(link.target.x0-link.source.x1)/2"
             :y="((link.y1 + link.y0) / 2)+30"
-            :width="(width/3)"
+            :width="link.width"
             dy="0.35em"
             text-anchor="middle">
               USD {{ numberFormatter(link.value) }}<br />
