@@ -52,33 +52,44 @@ import SankeyChart from '~/components/Charts/sankey-chart.vue'
           }
           return value
         }
+        const getProvider = (item, transaction_type_code) => {
+          if (['3', '4'].includes(transaction_type_code)) {
+            return `${trimName(item.provider_text) || trimName(item.reporting_org_text) || "UNKNOWN"} »`
+          } else if (['1'].includes(transaction_type_code)) {
+            return `${trimName(item.provider_text)}`
+          }
+        }
+        const getReceiver = (item, transaction_type_code) => {
+          if (['3', '4'].includes(transaction_type_code)) {
+            return `» ${trimName(item.receiver_text)}`
+          } else if (['1'].includes(transaction_type_code)) {
+            return `${trimName(item.receiver_text)} »`
+          }
+        }
         let items = this.items.sort((a,b) =>
           a.value_USD > b.value_USD ? -1 : 1
         ).slice(0, this.maximumVisibleItems)
         let nodes = items.reduce((summary, item) => {
           var provider, receiver
-          if (['3', '4'].includes(item.transaction_type_code)) {
-            var provider = trimName(item.provider_text) || trimName(item.reporting_org_text)
-          } else {
-            var provider = trimName(item.provider_text) || "UNKNOWN"
+
+          var provider = getProvider(item, item.transaction_type_code)
+          var receiver = getReceiver(item, item.transaction_type_code)
+          if (!summary.includes(provider)) {
+            summary.push(provider)
           }
-          var receiver = trimName(item.receiver_text)
-          if (!summary.includes(`${provider} »`)) {
-            summary.push(`${provider} »`)
-          }
-          if (!summary.includes(`» ${receiver}`)) {
-            summary.push(`» ${receiver}`)
+          if (!summary.includes(receiver)) {
+            summary.push(receiver)
           }
           return summary
         }, []).map(item => {
           return {name: item}
         })
         let links = items.map(item => {
-          let provider = trimName(item.provider_text) || trimName(item.reporting_org_text)
-          let receiver = trimName(item.receiver_text)
+          let provider = getProvider(item, item.transaction_type_code)
+          let receiver = getReceiver(item, item.transaction_type_code)
           return {
-            source: `${provider} »`,
-            target: `» ${receiver}`,
+            source: provider,
+            target: receiver,
             value: Math.round(item.value_USD)
           }
         })
