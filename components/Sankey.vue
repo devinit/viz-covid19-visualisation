@@ -9,11 +9,11 @@
     </template>
     <template v-else>
       <b-alert show class="text-muted text-center" variant="warning">
-        No expenditure data available for this organisation.
+        No disbursements or direct expenditure published so far for this organisation.
       </b-alert>
     </template>
     <p class="text-muted mb-3 mt-3" v-if="items.length > maximumVisibleItems">
-      Showing the top {{ maximumVisibleItems }} entries. View all entries in the table below.
+      Showing the top {{ maximumVisibleItems }} entries. View all {{ items.length }} entries in the table below.
     </p>
   </div>
 </template>
