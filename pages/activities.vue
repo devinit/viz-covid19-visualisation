@@ -20,6 +20,7 @@
           :selected-country.sync="selectedCountry"
           :countries="countries"
           :selected-reporting-org.sync="selectedReportingOrg"
+          :selected-humanitarian-development.sync="selectedHumanitarianDevelopment"
           :reporting-orgs="reportingOrgs" />
         <hr />
         <IATISummaryPane
@@ -44,10 +45,42 @@
             </b-dropdown>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col sm="5" md="6" class="my-1">
+            <b-form-group
+              label="Activities per page"
+              label-cols-sm="7"
+              label-cols-md="7"
+              label-cols-lg="4"
+              label-cols-xl="3"
+              label-align-sm="right"
+              label-size="sm"
+              label-for="perPageSelect">
+              <b-form-select
+                v-model="perPage"
+                id="perPageSelect"
+                size="sm"
+                :options="[100,500,1000]"
+              ></b-form-select>
+            </b-form-group>
+          </b-col>
+          <b-col sm="7" md="6" class="my-1">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              align="fill"
+              size="sm"
+              class="my-0"
+            ></b-pagination>
+          </b-col>
+        </b-row>
         <b-table
           v-if="activities"
           :items="activities"
           :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
           sortable
           responsive
         >
@@ -69,6 +102,36 @@
             </span>
           </template>
         </b-table>
+        <b-row>
+          <b-col sm="5" md="6" class="my-1">
+            <b-form-group
+              label="Activities per page"
+              label-cols-sm="7"
+              label-cols-md="7"
+              label-cols-lg="4"
+              label-cols-xl="3"
+              label-align-sm="right"
+              label-size="sm"
+              label-for="perPageSelect">
+              <b-form-select
+                v-model="perPage"
+                id="perPageSelect"
+                size="sm"
+                :options="[100,500,1000]"
+              ></b-form-select>
+            </b-form-group>
+          </b-col>
+          <b-col sm="7" md="6" class="my-1">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              align="fill"
+              size="sm"
+              class="my-0"
+            ></b-pagination>
+          </b-col>
+        </b-row>
       </template>
     </div>
   </div>
@@ -105,6 +168,7 @@ export default {
       },
       selectedCountry: null,
       selectedReportingOrg: null,
+      selectedHumanitarianDevelopment: ['humanitarian', 'humanitarian / development', 'development', 'unspecified'],
       downloadURLs: [
         {
           "format": "Excel",
@@ -118,10 +182,15 @@ export default {
           "format": "XML",
           "url": "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/xml/activities.xml"
         }
-      ]
+      ],
+      currentPage: 1,
+      perPage: 100
     }
   },
   computed: {
+    totalRows() {
+      return this.activities.length
+    },
     isBusy() {
       return this.$store.state.originalActivityData.length == 0
     },
@@ -164,6 +233,11 @@ export default {
           "label": "COVID-specific (USD)",
           "sortable": true,
           formatter: "numberFormatter"
+        },
+        {
+          "key": "humanitarianDevelopment",
+          "label": "Humanitarian?",
+          "sortable": true
         }]
     },
     codelists() {
@@ -208,24 +282,24 @@ export default {
       return this.$store.state.originalActivityData
     },
     activities() {
-      if (this.originalActivityData == []) { [] }
-      if ((this.selectedCountry == null) && (this.selectedReportingOrg == null)) {
-        return this.originalActivityData.map(activity=> {
-          return activity
-        })
+      const _checkReportingOrg = (activity) => {
+        if (this.selectedReportingOrg == null) { return true }
+        return activity.reportingOrg.ref == this.selectedReportingOrg
+      }
+      const _checkCountry = (activity) => {
+        if (this.selectedCountry == null) { return true }
+        else if (this.selectedCountry == "") { return activity.countriesRegions.length == 0 }
+        return activity.countriesRegions.map(cr=> { return cr.code}).includes(this.selectedCountry)
+      }
+      const _checkHumanitarianDevelopment = (activity) => {
+        if (this.selectedHumanitarianDevelopment.length == 4) { return true }
+        return this.selectedHumanitarianDevelopment.includes(activity.humanitarianDevelopment)
+      }
+      if ((this.selectedCountry == null) && (this.selectedReportingOrg == null) && (this.selectedHumanitarianDevelopment.length == 4)) {
+        return this.originalActivityData
       } else {
         return this.originalActivityData.filter(activity => {
-          if ((this.selectedReportingOrg != null) && (this.selectedCountry != null)) {
-            return (activity.reportingOrg.ref == this.selectedReportingOrg) &&
-            (activity.countriesRegions.map(cr=> { return cr.code}).includes(this.selectedCountry))
-          } else if (this.selectedReportingOrg != null) {
-            return activity.reportingOrg.ref == this.selectedReportingOrg
-          } else if (this.selectedCountry != null) {
-            if (this.selectedCountry == "") { return activity.countriesRegions.length == 0 }
-            return activity.countriesRegions.map(cr=> { return cr.code}).includes(this.selectedCountry)
-          }
-        }).map(activity=> {
-          return activity
+          return _checkReportingOrg(activity) && _checkCountry(activity) && _checkHumanitarianDevelopment(activity)
         })
       }
     }
