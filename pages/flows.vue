@@ -68,25 +68,70 @@
           right hand side (generally, their implementing organisation). The greater the size
           of the implementing organisation, the more money is being disbursed to that organisation.
         </b-alert>
-        <b-form-group label="Reporting organisation">
-          <b-form-select
-            :options="reportingOrgs"
-            v-model="selectedOrganisation">
-          </b-form-select>
-        </b-form-group>
         <b-row>
-          <b-col><b-badge variant="dark">Reported by</b-badge></b-col>
+          <b-col md="9">
+            <b-form-group label="Publisher">
+              <b-form-select
+                :options="reportingOrgs"
+                v-model="selectedOrganisation">
+              </b-form-select>
+            </b-form-group>
+          </b-col>
+          <b-col md="3">
+            <b-alert variant="secondary" show>
+              <b-form-checkbox
+                :options="[true,false]"
+                v-model="showIncomingFunds"
+                size="sm"
+                switch
+                title="Show or hide incoming funds to this organisation."
+                v-b-tooltip>
+                Show incoming funds
+              </b-form-checkbox>
+              <b-form-checkbox
+                :options="[true,false]"
+                v-model="showRelatedOrganisations"
+                size="sm"
+                switch
+                title="Including data from partner organisations may lead to double-counting."
+                v-b-tooltip>
+                Include data from partner organisations
+              </b-form-checkbox>
+            </b-alert>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col><b-badge variant="dark">Funded by</b-badge></b-col>
           <b-col class="text-right"><b-badge variant="dark">Implemented by</b-badge></b-col>
         </b-row>
         <SankeyChart :items="flowsOrganisationsChart"/>
         <p>Note: the chart above is generated from the organisation's own IATI
         data. However, some data processing was required to standardise the data.</p>
-        <h4>Data</h4>
+        <h4>Disbursements and Direct Expenditure</h4>
         <b-table
           :fields="fieldsOrganisations"
-          :items="flowsOrganisations"
+          :items="flowsOrganisationsTableDisbursementsExpenditure"
           sort-by="reporting_org_text"
-          fixed>
+          fixed
+          show-empty>
+          <template v-slot:empty="scope">
+            <b-alert show class="text-muted text-center" variant="info">
+              No disbursements or direct expenditure published so far for this organisation.
+            </b-alert>
+          </template>
+        </b-table>
+        <h4>Incoming funds</h4>
+        <b-table
+          :fields="fieldsOrganisations"
+          :items="flowsOrganisationsTableIncomingFunds"
+          sort-by="reporting_org_text"
+          fixed
+          show-empty>
+          <template v-slot:empty="scope">
+            <b-alert show class="text-muted text-center" variant="info">
+              No incoming funds published so far for this organisation.
+            </b-alert>
+          </template>
         </b-table>
       </template>
     </div>
@@ -137,7 +182,9 @@ export default {
           sortable: true
         }],
       selectedOrganisation: 'US-GOV-1',
-      selectedReportingOrgType: '10'
+      selectedReportingOrgType: '10',
+      showIncomingFunds: true,
+      showRelatedOrganisations: true
     }
   },
   computed: {
@@ -238,10 +285,48 @@ export default {
         return summary
       }, {}))
     },
-    flowsOrganisationsChart() {
+    flowsOrganisationsTable() {
       return this.flowsOrganisations.filter(item => {
         return this.selectedOrganisation == item.reporting_org_ref
       })
+    },
+    flowsOrganisationsTableIncomingFunds() {
+      return this.flowsOrganisationsTable.filter(item => {
+        return (item.transaction_type_code == "1")
+        })
+    },
+    flowsOrganisationsTableDisbursementsExpenditure() {
+
+      var _transactions = this.flowsOrganisationsTable.filter(item => {
+        return ['3', '4'].includes(item.transaction_type_code)
+      })
+      if (this.showRelatedOrganisations) {
+        return _transactions.concat(this.originalFlows.filter(item => {
+          return (this.selectedOrganisation == item.provider_ref) &&
+          (this.selectedOrganisation != item.reporting_org_ref) &&
+          (item.transaction_type_code == '1')
+        }).map(item => {
+          return {
+            'reporting_org_text': item.reporting_org_text,
+            'provider_text': item.provider_text,
+            'provider_ref': item.provider_ref,
+            'provider_type': item.provider_type,
+            'transaction_type': 'Disbursement',
+            'transaction_type_code': '4',
+            'value_USD': item.value_USD,
+            'receiver_text': item.receiver_text,
+            'receiver_ref': item.receiver_ref,
+            'receiver_type': item.receiver_type
+          }
+        }))
+      }
+      return _transactions
+    },
+    flowsOrganisationsChart() {
+      if (!(this.showIncomingFunds)) {
+        return this.flowsOrganisationsTableDisbursementsExpenditure
+      }
+      return this.flowsOrganisationsTableDisbursementsExpenditure.concat(this.flowsOrganisationsTableIncomingFunds)
     },
     flowsOrganisations() {
       let expenditure = Object.values(
@@ -253,6 +338,7 @@ export default {
                 reporting_org_text: item.reporting_org_text,
                 reporting_org_ref: item.reporting_org_ref,
                 reporting_org_type: item.reporting_org_type,
+                provider_text: item.provider_text,
                 transaction_type: "Expenditure",
                 transaction_type_code: "4",
                 value_USD: 0.0,
@@ -266,7 +352,7 @@ export default {
           }, {})
         )
       let disbursements = this.flows.filter(item => {
-        return ['3'].includes(item.transaction_type_code)
+        return ['1', '3'].includes(item.transaction_type_code)
       })
       return expenditure.concat(disbursements)
     },
