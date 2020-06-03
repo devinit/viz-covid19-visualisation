@@ -59,12 +59,12 @@
             {{ data.item.reportingOrg.text }}
           </template>
           <template v-slot:cell(implementingOrganisations)="data">
-            <span v-for="org in (data.item.participatingOrganisation ? data.item.participatingOrganisation[4] : [])" :key="org.text">
+            <span v-for="(org, orgindex) in (data.item.participatingOrganisation ? data.item.participatingOrganisation[4] : [])" :key="`${data.index}-${org.text}-${orgindex}`">
               {{ org.text }}
             </span>
           </template>
           <template v-slot:cell(countriesRegions)="data">
-            <span v-for="countryRegion in data.item.countriesRegions" :key="countryRegion.code">
+            <span v-for="countryRegion in data.item.countriesRegions" :key="`${data.index}-${countryRegion.code}`">
               {{ getCountryName(countryRegion) }}
             </span>
           </template>
