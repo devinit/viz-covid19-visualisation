@@ -102,7 +102,10 @@ export default {
       description: config.description,
       organisations: {
         'United Nations Development Programme': 'XM-DAC-41114',
-        'United Nations High Commissioner for Refugees': 'XM-DAC-41121'
+        'United Nations High Commissioner for Refugees': 'XM-DAC-41121',
+        "United Nations Children's Fund": 'XM-DAC-41122',
+        "Danish Refugee Council": 'DK-CVR-20699310',
+        "World Health Organization": 'XM-DAC-928'
       },
       planID: 952,
       emergencyID: 911,
