@@ -1,6 +1,6 @@
-# COVID 19 visualisation
+# Covid-19 visualisation
 
-> A simple visualisation using published FTS and IATI data on COVID-19. Can optionally be used with a cache or using live data.
+> A simple visualisation using published FTS and IATI data on Covid-19. Can optionally be used with a cache or using live data.
 
 ## Build Setup
 
