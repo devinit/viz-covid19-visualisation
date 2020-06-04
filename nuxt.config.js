@@ -52,6 +52,11 @@ export default {
   /*
   ** Build configuration
   */
+  buildModules: [
+    ['@nuxtjs/google-analytics', {
+      id: 'UA-6109435-18'
+    }]
+  ],
   build: {
     /*
     ** You can extend webpack config here
