@@ -2,7 +2,7 @@
   <div class="container-fluid" style="margin-top: 20px;">
     <div>
       <div class="alert alert-warning">
-        This is a prototype visualisation to track the Covid-19 response. Read more on the <nuxt-link :to="{name: 'about'}">about page</nuxt-link>.
+        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from <a href="https://iatistandard.org">IATI</a>. Read more on the <nuxt-link :to="{name: 'about'}">about page</nuxt-link>.
       </div>
       <template v-if="isBusy">
         <div class="text-center text-secondary">
