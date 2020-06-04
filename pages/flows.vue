@@ -13,10 +13,23 @@
       <template
           v-if="!isBusy">
         <h2>Flows between organisations</h2>
-        <b-form-group label="Organisation Type">
-          <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType">
-          </b-form-select>
-        </b-form-group>
+        <b-row>
+          <b-col sm="7" md="9">
+            <b-form-group label="Organisation Type">
+              <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType">
+              </b-form-select>
+            </b-form-group>
+          </b-col>
+          <b-col sm="5" md="3" class="text-sm-right">
+            <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
+              <b-dropdown-item
+                v-for="downloadURL in downloadURLs"
+                v-bind:key="downloadURL.format"
+                :href="downloadURL.url"
+                target="_blank">{{ downloadURL.format }}</b-dropdown-item>
+            </b-dropdown>
+          </b-col>
+        </b-row>
         <hr />
         <h3>Summary of disbursements and direct expenditure</h3>
         <b-alert show>
@@ -184,7 +197,21 @@ export default {
       selectedOrganisation: 'US-GOV-1',
       selectedReportingOrgType: '10',
       showIncomingFunds: true,
-      showRelatedOrganisations: true
+      showRelatedOrganisations: true,
+      downloadURLs: [
+        {
+          "format": "Excel (transactional data)",
+          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/transactions.xlsx?raw=true"
+        },
+        {
+          "format": "Excel (simplified data)",
+          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/traceability_grouped.xlsx?raw=true"
+        },
+        {
+          "format": "JSON (simplified data)",
+          "url": "https://github.com/markbrough/covid19-data/raw/gh-pages/traceability/traceability.json"
+        }
+      ]
     }
   },
   computed: {
