@@ -7,7 +7,7 @@
       </div>
     </template>
     <template v-else>
-      <p class="text-muted">Funding against Humanitarian Response Plan <b>Coronavirus disease Outbreak - COVID -19</b></p>
+      <p class="text-muted">Funding against Humanitarian Response Plan <b>Coronavirus disease Outbreak - Covid-19</b></p>
       <b-progress show-progress :max="planRequirements" class="mb-2" height="2rem">
         <b-progress-bar variant="primary"
           :value="planFunded"
