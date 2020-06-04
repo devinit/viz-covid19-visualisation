@@ -6,9 +6,9 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col md="6">
+      <b-col lg="6">
         <b-form inline>
-          <b-form-group>
+          <b-form-group class="mb-0">
             <b-form-radio-group
               class="displaySummaryControls mb-1"
               v-model="summary"
@@ -26,39 +26,43 @@
           </b-form-group>
         </b-form>
       </b-col>
-      <b-col md="6" class="ml-lg-auto text-md-right">
+      <b-col lg="6" class="ml-lg-auto text-lg-right">
         <b-row>
-          <b-form inline class="ml-lg-auto">
-            <b-form-group class="ml-lg-auto">
-              <b-form-select
-              v-model="country"
-              :options="countries"
-              :state="country ? true : null"
-              class="mb-1"
-              style="max-width: 250px"></b-form-select>
-              <b-form-select
-              v-model="organisation"
-              :options="reportingOrgs"
-              :state="organisation ? true : null"
-              class="mb-1"
-              style="max-width: 250px"></b-form-select>
-            </b-form-group>
-          </b-form>
+          <b-col>
+            <b-form inline class="ml-lg-auto">
+              <b-form-group class="ml-lg-auto mb-0">
+                <b-form-select
+                v-model="country"
+                :options="countries"
+                :state="country ? true : null"
+                class="mb-1"
+                style="max-width: 250px"></b-form-select>
+                <b-form-select
+                v-model="organisation"
+                :options="reportingOrgs"
+                :state="organisation ? true : null"
+                class="mb-1"
+                style="max-width: 250px"></b-form-select>
+              </b-form-group>
+            </b-form>
+          </b-col>
         </b-row>
         <b-row>
-          <b-dropdown text="Humanitarian / development" variant="secondary" class="ml-lg-auto" size="sm">
-            <b-dropdown-form>
-              <b-form-group>
-                <b-form-checkbox-group
-                  v-model="humanitarianDevelopment"
-                  :options="humanitarianDevelopmentOptions"
-                  size="sm"
-                  stacked
-                  switches
-                ></b-form-checkbox-group>
-              </b-form-group>
-            </b-dropdown-form>
-          </b-dropdown>
+          <b-col>
+            <b-dropdown text="Humanitarian / development" variant="secondary" class="ml-lg-auto" size="sm">
+              <b-dropdown-form>
+                <b-form-group>
+                  <b-form-checkbox-group
+                    v-model="humanitarianDevelopment"
+                    :options="humanitarianDevelopmentOptions"
+                    size="sm"
+                    stacked
+                    switches
+                  ></b-form-checkbox-group>
+                </b-form-group>
+              </b-dropdown-form>
+            </b-dropdown>
+          </b-col>
         </b-row>
       </b-col>
     </b-row>
