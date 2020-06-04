@@ -18,7 +18,8 @@
       <p>The activities page will contain double-counting, as activities will be reported by multiple organisations throughout the delivery chain of the same overarching project. There are mechanisms in IATI to avoid double counting (by stating where the funds have come from), generally called 'traceability'. However, implementation of these mechanisms will vary between publishers. While there is greater traceability between the UK's Department for International Development and the Dutch Ministry of Foreign Affairs and their respective implementing partners, traceability is not yet widespread for flows between large organisations. For more information on how Grand Bargain signatories are publishing their data, see the <a href="https://humportal.org">IATI Humanitarian Data Portal</a>.</p>
       <p>The activity data is extracted from the <a href="https://d-portal.org">d-portal API</a>.</p>
       <h2>Privacy Policy and Cookies</h2>
-      <p>View <a href="/Privacy-Policy.pdf">our privacy policy and cookies policy</a>.</p>
+      <p>View <a href="/Privacy-Policy.pdf">our privacy policy and cookies policy</a>. If you have any further
+        questions, please get in touch with us via <a href="mailto:humportal@devinit.org">humportal@devinit.org</a>.</p>
     </div>
   </div>
 </template>
