@@ -4,6 +4,7 @@
       <h2>About</h2>
       <p>Today we are facing an unprecedented crisis with devastating health, economic and social effects which are being felt around the world. The response from the international community to the Covid-19 pandemic has been extraordinary and vast: different appeals have been launched, substantial financing is being provided, and projects are being implemented. All of this calls for greater data-driven transparency of humanitarian and development financing and activities. We as an international community need to better track this information to enable a more coordinated and effective response towards affected populations.</p>
       <p>This new Covid-19 tracking prototype has been developed through the <a href="https://interagencystandingcommittee.org/greater-transparency">Grand Bargain transparency workstream</a> to visualise the response to Covid-19 as a pathway towards more comprehensive tracking, including what activities are being financed in affected countries. This visualisation is initially based on the UN Office for the Coordination of Humanitarian Affairs (UNOCHA)'s <a href="https://fts.unocha.org/">Financial Tracking Service</a> (FTS) and <a href="https://iatistandard.org/en/">International Aid Transparency Initiative (IATI)</a> data and will be updated daily as new data becomes available through each source.</p>
+      <hr />
       <h2>Data</h2>
       <p>The visualisation contains data on <nuxt-link :to="{name: 'index'}">contributions</nuxt-link>, demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}">activities</nuxt-link> (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from UNOCHA's FTS. The activity level data comes from IATI.</p>
       <p>The contributions page is most useful for understanding total aggregate funding, and the activities page most useful for understanding how funding is broken down by project.</p>
@@ -26,6 +27,26 @@
       </ul>
       <b-alert variant="info" show>More detailed data notes, and a number of data files behind this visualisation, are available from <a href="https://github.com/markbrough/covid19-data/tree/gh-pages">the <code>covid19-data</code> github repository</a>. The data files are automatically updated every 24 hours.</b-alert>
       <p>The activity data is extracted from the <a href="https://d-portal.org">d-portal API</a> using the above criteria.</p>
+      <h4>Flows</h4>
+      <p>The flows page contains the same selection of activities as the activities page. Data is filtered to a particular organisation type (e.g. government, multilateral, NGO), which is initially set to "Government" but can be changed by the user at the top of the page.</p>
+      <p>The topmost table shows a summary of data by disbursements and direct expenditure. This should help to identify any coding issues &ndash; for example: where an organisation has stated that 100% of their spending is direct expenditure, but this is known not to be the case.</p>
+      <p>Below the table is a visualisation of flows for each publishing organisation. The specific organisation can be selected from the drop-down list (this drop-down shows only publishers for the selected organisation type, which can be changed at the top of the page).</p>
+      <p>The visualisation can be customised by:</p>
+      <ul>
+        <li>toggling the display of incoming funds (i.e. funds <b>received</b> by this publishing organisation): this generally only changes the display for NGOs and some multilaterals</li>
+        <li>including data from partner organisations: this will include data reported by implementing partners of the selected publishing organisation. Note that this may lead to double-counting if both the publisher and one of their implementing partners are providing data on the same funding at different points in the chain.</li>
+      </ul>
+      <p>The tables below the visualisation show the same data as the visualisation, but in tabular format. They also contain more detail as the visualisation is limited to displaying the top 10 largest entries.</p>
+      <hr />
+      <h2>Technical details</h2>
+      <p>The front end of the prototype is built in Vue.JS and hosted as a static site on Github pages. The data is extracted from the FTS and D-Portal APIs, and reprocessed and condensed daily, using scripts written in Python and run on Travis.</p>
+      <p>All of the tools we have developed are shared as open source software:</p>
+      <ul>
+        <li><a href="https://github.com/markbrough/covid19">The front end (in Vue.JS)</a></li>
+        <li><a href="https://github.com/markbrough/covid19-data">The data processing scripts (in Python)</a></li>
+        <li><a href="https://github.com/markbrough/covid19-data/tree/gh-pages">The reprocessed data (automatically generated every 24 hours</a></li>
+      </ul>
+      <hr />
       <h2>Privacy Policy and Cookies</h2>
       <p>View <a href="/Privacy-Policy.pdf">our privacy policy and cookies policy</a>. If you have any further
         questions, please get in touch with us via <a href="mailto:humportal@devinit.org">humportal@devinit.org</a>.</p>
