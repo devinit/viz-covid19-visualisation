@@ -16,7 +16,16 @@
       <h4>Activities</h4>
       <p>The activities page lists activities that various organisations are involved in. 'Activity' can have multiple meanings, depending on the business processes of the respective organisation. Often, it is synonymous with a 'project', but it can also contain country-wide programmes, budget support, or contributions to other organisations.</p>
       <p>The activities page will contain double-counting, as activities will be reported by multiple organisations throughout the delivery chain of the same overarching project. There are mechanisms in IATI to avoid double counting (by stating where the funds have come from), generally called 'traceability'. However, implementation of these mechanisms will vary between publishers. While there is greater traceability between the UK's Department for International Development and the Dutch Ministry of Foreign Affairs and their respective implementing partners, traceability is not yet widespread for flows between large organisations. For more information on how Grand Bargain signatories are publishing their data, see the <a href="https://humportal.org">IATI Humanitarian Data Portal</a>.</p>
-      <p>The activity data is extracted from the <a href="https://d-portal.org">d-portal API</a>.</p>
+      <h5>Selection of COVID-19 activities from IATI data</h5>
+      Only COVID-19 activities are captured and displayed in the visualisation and the underlying data. IATI ativities are marked as COVID-19 related (and therefore included) if they meet <b>any</b> of the following criteria (largely following the <a href="https://docs.google.com/document/d/11XTnrPw8K76JvBhFfnqo-1Z9BmgqzWv2bEz9QoDrw2k/edit">IATI COVID-19 publishing guidance</a>):
+      <ul>
+        <li>title, description, or any transaction description contains the text "COVID-19" or "COVID 19"</li>
+        <li><code>humanitarian-scope</code> matches the GLIDE code "EP-2020-000012-001" (this is the GLIDE code that IATI uses for the COVID-19 emergency)</li>
+        <li><code>humanitarian-scope</code> matches the Humanitarian Response Plan code "HCOVD20"</li>
+        <li><code>tag/@code</code> "COVID-19"</li>
+      </ul>
+      <b-alert variant="info" show>More detailed data notes, and a number of data files behind this visualisation, are available from <a href="https://github.com/markbrough/covid19-data/tree/gh-pages">the <code>covid19-data</code> github repository</a>. The data files are automatically updated every 24 hours.</b-alert>
+      <p>The activity data is extracted from the <a href="https://d-portal.org">d-portal API</a> using the above criteria.</p>
       <h2>Privacy Policy and Cookies</h2>
       <p>View <a href="/Privacy-Policy.pdf">our privacy policy and cookies policy</a>. If you have any further
         questions, please get in touch with us via <a href="mailto:humportal@devinit.org">humportal@devinit.org</a>.</p>
