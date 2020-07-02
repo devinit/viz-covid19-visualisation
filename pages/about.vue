@@ -44,7 +44,7 @@
       <ul>
         <li><a href="https://github.com/markbrough/covid19">The front end (in Vue.JS)</a></li>
         <li><a href="https://github.com/markbrough/covid19-data">The data processing scripts (in Python)</a></li>
-        <li><a href="https://github.com/markbrough/covid19-data/tree/gh-pages">The reprocessed data (automatically generated every 24 hours</a></li>
+        <li><a href="https://github.com/markbrough/covid19-data/tree/gh-pages">The reprocessed data (automatically generated every 24 hours</a>)</li>
       </ul>
       <hr />
       <h2>Privacy Policy and Cookies</h2>
