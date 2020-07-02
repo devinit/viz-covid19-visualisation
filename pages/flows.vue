@@ -197,7 +197,7 @@ export default {
       selectedOrganisation: 'US-GOV-1',
       selectedReportingOrgType: '10',
       showIncomingFunds: true,
-      showRelatedOrganisations: true,
+      showRelatedOrganisations: false,
       downloadURLs: [
         {
           "format": "Excel (transactional data)",
