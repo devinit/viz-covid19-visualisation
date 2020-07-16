@@ -43,10 +43,42 @@
             </b-dropdown>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col sm="5" md="6" class="my-1">
+            <b-form-group
+              label="Contributions per page"
+              label-cols-sm="7"
+              label-cols-md="7"
+              label-cols-lg="5"
+              label-cols-xl="4"
+              label-align-sm="right"
+              label-size="sm"
+              label-for="perPageSelect">
+              <b-form-select
+                v-model="perPage"
+                id="perPageSelect"
+                size="sm"
+                :options="[100,500,1000]"
+              ></b-form-select>
+            </b-form-group>
+          </b-col>
+          <b-col sm="7" md="6" class="my-1">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              align="fill"
+              size="sm"
+              class="my-0"
+            ></b-pagination>
+          </b-col>
+        </b-row>
         <b-table :items="contributions" :fields="fields"
           sort-by="date"
           :sort-desc="true"
-          responsive>
+          responsive
+          :current-page="currentPage"
+          :per-page="perPage">
           <template v-slot:cell(source)="data">
             {{ data.item.source }}
           </template>
@@ -76,6 +108,36 @@
             </small>
           </template>
         </b-table>
+        <b-row>
+          <b-col sm="5" md="6" class="my-1">
+            <b-form-group
+              label="Contributions per page"
+              label-cols-sm="7"
+              label-cols-md="7"
+              label-cols-lg="5"
+              label-cols-xl="4"
+              label-align-sm="right"
+              label-size="sm"
+              label-for="perPageSelect">
+              <b-form-select
+                v-model="perPage"
+                id="perPageSelect"
+                size="sm"
+                :options="[100,500,1000]"
+              ></b-form-select>
+            </b-form-group>
+          </b-col>
+          <b-col sm="7" md="6" class="my-1">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              align="fill"
+              size="sm"
+              class="my-0"
+            ></b-pagination>
+          </b-col>
+        </b-row>
       </template>
     </div>
   </div>
@@ -124,7 +186,9 @@ export default {
           "format": "JSON",
           "url": "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-emergency-911.json"
         }
-      ]
+      ],
+      currentPage: 1,
+      perPage: 100
     }
   },
   computed: {
@@ -178,6 +242,9 @@ export default {
     },
     originalContributions() {
       return this.$store.state.contributions
+    },
+    totalRows() {
+      return this.contributions.length
     },
     contributions() {
       if (this.originalContributions == []) { [] }
