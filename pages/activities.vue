@@ -4,6 +4,8 @@
       <div class="alert alert-warning">
         This is a prototype visualisation to track the Covid-19 response. The data on this page comes from <a href="https://iatistandard.org">IATI</a>. Read more on the <nuxt-link :to="{name: 'about'}">about page</nuxt-link>.
       </div>
+      <h2>Activities</h2>
+      <hr />
       <template v-if="isBusy">
         <div class="text-center text-secondary">
           <b-spinner class="align-middle"></b-spinner>
@@ -12,24 +14,40 @@
       </template>
       <template
           v-if="!isBusy">
-        <h2>Activities</h2>
-        <hr />
         <IATISummaryPaneControls
           :display-summary.sync="displaySummary"
           :summary-label-field.sync="summaryLabelField"
           :selected-country.sync="selectedCountry"
           :countries="countries"
           :selected-reporting-org.sync="selectedReportingOrg"
+          :reporting-orgs="reportingOrgs"
+          :sectors="sectors"
+          :selected-sector.sync="selectedSector"
           :selected-humanitarian-development.sync="selectedHumanitarianDevelopment"
-          :reporting-orgs="reportingOrgs" />
-        <hr />
+          :summaryType.sync="summaryType" />
         <IATISummaryPane
           v-if="activities"
           :activityData="activities"
+          :activityTransactionsData="activityTransactions"
           :displaySummary="displaySummary"
           :summaryLabelField="summaryLabelField"
           :codelists="codelists"
-          :getCountryName="getCountryName" />
+          :getCountryName="getCountryName"
+          :getSectorName="getSectorName"
+          :summaryType="summaryType" />
+        <b-alert variant="warning" class="text-muted mb-3 mt-3" :show="displayDoubleCountingWarning">
+          The above results may include double counting. <a href="#" v-b-modal.double-counting-modal>Read more</a>.
+        </b-alert>
+        <b-modal id="double-counting-modal" title="Double counting" ok-only>
+          <p>The visualisation may show double counting, if multiple organisations have published data
+          about the same flows at multiple points in the chain.</p>
+          <p>For example, DFID could publish a contribution to a project managed by the World Health
+          Organisation. The WHO could in turn publish the project they are managing. At the moment,
+          the DFID contribution and the WHO's spend on this project would be added together; in reality
+          they should not be added together.</p>
+          <p>We are developing methodologies to reduce the scope for this kind of double counting in
+          the visualisation.</p>
+        </b-modal>
         <hr />
         <b-row>
           <b-col sm="7" md="9">
@@ -97,9 +115,14 @@
             </span>
           </template>
           <template v-slot:cell(countriesRegions)="data">
-            <span v-for="countryRegion in data.item.countriesRegions" :key="`${data.index}-${countryRegion.code}`">
-              {{ getCountryName(countryRegion) }}
-            </span>
+            <template v-if="data.item.countriesRegions.length > 10">
+              <span>Multiple countries</span>
+            </template>
+            <template v-else>
+              <span v-for="countryRegion in data.item.countriesRegions" :key="`${data.index}-${countryRegion.code}`">
+                {{ getCountryName(countryRegion) }}
+              </span>
+            </template>
           </template>
         </b-table>
         <b-row>
@@ -155,6 +178,7 @@ export default {
       title: config.head.title,
       description: config.description,
       displaySummary: 'chart',
+      summaryType: "number_of_projects",
       summaryLabelField: 'organisation',
       summaryLabelFields: [
         {'value': 'organisation', 'text': 'Reporting organisation'},
@@ -168,6 +192,7 @@ export default {
       },
       selectedCountry: null,
       selectedReportingOrg: null,
+      selectedSector: null,
       selectedHumanitarianDevelopment: ['humanitarian', 'humanitarian / development', 'development', 'unspecified'],
       downloadURLs: [
         {
@@ -188,6 +213,10 @@ export default {
     }
   },
   computed: {
+    displayDoubleCountingWarning() {
+      if ((this.summaryLabelField != "organisation") && (this.selectedReportingOrg == null)) { return true }
+      return false
+    },
     totalRows() {
       return this.activities.length
     },
@@ -197,8 +226,10 @@ export default {
     urls() {
       return  {
         DATA_URL: "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/activities.json",
+        ACTIVITY_TRANSACTIONS_DATA_URL: "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/traceability/transactions_sector_country.json",
         COUNTRIES_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Country.json`,
-        REGIONS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Region.json`
+        REGIONS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Region.json`,
+        SECTORS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Sector.json`
       }
     },
     fields() {
@@ -255,8 +286,8 @@ export default {
               }
             })
           } else {
-            if (!seenCountries.includes(null)) {
-              seenCountries.push(null)
+            if (!seenCountries.includes('')) {
+              seenCountries.push('')
               summary.push({'value': '', 'text': 'Unspecified'})
             }
           }
@@ -278,10 +309,64 @@ export default {
           a.text < b.text ? -1 : 1
       ))
     },
+    sectors() {
+      var seenSectors = []
+      return [{value: null, text: "All sectors"}].concat(
+        this.originalActivityData.reduce((summary, activity) => {
+          if (activity.sectors.length>0) {
+            activity.sectors.forEach(sector=> {
+              if (!seenSectors.includes(sector.code)) {
+                summary.push({value: sector.code, text: this.getSectorName(sector)})
+                seenSectors.push(sector.code)
+              }
+            })
+          } else {
+            if (!seenSectors.includes(null)) {
+              seenSectors.push(null)
+              summary.push({'value': '', 'text': 'Unspecified'})
+            }
+          }
+        return summary
+      }, []).sort((a,b) =>
+          a.text < b.text ? -1 : 1
+      ))
+    },
     originalActivityData() {
       return this.$store.state.originalActivityData
     },
+    originalActivityTransactionData() {
+      return this.$store.state.originalActivityTransactionData
+    },
+    activityTransactions() {
+      const _checkReportingOrg = (activityTransaction) => {
+        if (this.selectedReportingOrg == null) { return true }
+        return activityTransaction.reporting_org_ref == this.selectedReportingOrg
+      }
+      const _checkCountry = (activityTransaction) => {
+        if (this.selectedCountry == null) { return true }
+        return activityTransaction.country_region == this.selectedCountry
+      }
+      const _checkSector = (activityTransaction) => {
+        if (this.selectedSector == null) { return true }
+        return activityTransaction.sector == this.selectedSector
+      }
+      const _checkHumanitarianDevelopment = (activityTransaction) => {
+        if (this.selectedHumanitarianDevelopment.length == 4) { return true }
+        const _trans = {
+          "0": "development",
+          "1": "humanitarian",
+          "false": "development",
+          "true": "humanitarian",
+          "UNSPECIFIED": "unspecified"
+        }
+        return this.selectedHumanitarianDevelopment.includes(_trans[activityTransaction.humanitarian])
+      }
+      return this.$store.state.originalActivityTransactionData.filter(activityTransaction => {
+        return _checkReportingOrg(activityTransaction) && _checkCountry(activityTransaction) && _checkHumanitarianDevelopment(activityTransaction) && _checkSector(activityTransaction)
+      })
+    },
     activities() {
+      console.log("selected sector is", this.selectedSector)
       const _checkReportingOrg = (activity) => {
         if (this.selectedReportingOrg == null) { return true }
         return activity.reportingOrg.ref == this.selectedReportingOrg
@@ -291,15 +376,23 @@ export default {
         else if (this.selectedCountry == "") { return activity.countriesRegions.length == 0 }
         return activity.countriesRegions.map(cr=> { return cr.code}).includes(this.selectedCountry)
       }
+      const _checkSector = (activity) => {
+        if (this.selectedSector == null) { return true }
+        else if (this.selectedSector == "") { return activity.sectors.length == 0 }
+        return activity.sectors.map(cr=> { return cr.code}).includes(this.selectedSector)
+      }
       const _checkHumanitarianDevelopment = (activity) => {
         if (this.selectedHumanitarianDevelopment.length == 4) { return true }
         return this.selectedHumanitarianDevelopment.includes(activity.humanitarianDevelopment)
       }
-      if ((this.selectedCountry == null) && (this.selectedReportingOrg == null) && (this.selectedHumanitarianDevelopment.length == 4)) {
+      if ((this.selectedCountry == null) &&
+        (this.selectedReportingOrg == null) &&
+        (this.selectedSector == null) &&
+        (this.selectedHumanitarianDevelopment.length == 4)) {
         return this.originalActivityData
       } else {
         return this.originalActivityData.filter(activity => {
-          return _checkReportingOrg(activity) && _checkCountry(activity) && _checkHumanitarianDevelopment(activity)
+          return _checkReportingOrg(activity) && _checkCountry(activity) && _checkHumanitarianDevelopment(activity) && _checkSector(activity)
         })
       }
     }
@@ -312,7 +405,11 @@ export default {
       }) : ""
     },
     getCountryName(recipient_country) {
+      if (recipient_country.code == '') { return 'Unspecified' }
       return this.codelists.countries[recipient_country.code] ? this.codelists.countries[recipient_country.code] : `Unknown: ${recipient_country.code}`
+    },
+    getSectorName(sector) {
+      return this.codelists.sectors[sector.code] ? `${sector.code}: ${this.codelists.sectors[sector.code]}` : `${sector.code}: Unknown`
     },
     async setup() {
      await axios.get(`${this.urls.COUNTRIES_CODELIST_URL}`).then(response => {
@@ -324,10 +421,17 @@ export default {
       })
      await axios.get(`${this.urls.REGIONS_CODELIST_URL}`).then(response => {
         var data = response.data
-        this.$store.commit('setCodelistsCountry', data.data.reduce((countries, country) => {
-          countries[country.code] = country.name
+        this.$store.commit('setCodelistsCountry', data.data.reduce((countries, region) => {
+          countries[region.code] = region.name
           return countries
         }, this.$store.state.codelists.countries))
+      })
+     await axios.get(`${this.urls.SECTORS_CODELIST_URL}`).then(response => {
+        var data = response.data
+        this.$store.commit('setCodelistsSector', data.data.reduce((sectors, sector) => {
+          sectors[sector.code] = sector.name
+          return sectors
+        }, {}))
       })
     this.loadData()
     },
@@ -343,6 +447,11 @@ export default {
       let data = this.processActivityData(_data.data)
       this.$store.commit('setOriginalActivityData', data)
       this.$nuxt.$loading.finish()
+    },
+    async loadActivityTransactionData() {
+      let data = await axios.get(`${this.urls.ACTIVITY_TRANSACTIONS_DATA_URL}`)
+      this.$store.commit('setOriginalActivityTransactionData', data.data)
+      this.$nuxt.$loading.finish()
     }
   },
   watch: {
@@ -354,6 +463,11 @@ export default {
     selectedReportingOrg(value) {
       if (value) {
         this.summaryLabelField = 'country'
+      }
+    },
+    summaryType(value) {
+      if ((value != 'number_of_projects') && (this.originalActivityTransactionData.length == 0)) {
+        this.loadActivityTransactionData()
       }
     }
   },
