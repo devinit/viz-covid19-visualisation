@@ -4,8 +4,8 @@
       v-if="displaySummary==='chart'"
       :barChartData="summaryData"
       :labelField="summaryLabelField"
-      valueLabel="Number of projects"
-      valueField="number_of_projects"
+      :valueLabel="valueLabel"
+      :valueField="valueField"
       valuePrecision="0"
       />
     <b-table
@@ -30,16 +30,36 @@ export default {
     return {
     }
   },
-  props: ['activityData', 'displaySummary', 'summaryLabelField', 'codelists', 'getCountryName'],
+  props: ['activityData', 'displaySummary', 'summaryLabelField',
+    'codelists', 'getCountryName', 'getSectorName', 'summaryType',
+    'activityTransactionsData'],
   computed: {
+    valueField() {
+      return this.summaryType
+    },
+    valueLabel() {
+      const _options = {
+        'number_of_projects': 'Number of projects',
+        'commitments': 'Commitments (USD)',
+        'disbursements': 'Disbursements (USD)',
+      }
+      return _options[this.summaryType]
+    },
     summaryData() {
-      const _data = Object.values(this.activityData.reduce((summary, activity) => {
+      return this.summaryType == 'number_of_projects' ? this.summaryActivityData : this.summaryActivityTransactionsData
+    },
+    summaryActivityData() {
+      return Object.values(this.activityData.reduce((summary, activity) => {
         const getOrg = (activity) => {
           return activity.reportingOrg.text
         }
-        const getCountry = (activity) => {
-          if (activity.countriesRegions.length==0) { return "Unspecified" }
-          return this.getCountryName(activity.countriesRegions[0])
+        const getCountry = (countryRegion) => {
+          //if (countriesRegions.length==0) { return "Unspecified" }
+          return this.getCountryName(countryRegion)
+        }
+        const getSector = (sector) => {
+          //if (sectors.length==0) { return "Unspecified" }
+          return this.getSectorName(sector)
         }
         if (this.summaryLabelField == "organisation") {
           var target = summary[getOrg(activity)] ?
@@ -47,19 +67,81 @@ export default {
             summary[getOrg(activity)] = {
               'organisation': getOrg(activity)
             }
+          target[this.valueField] ? target[this.valueField] += 1 : target[this.valueField] = 1
         } else if (this.summaryLabelField == "country") {
-          var target = summary[getCountry(activity)] ?
-            summary[getCountry(activity)] :
-            summary[getCountry(activity)] = {
-              'country': getCountry(activity)
-            }
+          const countryRegions = activity.countriesRegions.length > 0 ? activity.countriesRegions : [{'code': ''}]
+          countryRegions.forEach(countryRegion => {
+            var target = summary[getCountry(countryRegion)] ?
+              summary[getCountry(countryRegion)] :
+              summary[getCountry(countryRegion)] = {
+                'country': getCountry(countryRegion)
+              }
+            target[this.valueField] ? target[this.valueField] += 1 : target[this.valueField] = 1
+          })
+        } else if (this.summaryLabelField == "sector") {
+          const sectors = activity.sectors.length > 0 ? activity.sectors : [{'code': ''}]
+          sectors.forEach(sector => {
+            var target = summary[getSector(sector)] ?
+              summary[getSector(sector)] :
+              summary[getSector(sector)] = {
+                'sector': getSector(sector)
+              }
+            target[this.valueField] ? target[this.valueField] += 1 : target[this.valueField] = 1
+          })
         }
-        target.number_of_projects ? target.number_of_projects += 1 : target.number_of_projects = 1
         return summary
       }, {})
-      ).sort((a,b) => a.number_of_projects > b.number_of_projects ? 1 : -1
+      ).sort((a,b) => a[this.valueField] > b[this.valueField] ? 1 : -1
       ).reverse()
-      return _data
+    },
+    summaryActivityTransactionsData() {
+      const getOrg = (activityTransaction) => {
+        return activityTransaction.reporting_org_text
+      }
+      const getCountry = (activityTransaction) => {
+        if (activityTransaction.country_region=="") { return "Unspecified" }
+        return this.getCountryName({code: activityTransaction.country_region})
+      }
+      const getSector = (activityTransaction) => {
+        if (activityTransaction.sector=="") { return "Unspecified" }
+        return this.getSectorName({code: activityTransaction.sector})
+      }
+      return Object.values(this.activityTransactionsData.reduce((summary, activityTransaction) => {
+        if (this.summaryLabelField == "organisation") {
+          var target = summary[getOrg(activityTransaction)] ?
+            summary[getOrg(activityTransaction)] :
+            summary[getOrg(activityTransaction)] = {
+              'organisation': getOrg(activityTransaction),
+              'commitments': 0,
+              'disbursements': 0
+            }
+        } else if (this.summaryLabelField == "country") {
+          var target = summary[getCountry(activityTransaction)] ?
+            summary[getCountry(activityTransaction)] :
+            summary[getCountry(activityTransaction)] = {
+              'country': getCountry(activityTransaction),
+              'commitments': 0,
+              'disbursements': 0
+            }
+        } else if (this.summaryLabelField == "sector") {
+          var target = summary[getSector(activityTransaction)] ?
+            summary[getSector(activityTransaction)] :
+            summary[getSector(activityTransaction)] = {
+              'sector': getSector(activityTransaction),
+              'commitments': 0,
+              'disbursements': 0
+            }
+        }
+        if (activityTransaction.transaction_type_code == '2') {
+          target.commitments += activityTransaction.value_USD_proportionate
+        }
+        else if (activityTransaction.transaction_type_code == '3') {
+          target.disbursements += activityTransaction.value_USD_proportionate
+        }
+        return summary
+      }, {})
+      ).sort((a,b) => a[this.valueField] > b[this.valueField] ? 1 : -1
+      ).reverse()
     },
     summaryFields() {
       const out = [
@@ -68,7 +150,7 @@ export default {
           sortable: true
         },
         {
-          key: 'number_of_projects',
+          key: this.valueField,
           sortable: true,
           thClass: "text-right",
           tdClass: "text-right",
