@@ -1,9 +1,16 @@
 <template>
   <div>
-    <BarChart :data="chartData" :options="barChartOptions" class="bar-chart" v-if="barChartData" />
-    <p class="text-muted mb-3 mt-3" v-if="barChartData.length > 20">
-      Showing the top 20 entries. Click <b>Table</b> above to view all entries.
-    </p>
+    <template v-if="barChartData.length > 0">
+      <BarChart :data="chartData" :options="barChartOptions" class="bar-chart" v-if="barChartData" />
+      <p class="text-muted mb-3 mt-3" v-if="barChartData.length > 20">
+        Showing the top 20 entries. Change view to <b>Table</b> to view all entries.
+      </p>
+    </template>
+    <template v-else>
+      <div class="bar-chart">
+        <b-alert show variant="secondary" class="text-center">No data to display. Try adjusting the filters.</b-alert>
+      </div>
+    </template>
   </div>
 </template>
 <style scoped>
@@ -21,7 +28,11 @@ export default {
   props: ['barChartData', 'labelField', 'valueField', 'valueLabel', 'valuePrecision', 'step'],
   data() {
     return {
-      barChartOptions: {
+    }
+  },
+  computed: {
+    barChartOptions(){
+      return {
         maintainAspectRatio: false,
         legend: {
           display: false
@@ -55,7 +66,13 @@ export default {
               ticks: {
                 beginAtZero: true,
                 precision: this.valuePrecision,
-                stepSize: this.step ? this.step : undefined
+                stepSize: this.step ? this.step : undefined,
+                callback: function(tick) {
+                  return tick.toLocaleString(undefined, {
+                    maximumFractionDigits: this.valuePrecision,
+                    minimumFractionDigits: this.valuePrecision
+                  })
+                }
               },
               scaleLabel: {
                 display: true,
@@ -83,9 +100,7 @@ export default {
           ]
         }
       }
-    }
-  },
-  computed: {
+    },
     chartData() {
       const colours = [
         "#6e40aa", "#6849b9", "#6153c7", "#585fd2", "#4e6cda", "#4479df", "#3988e1", "#2f96e0", "#26a5db", "#1fb3d3", "#1bc1c8", "#19cdbb", "#1bd9ac", "#20e29d", "#28ea8d", "#34f07e", "#44f470", "#56f665", "#6bf75c", "#81f558",
