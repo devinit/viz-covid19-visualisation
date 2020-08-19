@@ -196,8 +196,16 @@ export default {
       selectedHumanitarianDevelopment: ['humanitarian', 'humanitarian / development', 'development', 'unspecified'],
       downloadURLs: [
         {
-          "format": "Excel",
+          "format": "Excel (activities)",
           "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/activities.xlsx?raw=true"
+        },
+        {
+          "format": "Excel (transactions)",
+          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/traceability/transactions.xlsx?raw=true"
+        },
+        {
+          "format": "Excel (transactions - by country and sector)",
+          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/traceability/transactions_sectors_countries_regions.xlsx?raw=true"
         },
         {
           "format": "JSON",
