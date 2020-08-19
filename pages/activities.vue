@@ -405,8 +405,8 @@ export default {
     },
     urlQuery() {
       var _query = {}
-      if (this.selectedOrganisation) {
-        _query.reporting_organisation = this.selectedOrganisation
+      if (this.selectedReportingOrg) {
+        _query.reporting_organisation = this.selectedReportingOrg
       }
       if (this.selectedCountry) {
         _query.country = this.selectedCountry
