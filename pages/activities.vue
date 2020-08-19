@@ -374,7 +374,6 @@ export default {
       })
     },
     activities() {
-      console.log("selected sector is", this.selectedSector)
       const _checkReportingOrg = (activity) => {
         if (this.selectedReportingOrg == null) { return true }
         return activity.reportingOrg.ref == this.selectedReportingOrg
