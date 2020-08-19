@@ -262,6 +262,22 @@ export default {
           }
         })
       }
+    },
+    urlQuery() {
+      var _query = {}
+      if (this.displaySummary != 'chart') {
+        _query.display = this.displaySummary
+      }
+      if (this.summaryLabelField != 'fundingOrganisation') {
+        _query.summary = this.summaryLabelField
+      }
+      if (this.fundingOrganisation) {
+        _query.funder = this.fundingOrganisation
+      }
+      if (this.implementingOrganisation) {
+        _query.implementer = this.implementingOrganisation
+      }
+      return _query
     }
   },
   methods: {
@@ -294,6 +310,9 @@ export default {
         contribution.destination = this.getOrganisationName(contribution.destinationObjects)
         return contribution
       })
+    },
+    updateRouter() {
+      this.$router.push({ name: 'index', query: this.urlQuery })
     }
   },
   watch: {
@@ -303,17 +322,37 @@ export default {
       } else {
         this.summaryLabelField = 'fundingOrganisation'
       }
+      this.updateRouter()
     },
     implementingOrganisation(value) {
       if (value) {
         this.summaryLabelField = 'fundingOrganisation'
       }
+      this.updateRouter()
+    },
+    displaySummary(value) {
+      this.updateRouter()
+    },
+    summaryLabelField(value) {
+      this.updateRouter()
     }
   },
   mounted() {
     this.$nextTick(() => {
       if (this.contributions.length) { return }
       this.loadData()
+      if ('funder' in this.$route.query) {
+        this.fundingOrganisation = this.$route.query.funder
+      }
+      if ('implementer' in this.$route.query) {
+        this.implementingOrganisation = this.$route.query.implementer
+      }
+      if ('display' in this.$route.query) {
+        this.displaySummary = this.$route.query.display
+      }
+      if ('summary' in this.$route.query) {
+        this.summaryLabelField = this.$route.query.summary
+      }
     })
   }
 }
