@@ -15,7 +15,7 @@
         <h2>Flows between organisations</h2>
         <b-row>
           <b-col sm="7" md="9">
-            <b-form-group label="Organisation Type">
+            <b-form-group label="Publisher Type">
               <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType">
               </b-form-select>
             </b-form-group>
@@ -83,6 +83,10 @@
         </b-alert>
         <b-row>
           <b-col md="9">
+            <b-form-group label="Publisher Type">
+              <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType">
+              </b-form-select>
+            </b-form-group>
             <b-form-group label="Publisher">
               <b-form-select
                 :options="reportingOrgs"
@@ -323,7 +327,6 @@ export default {
         })
     },
     flowsOrganisationsTableDisbursementsExpenditure() {
-
       var _transactions = this.flowsOrganisationsTable.filter(item => {
         return ['3', '4'].includes(item.transaction_type_code)
       })
@@ -402,6 +405,22 @@ export default {
         summary += (item.disbursements_pct / this.flowsSummary.length)
         return summary
       }, 0.0)
+    },
+    urlQuery() {
+      var _query = {}
+      if (this.selectedReportingOrgType) {
+        _query.orgtype = this.selectedReportingOrgType
+      }
+      if (this.selectedOrganisation) {
+        _query.organisation = this.selectedOrganisation
+      }
+      if (this.showIncomingFunds != true) {
+        _query.incomingFunds = this.showIncomingFunds
+      }
+      if (this.showRelatedOrganisations != false) {
+        _query.relatedOrganisations = this.showRelatedOrganisations
+      }
+      return _query
     }
   },
   methods: {
@@ -429,6 +448,9 @@ export default {
         this.$store.commit('setOriginalFlows', data)
       })
       this.$nuxt.$loading.finish()
+    },
+    updateRouter() {
+      this.$router.push({ name: 'flows', query: this.urlQuery })
     }
   },
   watch: {
@@ -436,6 +458,16 @@ export default {
       if (value) {
         this.selectedOrganisation = this.reportingOrgs[0].value
       }
+      this.updateRouter()
+    },
+    selectedOrganisation(value) {
+      this.updateRouter()
+    },
+    showIncomingFunds(value) {
+      this.updateRouter()
+    },
+    showRelatedOrganisations(value) {
+      this.updateRouter()
     }
   },
   mounted() {
@@ -443,6 +475,18 @@ export default {
       if (Object.values(this.flows).length == 0) {
         this.$nuxt.$loading.start()
         this.loadData()
+      }
+      if ('organisation' in this.$route.query) {
+        this.selectedOrganisation = this.$route.query.organisation
+      }
+      if ('orgtype' in this.$route.query) {
+        this.selectedReportingOrgType = this.$route.query.orgtype
+      }
+      if ('incomingFunds' in this.$route.query) {
+        this.showIncomingFunds = this.$route.query.incomingFunds
+      }
+      if ('relatedOrganisations' in this.$route.query) {
+        this.showRelatedOrganisations = this.$route.query.relatedOrganisations
       }
     })
   }
