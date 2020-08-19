@@ -402,6 +402,31 @@ export default {
           return _checkReportingOrg(activity) && _checkCountry(activity) && _checkHumanitarianDevelopment(activity) && _checkSector(activity)
         })
       }
+    },
+    urlQuery() {
+      var _query = {}
+      if (this.selectedOrganisation) {
+        _query.reporting_organisation = this.selectedOrganisation
+      }
+      if (this.selectedCountry) {
+        _query.country = this.selectedCountry
+      }
+      if (this.selectedSector) {
+        _query.sector = this.selectedSector
+      }
+      if (this.selectedHumanitarianDevelopment.length != 4) {
+        _query.humanitarian = Object.values(this.selectedHumanitarianDevelopment).join()
+      }
+      if (this.displaySummary != 'chart') {
+        _query.display = this.displaySummary
+      }
+      if (this.summaryType != 'number_of_projects') {
+        _query.summary = this.summaryType
+      }
+      if (this.summaryLabelField != 'organisation') {
+        _query.breakdown = this.summaryLabelField
+      }
+      return _query
     }
   },
   methods: {
@@ -459,6 +484,9 @@ export default {
       let data = await axios.get(`${this.urls.ACTIVITY_TRANSACTIONS_DATA_URL}`)
       this.$store.commit('setOriginalActivityTransactionData', data.data)
       this.$nuxt.$loading.finish()
+    },
+    updateRouter() {
+      this.$router.push({ name: 'activities', query: this.urlQuery })
     }
   },
   watch: {
@@ -466,22 +494,58 @@ export default {
       if (value) {
         this.summaryLabelField = 'organisation'
       }
+      this.updateRouter()
     },
     selectedReportingOrg(value) {
       if (value) {
         this.summaryLabelField = 'country'
       }
+      this.updateRouter()
+    },
+    selectedSector(value) {
+      this.updateRouter()
+    },
+    selectedHumanitarianDevelopment(value) {
+      this.updateRouter()
+    },
+    displaySummary(value) {
+      this.updateRouter()
+    },
+    displayType(value) {
+      this.updateRouter()
+    },
+    summaryLabelField(value) {
+      this.updateRouter()
     },
     summaryType(value) {
       if ((value != 'number_of_projects') && (this.originalActivityTransactionData.length == 0)) {
         this.loadActivityTransactionData()
       }
+      this.updateRouter()
     }
   },
   mounted() {
     this.$nextTick(() => {
-      if ("organisation" in this.$route.query) {
+      if ('organisation' in this.$route.query) {
         this.selectedReportingOrg = this.$route.query.organisation
+      }
+      if ('country' in this.$route.query) {
+        this.selectedCountry = this.$route.query.country
+      }
+      if ('sector' in this.$route.query) {
+        this.selectedSector = this.$route.query.sector
+      }
+      if ('summary' in this.$route.query) {
+        this.summaryType = this.$route.query.summary
+      }
+      if ('breakdown' in this.$route.query) {
+        this.summaryLabelField = this.$route.query.breakdown
+      }
+      if ('display' in this.$route.query) {
+        this.displaySummary = this.$route.query.display
+      }
+      if ('humanitarian' in this.$route.query) {
+        this.selectedHumanitarianDevelopment = this.$route.query.humanitarian.split(",")
       }
       if (Object.values(this.codelists.countries).length == 0) {
         this.$nuxt.$loading.start()
