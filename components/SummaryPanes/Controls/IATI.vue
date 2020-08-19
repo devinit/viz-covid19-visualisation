@@ -23,7 +23,7 @@
         </b-row>
       </b-col>
     </b-row>
-    <b-sidebar id="controls-sidebar" title="Customise data">
+    <b-sidebar id="controls-sidebar" title="Customise data" no-close-on-route-change>
       <div class="px-3 py-2">
         <h4>Display as</h4>
         <b-form-radio-group
