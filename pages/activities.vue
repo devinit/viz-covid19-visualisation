@@ -406,7 +406,7 @@ export default {
     urlQuery() {
       var _query = {}
       if (this.selectedReportingOrg) {
-        _query.reporting_organisation = this.selectedReportingOrg
+        _query.organisation = this.selectedReportingOrg
       }
       if (this.selectedCountry) {
         _query.country = this.selectedCountry
@@ -527,6 +527,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if ('organisation' in this.$route.query) {
+        console.log('organisation is ', this.$route.query.organisation)
         this.selectedReportingOrg = this.$route.query.organisation
       }
       if ('country' in this.$route.query) {
