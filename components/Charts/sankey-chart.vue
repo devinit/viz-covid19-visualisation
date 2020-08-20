@@ -124,7 +124,8 @@
 }
 </style>
 <script>
-import * as d3 from 'd3';
+import { select as d3Select } from 'd3-selection';
+import { scaleOrdinal as d3ScaleOrdinal, schemeCategory10 as d3SchemeCategory10 } from 'd3';
 import { sankey as d3Sankey, sankeyLinkHorizontal as d3SsankeyLinkHorizontal } from 'd3-sankey'
 export default {
   name: 'sankey-chart',
@@ -139,7 +140,7 @@ export default {
   },
   computed: {
     colors () {
-      return d3.scaleOrdinal(d3.schemeCategory10)
+      return d3ScaleOrdinal(d3SchemeCategory10)
     },
     nodes() {
       return this.sankey.nodes
@@ -187,8 +188,7 @@ export default {
     makeChart() {
       const {nodes, links} = this.sankey
 
-      const svg = d3
-        .select("#sankeyChart")
+      const svg = d3Select("#sankeyChart")
         .append("svg")
         .attr("width", this.width)
         .attr("height", this.height)
