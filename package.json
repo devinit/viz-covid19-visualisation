@@ -23,7 +23,7 @@
     "jquery": "^3.4.0",
     "nuxt": "^2.12.2",
     "popper.js": "^1.14.7",
-    "vue": "^2.5.18",
+    "vue": "^2.6.12",
     "vue-chartjs": "^3.4.2"
   },
   "devDependencies": {
