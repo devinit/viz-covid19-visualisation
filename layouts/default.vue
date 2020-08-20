@@ -7,16 +7,16 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item :to="{name: 'index'}" exact-active-class="active">
+          <b-nav-item :to="{name: 'index'}" exact-active-class="active" no-prefetch>
             Contributions
           </b-nav-item>
-          <b-nav-item :to="{name: 'activities'}" active-class="active">
+          <b-nav-item :to="{name: 'activities'}" active-class="active" no-prefetch>
             Activities
           </b-nav-item>
-          <b-nav-item :to="{name: 'flows'}" active-class="active">
+          <b-nav-item :to="{name: 'flows'}" active-class="active" no-prefetch>
             Flows
           </b-nav-item>
-          <b-nav-item :to="{name: 'about'}" active-class="active">
+          <b-nav-item :to="{name: 'about'}" active-class="active" no-prefetch>
             About
           </b-nav-item>
         </b-navbar-nav>
