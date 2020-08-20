@@ -78,7 +78,7 @@
                 v-model="perPage"
                 id="perPageSelect"
                 size="sm"
-                :options="[100,500,1000]"
+                :options="[50,100,500,1000]"
               ></b-form-select>
             </b-form-group>
           </b-col>
@@ -110,7 +110,7 @@
             {{ data.item.reportingOrg.text }}
           </template>
           <template v-slot:cell(implementingOrganisations)="data">
-            <span v-for="(org, orgindex) in (data.item.participatingOrganisation ? data.item.participatingOrganisation[4] : [])" :key="`${data.index}-${org.text}-${orgindex}`">
+            <span v-for="(org, orgindex) in data.item.participatingOrganisation[4]" :key="`${data.index}-${org.text}-${orgindex}`">
               {{ org.text }}
             </span>
           </template>
@@ -140,7 +140,7 @@
                 v-model="perPage"
                 id="perPageSelect"
                 size="sm"
-                :options="[100,500,1000]"
+                :options="[50,100,500,1000]"
               ></b-form-select>
             </b-form-group>
           </b-col>
@@ -217,7 +217,7 @@ export default {
         }
       ],
       currentPage: 1,
-      perPage: 100
+      perPage: 50
     }
   },
   computed: {
@@ -282,58 +282,32 @@ export default {
     codelists() {
       return this.$store.state.codelists
     },
+    activityUsedCodelists() {
+      return this.$store.state.activityUsedCodelists
+    },
     countries() {
-      var seenCountries = []
       return [{value: null, text: "All countries"}].concat(
-        this.originalActivityData.reduce((summary, activity) => {
-          if (activity.countriesRegions.length>0) {
-            activity.countriesRegions.forEach(countryRegion=> {
-              if (!seenCountries.includes(countryRegion.code)) {
-                summary.push({value: countryRegion.code, text: this.getCountryName(countryRegion)})
-                seenCountries.push(countryRegion.code)
-              }
-            })
-          } else {
-            if (!seenCountries.includes('')) {
-              seenCountries.push('')
-              summary.push({'value': '', 'text': 'Unspecified'})
-            }
-          }
+        this.activityUsedCodelists.countriesRegions.reduce((summary, countryRegion) => {
+          summary.push({value: countryRegion, text: this.getCountryName({'code': countryRegion})})
         return summary
       }, []).sort((a,b) =>
           a.text < b.text ? -1 : 1
       ))
     },
     reportingOrgs() {
-      var seenReportingOrgs = []
       return [{value: null, text: "All reporting organisations"}].concat(
-        this.originalActivityData.reduce((summary, activity) => {
-        if (!seenReportingOrgs.includes(activity.reportingOrg.ref)) {
-          summary.push({value: activity.reportingOrg.ref, text: activity.reportingOrg.text })
-          seenReportingOrgs.push(activity.reportingOrg.ref)
-        }
+        this.activityUsedCodelists.reportingOrgs.reduce((summary, reportingOrg) => {
+          const reportingOrgName = this.activityUsedCodelists.reportingOrgNames[reportingOrg]
+          summary.push({value: reportingOrg, text: reportingOrgName })
         return summary
       }, []).sort((a,b) =>
           a.text < b.text ? -1 : 1
       ))
     },
     sectors() {
-      var seenSectors = []
       return [{value: null, text: "All sectors"}].concat(
-        this.originalActivityData.reduce((summary, activity) => {
-          if (activity.sectors.length>0) {
-            activity.sectors.forEach(sector=> {
-              if (!seenSectors.includes(sector.code)) {
-                summary.push({value: sector.code, text: this.getSectorName(sector)})
-                seenSectors.push(sector.code)
-              }
-            })
-          } else {
-            if (!seenSectors.includes(null)) {
-              seenSectors.push(null)
-              summary.push({'value': '', 'text': 'Unspecified'})
-            }
-          }
+        this.activityUsedCodelists.sectors.reduce((summary, sector) => {
+          summary.push({value: sector, text: this.getSectorName({'code': sector})})
         return summary
       }, []).sort((a,b) =>
           a.text < b.text ? -1 : 1
@@ -368,6 +342,12 @@ export default {
           "UNSPECIFIED": "unspecified"
         }
         return this.selectedHumanitarianDevelopment.includes(_trans[activityTransaction.humanitarian])
+      }
+      if ((this.selectedCountry == null) &&
+        (this.selectedReportingOrg == null) &&
+        (this.selectedSector == null) &&
+        (this.selectedHumanitarianDevelopment.length == 4)) {
+        return this.$store.state.originalActivityTransactionData
       }
       return this.$store.state.originalActivityTransactionData.filter(activityTransaction => {
         return _checkReportingOrg(activityTransaction) && _checkCountry(activityTransaction) && _checkHumanitarianDevelopment(activityTransaction) && _checkSector(activityTransaction)
@@ -438,10 +418,12 @@ export default {
     },
     getCountryName(recipient_country) {
       if (recipient_country.code == '') { return 'Unspecified' }
-      return this.codelists.countries[recipient_country.code] ? this.codelists.countries[recipient_country.code] : `Unknown: ${recipient_country.code}`
+      const _countryName = this.codelists.countries[recipient_country.code]
+      return _countryName ? _countryName : `Unknown: ${recipient_country.code}`
     },
     getSectorName(sector) {
-      return this.codelists.sectors[sector.code] ? `${sector.code}: ${this.codelists.sectors[sector.code]}` : `${sector.code}: Unknown`
+      const _sectorName = this.codelists.sectors[sector.code]
+      return _sectorName ? `${sector.code}: ${_sectorName}` : `${sector.code}: Unknown`
     },
     async setup() {
      await axios.get(`${this.urls.COUNTRIES_CODELIST_URL}`).then(response => {
@@ -476,8 +458,9 @@ export default {
     },
     async loadData() {
       let _data = await axios.get(`${this.urls.DATA_URL}`)
-      let data = this.processActivityData(_data.data)
-      this.$store.commit('setOriginalActivityData', data)
+      let activities = this.processActivityData(_data.data.activities)
+      this.$store.commit('setOriginalActivityData', activities)
+      this.$store.commit('setActivityUsedCodelists', _data.data.codelists)
       this.$nuxt.$loading.finish()
     },
     async loadActivityTransactionData() {
@@ -527,7 +510,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if ('organisation' in this.$route.query) {
-        console.log('organisation is ', this.$route.query.organisation)
         this.selectedReportingOrg = this.$route.query.organisation
       }
       if ('country' in this.$route.query) {
