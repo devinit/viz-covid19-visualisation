@@ -58,7 +58,7 @@
                 v-model="perPage"
                 id="perPageSelect"
                 size="sm"
-                :options="[100,500,1000]"
+                :options="[50,100,500,1000]"
               ></b-form-select>
             </b-form-group>
           </b-col>
@@ -123,7 +123,7 @@
                 v-model="perPage"
                 id="perPageSelect"
                 size="sm"
-                :options="[100,500,1000]"
+                :options="[50,100,500,1000]"
               ></b-form-select>
             </b-form-group>
           </b-col>
@@ -188,7 +188,7 @@ export default {
         }
       ],
       currentPage: 1,
-      perPage: 100
+      perPage: 50
     }
   },
   computed: {
