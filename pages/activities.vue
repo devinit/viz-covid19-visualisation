@@ -201,11 +201,11 @@ export default {
         },
         {
           "format": "Excel (transactions)",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/traceability/transactions.xlsx?raw=true"
+          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/transactions.xlsx?raw=true"
         },
         {
           "format": "Excel (transactions - by country and sector)",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/traceability/transactions_sectors_countries_regions.xlsx?raw=true"
+          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/transactions_sectors_countries_regions.xlsx?raw=true"
         },
         {
           "format": "JSON",
