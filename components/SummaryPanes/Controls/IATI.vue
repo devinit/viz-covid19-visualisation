@@ -27,7 +27,12 @@
         </b-row>
       </b-col>
     </b-row>
-    <b-sidebar id="controls-sidebar" title="Customise data" no-close-on-route-change right>
+    <b-sidebar
+      id="controls-sidebar"
+      title="Customise data"
+      no-close-on-route-change
+      width="500px"
+      right>
       <div class="px-3 py-2">
         <h4>Display as</h4>
         <b-form-radio-group
@@ -115,6 +120,7 @@
             switches
           ></b-form-checkbox-group>
         </b-form-group>
+        <hr />
         <h5>Select countries based on UNM49 classifications</h5>
         <b-form-group
           label="Least developed countries"
@@ -145,6 +151,7 @@
         </b-form-group>
         <h5>Select reporting organisations based on type</h5>
         <b-select
+          class="mb-2"
           :options="organisationType"
           v-model="selectedOrganisationType"></b-select>
       </div>
