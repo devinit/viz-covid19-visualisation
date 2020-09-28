@@ -24,7 +24,9 @@
           :sectors="sectors"
           :selected-sector.sync="selectedSector"
           :selected-humanitarian-development.sync="selectedHumanitarianDevelopment"
-          :summaryType.sync="summaryType" />
+          :summary-type.sync="summaryType"
+          :m49-codelists="m49Codelists"
+          :activity-used-codelists="activityUsedCodelists" />
         <IATISummaryPane
           v-if="activities"
           :activityData="activities"
@@ -190,9 +192,9 @@ export default {
         "3": "Disbursements",
         "4": "Expenditure"
       },
-      selectedCountry: null,
-      selectedReportingOrg: null,
-      selectedSector: null,
+      selectedCountry: [],
+      selectedReportingOrg: [],
+      selectedSector: [],
       selectedHumanitarianDevelopment: ['humanitarian', 'humanitarian / development', 'development', 'unspecified'],
       downloadURLs: [
         {
@@ -237,7 +239,8 @@ export default {
         ACTIVITY_TRANSACTIONS_DATA_URL: "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/traceability/transactions_sector_country.json",
         COUNTRIES_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Country.json`,
         REGIONS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Region.json`,
-        SECTORS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Sector.json`
+        SECTORS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Sector.json`,
+        M49_CODELIST_URL: `https://gist.githubusercontent.com/markbrough/a4fe2a519ef1453790948cf3e50d0d20/raw/6eee625263dc39e37efd2003a928a57680e225e8/m49_countries_simplified.json` // Temporary
       }
     },
     fields() {
@@ -285,6 +288,9 @@ export default {
     activityUsedCodelists() {
       return this.$store.state.activityUsedCodelists
     },
+    m49Codelists() {
+      return this.$store.state.m49Codelists
+    },
     countries() {
       return [{value: null, text: "All countries"}].concat(
         this.activityUsedCodelists.countriesRegions.reduce((summary, countryRegion) => {
@@ -321,16 +327,16 @@ export default {
     },
     activityTransactions() {
       const _checkReportingOrg = (activityTransaction) => {
-        if (this.selectedReportingOrg == null) { return true }
-        return activityTransaction.reporting_org_ref == this.selectedReportingOrg
+        if (this.selectedReportingOrg.length == 0) { return true }
+        return this.selectedReportingOrg.includes(activityTransaction.reporting_org_ref)
       }
       const _checkCountry = (activityTransaction) => {
-        if (this.selectedCountry == null) { return true }
-        return activityTransaction.country_region == this.selectedCountry
+        if (this.selectedCountry.length == 0) { return true }
+        return this.selectedCountry.includes(activityTransaction.country_region)
       }
       const _checkSector = (activityTransaction) => {
-        if (this.selectedSector == null) { return true }
-        return activityTransaction.sector == this.selectedSector
+        if (this.selectedSector.length == 0) { return true }
+        return this.selectedSector.includes(activityTransaction.sector)
       }
       const _checkHumanitarianDevelopment = (activityTransaction) => {
         if (this.selectedHumanitarianDevelopment.length == 4) { return true }
@@ -343,9 +349,9 @@ export default {
         }
         return this.selectedHumanitarianDevelopment.includes(_trans[activityTransaction.humanitarian])
       }
-      if ((this.selectedCountry == null) &&
-        (this.selectedReportingOrg == null) &&
-        (this.selectedSector == null) &&
+      if ((this.selectedCountry.length==0) &&
+        (this.selectedReportingOrg.length==0) &&
+        (this.selectedSector.length==0) &&
         (this.selectedHumanitarianDevelopment.length == 4)) {
         return this.$store.state.originalActivityTransactionData
       }
@@ -355,26 +361,28 @@ export default {
     },
     activities() {
       const _checkReportingOrg = (activity) => {
-        if (this.selectedReportingOrg == null) { return true }
-        return activity.reportingOrg.ref == this.selectedReportingOrg
+        if (this.selectedReportingOrg.length == 0) { return true }
+        return this.selectedReportingOrg.includes(activity.reportingOrg.ref)
       }
       const _checkCountry = (activity) => {
-        if (this.selectedCountry == null) { return true }
-        else if (this.selectedCountry == "") { return activity.countriesRegions.length == 0 }
-        return activity.countriesRegions.map(cr=> { return cr.code}).includes(this.selectedCountry)
+        if (this.selectedCountry.length == 0) { return true }
+        else if (this.selectedCountry.includes("")) { if (activity.countriesRegions.length == 0) { return true }}
+        const overlap = activity.countriesRegions.filter(cr => { return this.selectedCountry.includes(cr.code) })
+        return overlap.length > 0
       }
       const _checkSector = (activity) => {
-        if (this.selectedSector == null) { return true }
-        else if (this.selectedSector == "") { return activity.sectors.length == 0 }
-        return activity.sectors.map(cr=> { return cr.code}).includes(this.selectedSector)
+        if (this.selectedSector.length == 0) { return true }
+        else if (this.selectedSector.includes("")) { if (activity.sectors.length == 0) { return true } }
+        const overlap = activity.sectors.filter(so => { return this.selectedSector.includes(so.code)})
+        return overlap.length > 0
       }
       const _checkHumanitarianDevelopment = (activity) => {
         if (this.selectedHumanitarianDevelopment.length == 4) { return true }
         return this.selectedHumanitarianDevelopment.includes(activity.humanitarianDevelopment)
       }
-      if ((this.selectedCountry == null) &&
-        (this.selectedReportingOrg == null) &&
-        (this.selectedSector == null) &&
+      if ((this.selectedCountry.length==0) &&
+        (this.selectedReportingOrg.length==0) &&
+        (this.selectedSector.length==0) &&
         (this.selectedHumanitarianDevelopment.length == 4)) {
         return this.originalActivityData
       } else {
@@ -385,14 +393,14 @@ export default {
     },
     urlQuery() {
       var _query = {}
-      if (this.selectedReportingOrg) {
-        _query.organisation = this.selectedReportingOrg
+      if (this.selectedReportingOrg.length > 0) {
+        _query.organisation = Object.values(this.selectedReportingOrg).join()
       }
-      if (this.selectedCountry) {
-        _query.country = this.selectedCountry
+      if (this.selectedCountry.length > 0) {
+        _query.country = Object.values(this.selectedCountry).join()
       }
-      if (this.selectedSector) {
-        _query.sector = this.selectedSector
+      if (this.selectedSector.length > 0) {
+        _query.sector = Object.values(this.selectedSector).join()
       }
       if (this.selectedHumanitarianDevelopment.length != 4) {
         _query.humanitarian = Object.values(this.selectedHumanitarianDevelopment).join()
@@ -447,6 +455,10 @@ export default {
           return sectors
         }, {}))
       })
+     await axios.get(`${this.urls.M49_CODELIST_URL}`).then(response => {
+        var data = response.data
+        this.$store.commit('setM49Codelists', data)
+     })
     this.loadData()
     },
     processActivityData(data) {
@@ -510,13 +522,13 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if ('organisation' in this.$route.query) {
-        this.selectedReportingOrg = this.$route.query.organisation
+        this.selectedReportingOrg = this.$route.query.organisation.split(",")
       }
       if ('country' in this.$route.query) {
-        this.selectedCountry = this.$route.query.country
+        this.selectedCountry = this.$route.query.country.split(",")
       }
       if ('sector' in this.$route.query) {
-        this.selectedSector = this.$route.query.sector
+        this.selectedSector = this.$route.query.sector.split(",")
       }
       if ('summary' in this.$route.query) {
         this.summaryType = this.$route.query.summary
