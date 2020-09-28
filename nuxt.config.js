@@ -45,6 +45,7 @@ export default {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    'nuxt-vue-select',
   ],
   /*
   ** Axios module configuration
