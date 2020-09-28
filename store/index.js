@@ -18,11 +18,19 @@ export const state = () => ({
     'countriesRegions': [],
     'sectors': [],
     'reportingOrgs': [],
-    'reportingOrgNames': {}
+    'reportingOrgNames': {},
+    'reportingOrgTypes': {},
   },
   originalActivityData: [],
   originalActivityTransactionData: [],
-  originalFlows: []
+  originalFlows: [],
+  m49Codelists: {
+    'leastDeveloped': [],
+    'landLockedDeveloping': [],
+    'smallIslandDeveloping': [],
+    'developing': [],
+    'developed': []
+  }
 })
 
 export const mutations = {
@@ -49,6 +57,9 @@ export const mutations = {
   },
   setCodelistsOrganisationType(state, codelists) {
     Vue.set(state.codelists, 'organisationTypes', codelists)
+  },
+  setM49Codelists(state, codelists) {
+    state.m49Codelists = codelists
   },
   setActivityUsedCodelists(state, codelists) {
     state.activityUsedCodelists = codelists
