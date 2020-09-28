@@ -3,22 +3,26 @@
     <b-row>
       <b-col>
         <h3>Summary</h3>
-        <b-row>
+        <b-row class="mb-1">
           <b-col md="8">
             <p class="lead selection-text">
               Showing a <b v-b-toggle.controls-sidebar>{{ displaySummary }}</b> of
               <b v-b-toggle.controls-sidebar>{{ summaryTypeText }}</b> by
               <b v-b-toggle.controls-sidebar>{{ summaryLabelText }}</b>.
             </p>
+          </b-col>
+          <b-col md="4" class="text-md-right">
+            <b-btn v-b-toggle.controls-sidebar variant="success">Filter and customise display &raquo;</b-btn>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
             <p v-if="filterText" class="filter-text">
               Filtered to activities
               <span v-for="filter in filterText">
                 {{ filter.text }} <b v-b-toggle.controls-sidebar>{{ filter.filter }}</b>
               </span>.
             </p>
-          </b-col>
-          <b-col md="4" class="text-md-right">
-            <b-btn v-b-toggle.controls-sidebar variant="success">Filter and customise display &raquo;</b-btn>
           </b-col>
         </b-row>
       </b-col>
@@ -53,30 +57,53 @@
           size="sm"
           ></b-form-select>
         <hr />
-        <h4>Filters</h4>
+        <b-row>
+          <b-col>
+            <h4>Filters</h4>
+          </b-col>
+          <b-col class="text-right" v-if="filterText">
+            <b-btn variant="danger" size="sm" @click="resetFilters">Reset</b-btn>
+          </b-col>
+        </b-row>
         <b-form-group
-          label="Reporting Organisation">
-          <b-form-select
+          label="Reporting Organisation"
+          :state="organisation.length > 0 ? true : null">
+          <v-select
           v-model="organisation"
           :options="reportingOrgs"
-          :state="organisation ? true : null"
-          size="sm"></b-form-select>
+          label="text"
+          :getOptionKey="option => option.value"
+          :getOptionLabel="option => option.text"
+          :reduce="option => option.value"
+          placeholder="All organisations"
+          multiple
+          />
         </b-form-group>
         <b-form-group
-          label="Country">
-          <b-form-select
-          v-model="country"
+          label="Country"
+          :state="country.length > 0 ? true : null">
+          <v-select
           :options="countries"
-          :state="country ? true : null"
-          size="sm"></b-form-select>
+          label="text"
+          :getOptionKey="option => option.value"
+          :getOptionLabel="option => option.text"
+          :reduce="option => option.value"
+          placeholder="All countries"
+          multiple
+          v-model="country" />
         </b-form-group>
         <b-form-group
-          label="Sector">
-          <b-form-select
+          label="Sector"
+          :state="sector.length > 0 ? true : null">
+          <v-select
           v-model="sector"
           :options="sectors"
-          :state="sector ? true : null"
-          size="sm"></b-form-select>
+          label="text"
+          :getOptionKey="option => option.value"
+          :getOptionLabel="option => option.text"
+          :reduce="option => option.value"
+          placeholder="All sectors"
+          multiple />
         </b-form-group>
         <b-form-group
           label="Humanitarian / Development">
@@ -88,6 +115,38 @@
             switches
           ></b-form-checkbox-group>
         </b-form-group>
+        <h5>Select countries based on UNM49 classifications</h5>
+        <b-form-group
+          label="Least developed countries"
+          class="mb-1"
+        >
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('leastDeveloped', true)">Include</b-btn>
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('leastDeveloped', false)">Exclude</b-btn>
+        </b-form-group>
+        <b-form-group
+          label="Land locked developing countries"
+          class="mb-1"
+        >
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('landLockedDeveloping', true)">Include</b-btn>
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('landLockedDeveloping', false)">Exclude</b-btn>
+        </b-form-group>
+        <b-form-group
+          label="Small island developing states"
+          class="mb-1"
+        >
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('smallIslandDeveloping', true)">Include</b-btn>
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('smallIslandDeveloping', false)">Exclude</b-btn>
+        </b-form-group>
+        <b-form-group
+          label="Developed or developing"
+        >
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('developed', true)">Developed</b-btn>
+            <b-btn size="sm" variant="outline-secondary" @click="selectCountries('developing', true)">Developing</b-btn>
+        </b-form-group>
+        <h5>Select reporting organisations based on type</h5>
+        <b-select
+          :options="organisationType"
+          v-model="selectedOrganisationType"></b-select>
       </div>
     </b-sidebar>
   </div>
@@ -96,6 +155,9 @@
   .selection-text b, .filter-text b {
     border-bottom: 2px solid #eeeeee;
     cursor: pointer;
+  }
+  .is-valid .vs__dropdown-toggle {
+    border-color: #28a745;
   }
 </style>
 <script>
@@ -106,7 +168,8 @@ export default {
     "selectedCountry", "countries",
     "selectedReportingOrg", "reportingOrgs",
     "selectedSector", "sectors",
-    "selectedHumanitarianDevelopment", "summaryType"],
+    "selectedHumanitarianDevelopment", "summaryType",
+    "m49Codelists", "activityUsedCodelists"],
   data() {
     return {
       summaryLabelOptions: [
@@ -128,19 +191,58 @@ export default {
         {'value': 'humanitarian / development', 'text': 'Humanitarian / Development'},
         {'value': 'development', 'text': 'Development'},
         {'value': 'unspecified', 'text': 'Unspecified'}
+      ],
+      selectedOrganisationType: null,
+      organisationType: [
+        {value: null, text: "Select one..."},
+        {value: "10", text: "Government"},
+        {value: "15", text: "Other Public Sector"},
+        {value: "21", text: "International NGO"},
+        {value: "22", text: "National NGO"},
+        {value: "30", text: "Public Private Partnership"},
+        {value: "40", text: "Multilateral"},
+        {value: "60", text: "Foundation"},
+        {value: "70", text: "Private Sector"},
+        {value: "80", text: "Academic, Training and Research"},
+        {value: "90", text: "Other"}
       ]
+    }
+  },
+  watch: {
+    selectedOrganisationType(newOrgType) {
+      if (newOrgType != null) {
+        const organisationsTypes = this.activityUsedCodelists.reportingOrgTypes[newOrgType].filter(org => {
+          return org != null
+        })
+        this.organisation = organisationsTypes ? organisationsTypes : []
+      }
+    }
+  },
+  methods: {
+    selectCountries(m49List, required_value) {
+      this.country = this.countries.filter(country => {
+        if (country.text.includes("regional")) { return false }
+        if (country.value == null) { return false }
+        return this.m49Codelists[m49List].includes(country.value) == required_value
+      }).map(country => { return country.value })
+    },
+    resetFilters() {
+      this.country = []
+      this.organisation = []
+      this.sector = []
+      this.selectedOrganisationType = null
     }
   },
   computed: {
     filterText() {
       var filters = []
-      if (this.country != null) {
+      if (this.country.length > 0) {
         filters.push({'text': 'in ', 'filter': this.countryText})
       }
-      if (this.organisation != null) {
+      if (this.organisation.length > 0) {
         filters.push({'text': 'reported by ', 'filter': this.organisationText})
       }
-      if (this.sector != null) {
+      if (this.sector.length > 0) {
         filters.push({'text': 'in the sector ', 'filter': this.sectorText})
       }
       if (this.humanitarianDevelopment.length != 4) {
@@ -151,18 +253,21 @@ export default {
     },
     countryText() {
       return this.countries.filter(option => {
-        return option.value == this.country
-      })[0].text
+        return this.country.includes(option.value)
+      }).map(country => { return country.text }
+      ).join(", ")
     },
     sectorText() {
       return this.sectors.filter(option => {
-        return option.value == this.sector
-      })[0].text
+        return this.sector.includes(option.value)
+      }).map(sector => { return sector.text }
+      ).join(", ")
     },
     organisationText() {
       return this.reportingOrgs.filter(option => {
-        return option.value == this.organisation
-      })[0].text
+        return this.organisation.includes(option.value)
+      }).map(organisation => { return organisation.text }
+      ).join(", ")
     },
     summaryTypeText() {
       return this.summaryTypeOptions.filter(option => {
