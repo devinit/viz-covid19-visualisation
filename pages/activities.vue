@@ -292,32 +292,29 @@ export default {
       return this.$store.state.m49Codelists
     },
     countries() {
-      return [{value: null, text: "All countries"}].concat(
-        this.activityUsedCodelists.countriesRegions.reduce((summary, countryRegion) => {
+      return this.activityUsedCodelists.countriesRegions.reduce((summary, countryRegion) => {
           summary.push({value: countryRegion, text: this.getCountryName({'code': countryRegion})})
         return summary
       }, []).sort((a,b) =>
           a.text < b.text ? -1 : 1
-      ))
+      )
     },
     reportingOrgs() {
-      return [{value: null, text: "All reporting organisations"}].concat(
-        this.activityUsedCodelists.reportingOrgs.reduce((summary, reportingOrg) => {
+      return this.activityUsedCodelists.reportingOrgs.reduce((summary, reportingOrg) => {
           const reportingOrgName = this.activityUsedCodelists.reportingOrgNames[reportingOrg]
           summary.push({value: reportingOrg, text: reportingOrgName })
         return summary
       }, []).sort((a,b) =>
           a.text < b.text ? -1 : 1
-      ))
+      )
     },
     sectors() {
-      return [{value: null, text: "All sectors"}].concat(
-        this.activityUsedCodelists.sectors.reduce((summary, sector) => {
+      return this.activityUsedCodelists.sectors.reduce((summary, sector) => {
           summary.push({value: sector, text: this.getSectorName({'code': sector})})
         return summary
       }, []).sort((a,b) =>
           a.text < b.text ? -1 : 1
-      ))
+      )
     },
     originalActivityData() {
       return this.$store.state.originalActivityData
