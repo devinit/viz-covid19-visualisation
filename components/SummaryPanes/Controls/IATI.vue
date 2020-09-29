@@ -121,7 +121,7 @@
           ></b-form-checkbox-group>
         </b-form-group>
         <hr />
-        <h5>Select countries based on UNM49 classifications</h5>
+        <h5>Select countries based on <a href="https://unstats.un.org/unsd/methodology/m49/">UN classifications</a></h5>
         <b-form-group
           label="Least developed countries"
           class="mb-1"
