@@ -120,6 +120,16 @@
             switches
           ></b-form-checkbox-group>
         </b-form-group>
+        <b-form-group
+          label="IATI COVID-19 Publishing Guidance">
+          <b-form-checkbox-group
+            v-model="COVIDMatches"
+            :options="COVIDMatchesOptions"
+            size="sm"
+            stacked
+            switches
+          ></b-form-checkbox-group>
+        </b-form-group>
         <hr />
         <h5>Select countries based on <a href="https://unstats.un.org/unsd/methodology/m49/">UN classifications</a></h5>
         <b-form-group
@@ -176,7 +186,8 @@ export default {
     "selectedReportingOrg", "reportingOrgs",
     "selectedSector", "sectors",
     "selectedHumanitarianDevelopment", "summaryType",
-    "m49Codelists", "activityUsedCodelists"],
+    "m49Codelists", "activityUsedCodelists",
+    "selectedCOVIDMatches"],
   data() {
     return {
       summaryLabelOptions: [
@@ -212,6 +223,14 @@ export default {
         {value: "70", text: "Private Sector"},
         {value: "80", text: "Academic, Training and Research"},
         {value: "90", text: "Other"}
+      ],
+      COVIDMatchesOptions: [
+      {'value': 'title', 'text': 'Activity Title'},
+      {'value': 'description', 'text': 'Activity Description'},
+      {'value': 'GLIDE', 'text': 'GLIDE Code'},
+      {'value': 'HRP', 'text': 'HRP Code'},
+      {'value': 'tag', 'text': 'Tag'},
+      {'value': 'transaction-description', 'text': 'Transaction Description'}
       ]
     }
   },
@@ -285,6 +304,16 @@ export default {
       return this.summaryLabelOptions.filter(option => {
         return option.value == this.summaryLabelField
       })[0].text.toLowerCase()
+    },
+    COVIDMatches: {
+     // getter
+      get: function () {
+        return this.selectedCOVIDMatches
+      },
+      // setter
+      set: function (newValue) {
+        this.$emit('update:selectedCOVIDMatches', newValue)
+      }
     },
     humanitarianDevelopment: {
      // getter
