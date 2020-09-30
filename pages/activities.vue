@@ -26,7 +26,8 @@
           :selected-humanitarian-development.sync="selectedHumanitarianDevelopment"
           :summary-type.sync="summaryType"
           :m49-codelists="m49Codelists"
-          :activity-used-codelists="activityUsedCodelists" />
+          :activity-used-codelists="activityUsedCodelists"
+          :selectedCOVIDMatches.sync="selectedCOVIDMatches" />
         <IATISummaryPane
           v-if="activities"
           :activityData="activities"
@@ -219,7 +220,8 @@ export default {
         }
       ],
       currentPage: 1,
-      perPage: 50
+      perPage: 50,
+      selectedCOVIDMatches: ['title', 'description', 'GLIDE', 'HRP', 'tag', 'transaction-description']
     }
   },
   computed: {
@@ -346,10 +348,16 @@ export default {
         }
         return this.selectedHumanitarianDevelopment.includes(_trans[activityTransaction.humanitarian])
       }
+      const _checkCOVIDMatches = (activity) => {
+        if (this.selectedCOVIDMatches.length == 6) { return true }
+        const overlap = activityTransaction.covid_matches.filter(match => { return this.selectedCOVIDMatches.includes(match)})
+        return overlap.length > 0
+      }
       if ((this.selectedCountry.length==0) &&
         (this.selectedReportingOrg.length==0) &&
         (this.selectedSector.length==0) &&
-        (this.selectedHumanitarianDevelopment.length == 4)) {
+        (this.selectedHumanitarianDevelopment.length == 4) &&
+        (this.selectedCOVIDMatches.length == 6)) {
         return this.$store.state.originalActivityTransactionData
       }
       return this.$store.state.originalActivityTransactionData.filter(activityTransaction => {
@@ -377,14 +385,20 @@ export default {
         if (this.selectedHumanitarianDevelopment.length == 4) { return true }
         return this.selectedHumanitarianDevelopment.includes(activity.humanitarianDevelopment)
       }
+      const _checkCOVIDMatches = (activity) => {
+        if (this.selectedCOVIDMatches.length == 6) { return true }
+        const overlap = activity.COVIDMatches.filter(match => { return this.selectedCOVIDMatches.includes(match)})
+        return overlap.length > 0
+      }
       if ((this.selectedCountry.length==0) &&
         (this.selectedReportingOrg.length==0) &&
         (this.selectedSector.length==0) &&
-        (this.selectedHumanitarianDevelopment.length == 4)) {
+        (this.selectedHumanitarianDevelopment.length == 4) &&
+        (this.selectedCOVIDMatches.length == 6)) {
         return this.originalActivityData
       } else {
         return this.originalActivityData.filter(activity => {
-          return _checkReportingOrg(activity) && _checkCountry(activity) && _checkHumanitarianDevelopment(activity) && _checkSector(activity)
+          return _checkReportingOrg(activity) && _checkCountry(activity) && _checkHumanitarianDevelopment(activity) && _checkSector(activity) && _checkCOVIDMatches(activity)
         })
       }
     },
