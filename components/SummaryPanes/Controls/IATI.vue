@@ -121,7 +121,8 @@
           ></b-form-checkbox-group>
         </b-form-group>
         <b-form-group
-          label="IATI COVID-19 Publishing Guidance">
+          label="IATI COVID-19 Publishing Guidance"
+          description="Select activities based on which part(s) of the IATI COVID-19 Publishing Guidance they use.">
           <b-form-checkbox-group
             v-model="COVIDMatches"
             :options="COVIDMatchesOptions"
