@@ -425,6 +425,9 @@ export default {
       if (this.summaryLabelField != 'organisation') {
         _query.breakdown = this.summaryLabelField
       }
+      if (this.selectedCOVIDMatches.length != 6) {
+        _query.covid_matches = Object.values(this.selectedCOVIDMatches).join()
+      }
       return _query
     }
   },
@@ -528,6 +531,9 @@ export default {
         this.loadActivityTransactionData()
       }
       this.updateRouter()
+    },
+    selectedCOVIDMatches(value) {
+      this.updateRouter()
     }
   },
   mounted() {
@@ -552,6 +558,9 @@ export default {
       }
       if ('humanitarian' in this.$route.query) {
         this.selectedHumanitarianDevelopment = this.$route.query.humanitarian.split(",")
+      }
+      if ('covid_matches' in this.$route.query) {
+        this.selectedCOVIDMatches = this.$route.query.covid_matches.split(",")
       }
       if (Object.values(this.codelists.countries).length == 0) {
         this.$nuxt.$loading.start()
