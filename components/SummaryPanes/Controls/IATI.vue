@@ -226,12 +226,12 @@ export default {
         {value: "90", text: "Other"}
       ],
       COVIDMatchesOptions: [
-      {'value': 'title', 'text': 'Activity Title'},
-      {'value': 'description', 'text': 'Activity Description'},
-      {'value': 'GLIDE', 'text': 'GLIDE Code'},
-      {'value': 'HRP', 'text': 'HRP Code'},
-      {'value': 'tag', 'text': 'Tag'},
-      {'value': 'transaction-description', 'text': 'Transaction Description'}
+        {'value': 'title', 'text': 'Activity Title'},
+        {'value': 'description', 'text': 'Activity Description'},
+        {'value': 'GLIDE', 'text': 'GLIDE Code'},
+        {'value': 'HRP', 'text': 'HRP Code'},
+        {'value': 'tag', 'text': 'Tag'},
+        {'value': 'transaction-description', 'text': 'Transaction Description'}
       ]
     }
   },
@@ -275,6 +275,9 @@ export default {
       if (this.humanitarianDevelopment.length != 4) {
         filters.push({'text': 'classified as ', 'filter': this.humanitarianDevelopment.join(", ")})
       }
+      if (this.COVIDMatches.length != 6) {
+        filters.push({'text': 'matching IATI Publishing Guidance by ', 'filter': this.COVIDMatchesText.join(", ")})
+      }
       if (filters.length == 0) { return null }
       return filters
     },
@@ -305,6 +308,13 @@ export default {
       return this.summaryLabelOptions.filter(option => {
         return option.value == this.summaryLabelField
       })[0].text.toLowerCase()
+    },
+    COVIDMatchesText() {
+      return this.COVIDMatchesOptions.filter(option => {
+        return this.COVIDMatches.includes(option.value)
+      }).map(option => {
+        return option.text
+      })
     },
     COVIDMatches: {
      // getter
