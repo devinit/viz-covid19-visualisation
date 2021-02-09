@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" style="margin-top: 20px;">
+  <b-container fluid class="mt-4">
     <div>
       <h2>About</h2>
       <p>Today we are facing an unprecedented crisis with devastating health, economic and social effects which are being felt around the world. The response from the international community to the Covid-19 pandemic has been extraordinary and vast: different appeals have been launched, substantial financing is being provided, and projects are being implemented. All of this calls for greater data-driven transparency of humanitarian and development financing and activities. We as an international community need to better track this information to enable a more coordinated and effective response towards affected populations.</p>
@@ -69,7 +69,7 @@
         </b-col>
       </b-row>
     </div>
-  </div>
+  </b-container>
 </template>
 <style>
 .logos-section {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" style="margin-top: 20px;">
+  <b-container fluid class="mt-4">
     <div>
       <b-alert show variant="warning">
         This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's <a href="https://fts.unocha.org/">FTS</a>. Read more on the <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
@@ -140,7 +140,7 @@
         </b-row>
       </template>
     </div>
-  </div>
+  </b-container>
 </template>
 <style>
 </style>
