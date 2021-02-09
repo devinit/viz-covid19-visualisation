@@ -14,18 +14,18 @@ $ npm i
 $ npm run dev
 
 # build for production and launch server
-$ nprm run build
+$ npm run build
 $ npm run start
 
 # generate static project
-$ nprm run generate
+$ npm run generate
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
 
-## Generate a Github Pages static site
+## Generate a Github Pages static site and push to Github
 
 ```bash
-$ npm gen-gh
-$ npm deploy
+$ npm run generate
+$ npm run deploy
 ```
