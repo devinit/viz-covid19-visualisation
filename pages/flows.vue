@@ -205,15 +205,15 @@ export default {
       downloadURLs: [
         {
           "format": "Excel (transactional data)",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/transactions.xlsx?raw=true"
+          "url": "https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx?raw=true"
         },
         {
           "format": "Excel (simplified data)",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/traceability_grouped.xlsx?raw=true"
+          "url": "https://ocha-dap.github.io/covid19-data/traceability/traceability_grouped.xlsx?raw=true"
         },
         {
           "format": "JSON (simplified data)",
-          "url": "https://github.com/markbrough/covid19-data/raw/gh-pages/traceability/traceability.json"
+          "url": "https://ocha-dap.github.io/covid19-data/traceability/traceability.json"
         }
       ]
     }
@@ -224,7 +224,7 @@ export default {
     },
     urls() {
       return  {
-        DATA_URL: "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/traceability/traceability.json",
+        DATA_URL: "https://ocha-dap.github.io/covid19-data/traceability/traceability.json",
         ORGANISATION_TYPES: "https://codelists.codeforiati.org/api/json/en/OrganisationType.json"
       }
     },

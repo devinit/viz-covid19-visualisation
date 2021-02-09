@@ -25,7 +25,7 @@
         <li><code>humanitarian-scope</code> matches the Humanitarian Response Plan code "HCOVD20"</li>
         <li><code>tag/@code</code> "COVID-19"</li>
       </ul>
-      <b-alert variant="info" show>More detailed data notes, and a number of data files behind this visualisation, are available from <a href="https://github.com/markbrough/covid19-data/tree/gh-pages">the <code>covid19-data</code> github repository</a>. The data files are automatically updated every 24 hours.</b-alert>
+      <b-alert variant="info" show>More detailed data notes, and a number of data files behind this visualisation, are available from <a href="https://github.com/OCHA-DAP/covid19-data/tree/gh-pages">the <code>covid19-data</code> github repository</a>. The data files are automatically updated every 24 hours.</b-alert>
       <p>The activity data is extracted from the <a href="https://d-portal.org">d-portal API</a> using the above criteria.</p>
       <h4>Flows</h4>
       <p>The flows page contains the same selection of activities as the activities page. Data is filtered to a particular organisation type (e.g. government, multilateral, NGO), which is initially set to "Government" but can be changed by the user at the top of the page.</p>
@@ -42,9 +42,9 @@
       <p>The front end of the prototype is built in Vue.JS and hosted as a static site on Github pages. The data is extracted from the FTS and D-Portal APIs, and reprocessed and condensed daily, using scripts written in Python and run on Travis.</p>
       <p>All of the tools we have developed are shared as open source software:</p>
       <ul>
-        <li><a href="https://github.com/markbrough/covid19">The front end (in Vue.JS)</a></li>
-        <li><a href="https://github.com/markbrough/covid19-data">The data processing scripts (in Python)</a></li>
-        <li><a href="https://github.com/markbrough/covid19-data/tree/gh-pages">The reprocessed data (automatically generated every 24 hours</a>)</li>
+        <li><a href="https://github.com/OCHA-DAP/viz-covid19-visualisation">The front end (in Vue.JS)</a></li>
+        <li><a href="https://github.com/OCHA-DAP/covid19-data">The data processing scripts (in Python)</a></li>
+        <li><a href="https://github.com/OCHA-DAP/covid19-data/tree/gh-pages">The reprocessed data (automatically generated every 24 hours</a>)</li>
       </ul>
       <hr />
       <h2>Privacy Policy and Cookies</h2>

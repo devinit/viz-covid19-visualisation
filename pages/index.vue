@@ -180,11 +180,11 @@ export default {
       downloadURLs: [
         {
           "format": "Excel",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/contributions.xlsx?raw=true"
+          "url": "https://ocha-dap.github.io/covid19-data/xlsx/contributions.xlsx?raw=true"
         },
         {
           "format": "JSON",
-          "url": "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-emergency-911.json"
+          "url": "https://ocha-dap.github.io/covid19-data/fts-emergency-911.json"
         }
       ],
       currentPage: 1,
@@ -223,9 +223,9 @@ export default {
     },
     urls() {
       return {
-        EMERGENCY_URL: `https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-emergency-${this.emergencyID}.json`,
-        PLAN_URL: `https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-plan-${this.planID}.json`,
-        FLOW_URL: `https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/fts-flow-plan-${this.planID}.json`
+        EMERGENCY_URL: `https://ocha-dap.github.io/covid19-data/fts-emergency-${this.emergencyID}.json`,
+        PLAN_URL: `https://ocha-dap.github.io/covid19-data/fts-plan-${this.planID}.json`,
+        FLOW_URL: `https://ocha-dap.github.io/covid19-data/fts-flow-plan-${this.planID}.json`
       }
     },
     fields() {

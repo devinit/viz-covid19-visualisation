@@ -200,23 +200,23 @@ export default {
       downloadURLs: [
         {
           "format": "Excel (activities)",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/xlsx/activities.xlsx?raw=true"
+          "url": "https://ocha-dap.github.io/covid19-data/xlsx/activities.xlsx"
         },
         {
           "format": "Excel (transactions)",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/transactions.xlsx?raw=true"
+          "url": "https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx"
         },
         {
           "format": "Excel (transactions - by country and sector)",
-          "url": "https://github.com/markbrough/covid19-data/blob/gh-pages/traceability/transactions_sectors_countries_regions.xlsx?raw=true"
+          "url": "https://ocha-dap.github.io/covid19-data/traceability/transactions_sectors_countries_regions.xlsx"
         },
         {
           "format": "JSON",
-          "url": "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/activities.json"
+          "url": "https://ocha-dap.github.io/covid19-data/activities.json"
         },
         {
           "format": "XML",
-          "url": "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/xml/activities.xml"
+          "url": "https://ocha-dap.github.io/covid19-data/xml/activities.xml"
         }
       ],
       currentPage: 1,
@@ -237,12 +237,12 @@ export default {
     },
     urls() {
       return  {
-        DATA_URL: "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/activities.json",
-        ACTIVITY_TRANSACTIONS_DATA_URL: "https://raw.githubusercontent.com/markbrough/covid19-data/gh-pages/traceability/transactions_sector_country.json",
+        DATA_URL: "https://ocha-dap.github.io/covid19-data/activities.json",
+        ACTIVITY_TRANSACTIONS_DATA_URL: "https://ocha-dap.github.io/covid19-data/traceability/transactions_sector_country.json",
         COUNTRIES_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Country.json`,
         REGIONS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Region.json`,
         SECTORS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Sector.json`,
-        M49_CODELIST_URL: `https://gist.githubusercontent.com/markbrough/a4fe2a519ef1453790948cf3e50d0d20/raw/6eee625263dc39e37efd2003a928a57680e225e8/m49_countries_simplified.json` // Temporary
+        M49_CODELIST_URL: `https://ocha-dap.github.io/covid19-data/m49_countries_simplified.json`
       }
     },
     fields() {
