@@ -1,11 +1,6 @@
-import axios from 'axios'
-import config from '../nuxt.config'
 import Vue from 'vue'
 
 export const state = () => ({
-  useCache: false,
-  IATISource: 'dportal',
-  CORSAnywhere: "https://cors-anywhere.herokuapp.com/",
   contributions: [],
   planRequirements: 0,
   planFunded: 0,
@@ -34,12 +29,6 @@ export const state = () => ({
 })
 
 export const mutations = {
-  toggleUseCache(state) {
-    state.useCache = !(state.useCache)
-  },
-  setIATISource(state, source) {
-    state.IATISource = source
-  },
   setContributions(state, contributions) {
     state.contributions = contributions
   },
