@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid" style="margin-top: 20px;">
     <div>
-      <div class="alert alert-warning">
+      <b-alert show variant="warning">
         This is a prototype visualisation to track the Covid-19 response. The data on this page comes from <a href="https://iatistandard.org">IATI</a>. Read more on the <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
-      </div>
+      </b-alert>
       <h2>Activities</h2>
       <hr />
       <template v-if="isBusy">
