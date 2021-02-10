@@ -80,7 +80,7 @@ Tooltips can be used throughout the site to provide more information where requi
   v-b-tooltip.hover
   variant="secondary"
   pill
-  :title="tooltips[theTooltipKey]">
+  :title="tooltips['theTooltipKey']">
   ?
 </b-badge>
 ```
