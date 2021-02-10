@@ -60,9 +60,9 @@ export default {
     [
       '@nuxtjs/gtm'
     ],
-
+    // LINTING
     // Doc: https://github.com/nuxt-community/eslint-module
-    // Uncomment the below lines to enable linting
+    // Comment out the below 3 lines to disable linting
     ['@nuxtjs/eslint-module', {
       fix: true
     }]

@@ -30,6 +30,8 @@ $ npm run generate
 $ npm run deploy
 ```
 
+Note that linting is enabled, and will automatically fix a number of issues in your code. However, sometimes this can feel a bit aggressive or annoying while you are working through something, so if you want to disable linting, you can comment out the 3 indicated lines in `nuxt.config.js`
+
 ## Overview
 
 There are four "tabs" in the visualisation: Contributions; Activities; Flows; About. Each of these tabs is accessible from the top navigation bar. The navigation bar is found in `default.vue`.
