@@ -17,7 +17,7 @@ module.exports = {
   rules: {
     'vue/html-closing-bracket-newline': 'off',
     'dot-notation': 'off',
-    'vue/comment-directive': 'off',
-    'vue/require-prop-types': 'off'
+    'vue/require-prop-types': 'off',
+    'vue/component-tags-order': 'off'
   }
 }
