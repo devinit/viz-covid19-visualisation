@@ -179,7 +179,6 @@ export default {
   data() {
     return {
       title: config.head.title,
-      description: config.description,
       displaySummary: 'chart',
       summaryType: "number_of_projects",
       summaryLabelField: 'organisation',

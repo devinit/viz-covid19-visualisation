@@ -167,7 +167,6 @@ export default {
   data() {
     return {
       title: config.head.title,
-      description: config.description,
       transactionType: "2",
       transactionTypes: {
         "2": "Commitments",

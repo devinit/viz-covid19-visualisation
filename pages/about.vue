@@ -84,8 +84,7 @@ export default {
   },
   data() {
     return {
-      title: config.head.title,
-      description: config.description
+      title: config.head.title
     }
   }
 }

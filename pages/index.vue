@@ -161,7 +161,6 @@ export default {
   data() {
     return {
       title: config.head.title,
-      description: config.description,
       organisations: {
         'United Nations Development Programme': 'XM-DAC-41114',
         'United Nations High Commissioner for Refugees': 'XM-DAC-41121',
