@@ -29,3 +29,35 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 $ npm run generate
 $ npm run deploy
 ```
+
+## Overview
+
+There are four "tabs" in the visualisation: Contributions; Activities; Flows; About. Each of these tabs is accessible from the top navigation bar. The navigation bar is found in `default.vue`.
+
+### Contributions (`pages/index.vue`)
+
+The Contributions tab contains data from UNOCHA's FTS, and displays **components** in the following order:
+* `SummaryPanes/HRP.vue`: a "thermometer" at the top (currently, showing the % of the COVID-19 HRP funded to date).
+* `SummaryPanes/Controls/Contributions.vue`: a set of controls for determining what information gets displayed both in the Summary pane and in the list of contributions.
+* `SummaryPanes/Contributions.vue`: a Summary pane containing a chart or table for the currently filtered information.
+* `ActivityTable.vue`: a table containing the list of contributions.
+
+### Activities (`pages/activities.vue`)
+
+The Activities tab contains data from IATI, and displays **components** in the following order:
+* `SummaryPanes/Controls/IATI.vue`: a set of controls for determining what information gets displayed both in the Summary pane and in the list of activities.
+* `SummaryPanes/IATI.vue`: a Summary pane containing a chart or table for the currently filtered information.
+* `ActivityTable.vue`: a table containing the list of IATI activities.
+
+### Flows (`pages/flows.vue`)
+
+The Flows tab contains data from IATI, and displays the following information (which could potentially be stored in separate components, but currently is just in the one file, because these elements are not re-used elsewhere).
+* A summary table displaying commitments, disbursements and expenditure for all organisations in the selected **organisation type**.
+* A Sankey chart (using the `Sankey.vue` component) for the selected **organisation**.
+* A table containing the total disbursements and expenditures from the selected organisation to its implementing partners.
+* A table containing incoming funds from the selected organisation's funders to this organisation.
+
+### About (`pages/about.vue`)
+
+The About tab contains a description and background of the visualisation. It describes data sources and provides some high-level technical details.
+
