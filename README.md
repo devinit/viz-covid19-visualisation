@@ -30,7 +30,11 @@ $ npm run generate
 $ npm run deploy
 ```
 
-Note that linting is enabled, and will automatically fix a number of issues in your code. However, sometimes this can feel a bit aggressive or annoying while you are working through something, so if you want to disable linting, you can comment out the 3 indicated lines in `nuxt.config.js`
+## Linting
+
+Note that linting is enabled, and will automatically fix a number of issues in your code. However, sometimes this can feel a bit aggressive or annoying while you are working through something, so if you want to disable linting, you can comment out the 3 indicated lines in `nuxt.config.js`.
+
+You can manage linting rules in `.eslintrc.js`. I disabled a few rules but you may have other preferences.
 
 ## Overview
 
