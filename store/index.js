@@ -25,7 +25,8 @@ export const state = () => ({
     smallIslandDeveloping: [],
     developing: [],
     developed: []
-  }
+  },
+  tooltips: {}
 })
 
 export const mutations = {
@@ -61,6 +62,12 @@ export const mutations = {
   },
   setOriginalFlows (state, flows) {
     state.originalFlows = flows
+  },
+  setTooltips (state, tooltips) {
+    state.tooltips = tooltips.reduce((summary, item) => {
+      summary[item.key] = item.tooltip
+      return summary
+    }, {})
   }
 }
 

@@ -115,6 +115,15 @@
         sortable
         responsive
       >
+        <template #head()="data">
+          {{ data.label }} <b-badge
+            v-b-tooltip.hover
+            variant="secondary"
+            pill
+            :title="tooltips[data.column]">
+            ?
+          </b-badge>
+        </template>
         <template #cell(title)="data">
           <a
             :href="`http://d-portal.org/q.html?aid=${data.item.iatiIdentifier}`"
@@ -176,6 +185,7 @@
 </style>
 <script>
 import axios from 'axios'
+import csvtojson from 'csvtojson'
 import config from '../nuxt.config'
 import IATISummaryPane from '~/components/SummaryPanes/IATI.vue'
 import IATISummaryPaneControls from '~/components/SummaryPanes/Controls/IATI.vue'
@@ -293,6 +303,9 @@ export default {
     },
     codelists () {
       return this.$store.state.codelists
+    },
+    tooltips () {
+      return this.$store.state.tooltips
     },
     activityUsedCodelists () {
       return this.$store.state.activityUsedCodelists
@@ -564,6 +577,12 @@ export default {
       const activities = this.processActivityData(_data.data.activities)
       this.$store.commit('setOriginalActivityData', activities)
       this.$store.commit('setActivityUsedCodelists', _data.data.codelists)
+      await axios.get('/tooltips.csv')
+        .then((response) => {
+          return csvtojson().fromString(response.data).then((jsonData) => {
+            this.$store.commit('setTooltips', jsonData)
+          })
+        })
       this.$nuxt.$loading.finish()
     },
     async loadActivityTransactionData () {
