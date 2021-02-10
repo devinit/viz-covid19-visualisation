@@ -7,11 +7,11 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: "A prototype visualisation to track the Covid-19 response." },
+      { hid: 'description', name: 'description', content: 'A prototype visualisation to track the Covid-19 response.' },
       { name: 'twitter:card', content: 'summary' },
       { name: 'twitter:site', content: '@devinit' },
       { name: 'twitter:title', content: 'Covid-19 Response Visualisation' },
-      { name: 'twitter:description', content: "A prototype visualisation to track the Covid-19 response" },
+      { name: 'twitter:description', content: 'A prototype visualisation to track the Covid-19 response' },
       { name: 'twitter:image', content: 'https://covid19.humportal.org/visualisation.png' },
       { name: 'twitter:image:alt', content: 'Contributions to the Covid-19 emergency.' }
     ],
@@ -44,7 +44,7 @@ export default {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    'nuxt-vue-select',
+    'nuxt-vue-select'
   ],
   /*
   ** Axios module configuration
@@ -75,7 +75,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
+    extend (config, ctx) {
       config.externals = {
         moment: 'moment'
       }

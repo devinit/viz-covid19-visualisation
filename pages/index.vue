@@ -1,17 +1,21 @@
 <template>
   <b-container fluid class="mt-4">
     <div>
-      <b-alert show variant="warning">
-        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's <a href="https://fts.unocha.org/">FTS</a>. Read more on the <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
+      <b-alert
+        show
+        variant="warning">
+        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's <a href="https://fts.unocha.org/">FTS</a>. Read more on the <nuxt-link :to="{name: 'about'}" no-prefetch>
+          about page
+        </nuxt-link>.
       </b-alert>
       <h2>Contributions</h2>
-      <hr />
+      <hr>
 
       <HRPSummaryPane :urls="urls" />
 
       <template v-if="busy">
         <div class="text-center text-secondary mb-4">
-          <b-spinner class="align-middle"></b-spinner>
+          <b-spinner class="align-middle" />
           <strong>Loading...</strong>
         </div>
       </template>
@@ -23,12 +27,12 @@
           :funding-organisations="fundingOrganisations"
           :implementing-organisation.sync="implementingOrganisation"
           :implementing-organisations="implementingOrganisations" />
-        <hr />
+        <hr>
         <ContributionsSummaryPane
           :display-summary="displaySummary"
           :summary-label-field="summaryLabelField"
           :contributions="contributions" />
-          <hr />
+        <hr>
         <b-row>
           <b-col sm="7" md="9">
             <h3>{{ contributions.length }} Contributions</h3>
@@ -39,7 +43,9 @@
                 v-for="downloadURL in downloadURLs"
                 v-bind:key="downloadURL.format"
                 :href="downloadURL.url"
-                target="_blank">{{ downloadURL.format }}</b-dropdown-item>
+                target="_blank">
+                {{ downloadURL.format }}
+              </b-dropdown-item>
             </b-dropdown>
           </b-col>
         </b-row>
@@ -55,11 +61,11 @@
               label-size="sm"
               label-for="perPageSelect">
               <b-form-select
-                v-model="perPage"
                 id="perPageSelect"
-                size="sm"
+                v-model="perPage"
                 :options="[50,100,500,1000]"
-              ></b-form-select>
+                size="sm"
+              />
             </b-form-group>
           </b-col>
           <b-col sm="7" md="6" class="my-1">
@@ -70,25 +76,27 @@
               align="fill"
               size="sm"
               class="my-0"
-            ></b-pagination>
+            />
           </b-col>
         </b-row>
-        <b-table :items="contributions" :fields="fields"
-          sort-by="date"
+        <b-table
+          :items="contributions"
+          :fields="fields"
           :sort-desc="true"
-          responsive
           :current-page="currentPage"
-          :per-page="perPage">
+          :per-page="perPage"
+          sort-by="date"
+          responsive>
           <template v-slot:cell(source)="data">
             {{ data.item.source }}
           </template>
           <template v-slot:cell(destination)="data">
             <template v-if="data.item.destination in organisations">
               <nuxt-link
-              :to="{name:'activities', query: { organisation: organisations[data.item.destination] }}"
-              :title="`View activities reported by ${data.item.destination}`"
-              v-b-tooltip.hover>
-              {{ data.item.destination }}
+                :to="{name:'activities', query: { organisation: organisations[data.item.destination] }}"
+                :title="`View activities reported by ${data.item.destination}`"
+                v-b-tooltip.hover>
+                {{ data.item.destination }}
               </nuxt-link>
             </template>
             <template v-else>
@@ -120,11 +128,11 @@
               label-size="sm"
               label-for="perPageSelect">
               <b-form-select
-                v-model="perPage"
                 id="perPageSelect"
-                size="sm"
+                v-model="perPage"
                 :options="[50,100,500,1000]"
-              ></b-form-select>
+                size="sm"
+              />
             </b-form-group>
           </b-col>
           <b-col sm="7" md="6" class="my-1">
@@ -135,7 +143,7 @@
               align="fill"
               size="sm"
               class="my-0"
-            ></b-pagination>
+            />
           </b-col>
         </b-row>
       </template>
@@ -145,44 +153,42 @@
 <style>
 </style>
 <script>
-import ActivityTable from '~/components/ActivityTable.vue'
+import axios from 'axios'
+import config from '../nuxt.config'
 import ContributionsSummaryPane from '~/components/SummaryPanes/Contributions.vue'
 import HRPSummaryPane from '~/components/SummaryPanes/HRP.vue'
 import ContributionsSummaryPaneControls from '~/components/SummaryPanes/Controls/Contributions.vue'
-import config from '../nuxt.config'
-import axios from 'axios'
 export default {
   components: {
-    ActivityTable,
     ContributionsSummaryPane,
     ContributionsSummaryPaneControls,
     HRPSummaryPane
   },
-  data() {
+  data () {
     return {
       title: config.head.title,
       organisations: {
         'United Nations Development Programme': 'XM-DAC-41114',
         'United Nations High Commissioner for Refugees': 'XM-DAC-41121',
         "United Nations Children's Fund": 'XM-DAC-41122',
-        "Danish Refugee Council": 'DK-CVR-20699310',
-        "World Health Organization": 'XM-DAC-928',
-        "World Food Programme": 'XM-DAC-41140'
+        'Danish Refugee Council': 'DK-CVR-20699310',
+        'World Health Organization': 'XM-DAC-928',
+        'World Food Programme': 'XM-DAC-41140'
       },
       planID: 952,
       emergencyID: 911,
       displaySummary: 'chart',
-      summaryLabelField: "fundingOrganisation",
+      summaryLabelField: 'fundingOrganisation',
       fundingOrganisation: null,
       implementingOrganisation: null,
       downloadURLs: [
         {
-          "format": "Excel",
-          "url": "https://ocha-dap.github.io/covid19-data/xlsx/contributions.xlsx?raw=true"
+          'format': 'Excel',
+          'url': 'https://ocha-dap.github.io/covid19-data/xlsx/contributions.xlsx?raw=true'
         },
         {
-          "format": "JSON",
-          "url": "https://ocha-dap.github.io/covid19-data/fts-emergency-911.json"
+          'format': 'JSON',
+          'url': 'https://ocha-dap.github.io/covid19-data/fts-emergency-911.json'
         }
       ],
       currentPage: 1,
@@ -190,83 +196,83 @@ export default {
     }
   },
   computed: {
-    busy() {
-      return this.$store.state.contributions.length == 0
+    busy () {
+      return this.$store.state.contributions.length === 0
     },
-    fundingOrganisations() {
-      var seenOrganisations = []
-      return [{value: null, text: "All funders"}].concat(
+    fundingOrganisations () {
+      const seenOrganisations = []
+      return [{ value: null, text: 'All funders' }].concat(
         this.originalContributions.reduce((summary, contribution) => {
-        if (!seenOrganisations.includes(contribution.source)) {
-          summary.push({value: contribution.source, text: contribution.source })
-          seenOrganisations.push(contribution.source)
-        }
-        return summary
-      }, []).sort((a,b) =>
+          if (!seenOrganisations.includes(contribution.source)) {
+            summary.push({ value: contribution.source, text: contribution.source })
+            seenOrganisations.push(contribution.source)
+          }
+          return summary
+        }, []).sort((a, b) =>
           a.text < b.text ? -1 : 1
-      ))
+        ))
     },
-    implementingOrganisations() {
-      var seenOrganisations = []
-      return [{value: null, text: "All implementers"}].concat(
+    implementingOrganisations () {
+      const seenOrganisations = []
+      return [{ value: null, text: 'All implementers' }].concat(
         this.originalContributions.reduce((summary, contribution) => {
-        if (!seenOrganisations.includes(contribution.destination)) {
-          summary.push({value: contribution.destination, text: contribution.destination })
-          seenOrganisations.push(contribution.destination)
-        }
-        return summary
-      }, []).sort((a,b) =>
+          if (!seenOrganisations.includes(contribution.destination)) {
+            summary.push({ value: contribution.destination, text: contribution.destination })
+            seenOrganisations.push(contribution.destination)
+          }
+          return summary
+        }, []).sort((a, b) =>
           a.text < b.text ? -1 : 1
-      ))
+        ))
     },
-    urls() {
+    urls () {
       return {
         EMERGENCY_URL: `https://ocha-dap.github.io/covid19-data/fts-emergency-${this.emergencyID}.json`,
         PLAN_URL: `https://ocha-dap.github.io/covid19-data/fts-plan-${this.planID}.json`,
         FLOW_URL: `https://ocha-dap.github.io/covid19-data/fts-flow-plan-${this.planID}.json`
       }
     },
-    fields() {
+    fields () {
       return [
-      { key: "id", "label": "ID", sortable: true },
-      { key: "source", "label": "Funder", sortable: true },
-      { key: "destination", "label": "Implementer", sortable: true },
-      { key: "status", "label": "Status", sortable: true },
-      { key: "date", "label": "Date", sortable: true },
-      { key: "amountUSD", "label": "Amount (USD)", sortable: true, formatter: "numberFormatter"
-      },
-      { key: "details", "label": "Details" }
+        { key: 'id', 'label': 'ID', sortable: true },
+        { key: 'source', 'label': 'Funder', sortable: true },
+        { key: 'destination', 'label': 'Implementer', sortable: true },
+        { key: 'status', 'label': 'Status', sortable: true },
+        { key: 'date', 'label': 'Date', sortable: true },
+        { key: 'amountUSD', 'label': 'Amount (USD)', sortable: true, formatter: 'numberFormatter'
+        },
+        { key: 'details', 'label': 'Details' }
       ]
     },
-    originalContributions() {
+    originalContributions () {
       return this.$store.state.contributions
     },
-    totalRows() {
+    totalRows () {
       return this.contributions.length
     },
-    contributions() {
-      if (this.originalContributions == []) { [] }
-      if ((this.fundingOrganisation == null) && (this.implementingOrganisation == null)) {
+    contributions () {
+      if (this.originalContributions === []) { return [] }
+      if ((this.fundingOrganisation === null) && (this.implementingOrganisation === null)) {
         return this.originalContributions
       } else {
-        return this.originalContributions.filter(contribution => {
-          if ((this.fundingOrganisation != null) && (this.implementingOrganisation != null)) {
-            return (contribution.source == this.fundingOrganisation) &&
-            (contribution.destination == this.implementingOrganisation)
-          } else if (this.fundingOrganisation != null) {
-            return contribution.source == this.fundingOrganisation
-          } else if (this.implementingOrganisation != null) {
-            return contribution.destination == this.implementingOrganisation
+        return this.originalContributions.filter((contribution) => {
+          if ((this.fundingOrganisation !== null) && (this.implementingOrganisation !== null)) {
+            return (contribution.source === this.fundingOrganisation) &&
+            (contribution.destination === this.implementingOrganisation)
+          } else if (this.fundingOrganisation !== null) {
+            return contribution.source === this.fundingOrganisation
+          } else if (this.implementingOrganisation !== null) {
+            return contribution.destination === this.implementingOrganisation
           }
         })
       }
     },
-    urlQuery() {
-      var _query = {}
-      if (this.displaySummary != 'chart') {
+    urlQuery () {
+      const _query = {}
+      if (this.displaySummary !== 'chart') {
         _query.display = this.displaySummary
       }
-      if (this.summaryLabelField != 'fundingOrganisation') {
+      if (this.summaryLabelField !== 'fundingOrganisation') {
         _query.summary = this.summaryLabelField
       }
       if (this.fundingOrganisation) {
@@ -278,43 +284,8 @@ export default {
       return _query
     }
   },
-  methods: {
-    numberFormatter(value) {
-      return value ? value.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2
-      }) : ""
-    },
-    getOrganisationName(organisation) {
-      var organisations = organisation.filter(item => {
-        return item.type=="Organization"
-      }).map(item=>{
-        return item.name
-      })
-      return organisations ? organisations.join() : ""
-    },
-    async loadData() {
-      this.$nuxt.$loading.start()
-      await axios.get(`${this.urls.EMERGENCY_URL}`).then(response => {
-        this.$store.commit('setContributions', this.processContributions(response.data.data.flows))
-      })
-      this.$nuxt.$loading.finish()
-    },
-    processContributions(contributions) {
-      return contributions.filter(contribution=> {
-          return ((contribution.boundary == "incoming") && (contribution.onBoundary == "single"))
-        }).map(contribution => {
-        contribution.source = this.getOrganisationName(contribution.sourceObjects)
-        contribution.destination = this.getOrganisationName(contribution.destinationObjects)
-        return contribution
-      })
-    },
-    updateRouter() {
-      this.$router.push({ name: 'index', query: this.urlQuery })
-    }
-  },
   watch: {
-    fundingOrganisation(value) {
+    fundingOrganisation (value) {
       if (value) {
         this.summaryLabelField = 'implementingOrganisation'
       } else {
@@ -322,20 +293,20 @@ export default {
       }
       this.updateRouter()
     },
-    implementingOrganisation(value) {
+    implementingOrganisation (value) {
       if (value) {
         this.summaryLabelField = 'fundingOrganisation'
       }
       this.updateRouter()
     },
-    displaySummary(value) {
+    displaySummary (value) {
       this.updateRouter()
     },
-    summaryLabelField(value) {
+    summaryLabelField (value) {
       this.updateRouter()
     }
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       if (this.contributions.length) { return }
       this.loadData()
@@ -352,6 +323,41 @@ export default {
         this.summaryLabelField = this.$route.query.summary
       }
     })
+  },
+  methods: {
+    numberFormatter (value) {
+      return value ? value.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+      }) : ''
+    },
+    getOrganisationName (organisation) {
+      const organisations = organisation.filter((item) => {
+        return item.type === 'Organization'
+      }).map((item) => {
+        return item.name
+      })
+      return organisations ? organisations.join() : ''
+    },
+    async loadData () {
+      this.$nuxt.$loading.start()
+      await axios.get(`${this.urls.EMERGENCY_URL}`).then((response) => {
+        this.$store.commit('setContributions', this.processContributions(response.data.data.flows))
+      })
+      this.$nuxt.$loading.finish()
+    },
+    processContributions (contributions) {
+      return contributions.filter((contribution) => {
+        return ((contribution.boundary === 'incoming') && (contribution.onBoundary === 'single'))
+      }).map((contribution) => {
+        contribution.source = this.getOrganisationName(contribution.sourceObjects)
+        contribution.destination = this.getOrganisationName(contribution.destinationObjects)
+        return contribution
+      })
+    },
+    updateRouter () {
+      this.$router.push({ name: 'index', query: this.urlQuery })
+    }
   }
 }
 </script>

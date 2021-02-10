@@ -10,19 +10,19 @@
         <b-form inline>
           <b-form-group>
             <b-form-radio-group
-              class="displaySummaryControls mb-1"
               v-model="summary"
               :options="summaryDisplayOptions"
+              class="displaySummaryControls mb-1"
               buttons
               button-variant="outline-primary"
-            ></b-form-radio-group>
+            />
             <b-form-radio-group
-              class="displaySummaryControls mb-1"
               v-model="summaryLabel"
               :options="summaryLabelOptions"
+              class="displaySummaryControls mb-1"
               buttons
               button-variant="outline-secondary"
-            ></b-form-radio-group>
+            />
           </b-form-group>
         </b-form>
       </b-col>
@@ -30,17 +30,17 @@
         <b-form inline>
           <b-form-group class="ml-lg-auto">
             <b-form-select
-            v-model="theFundingOrganisation"
-            :options="fundingOrganisations"
-            :state="theFundingOrganisation ? true : null"
-            class="mb-1"
-            style="max-width: 200px"></b-form-select>
+              v-model="theFundingOrganisation"
+              :options="fundingOrganisations"
+              :state="theFundingOrganisation ? true : null"
+              class="mb-1"
+              style="max-width: 200px" />
             <b-form-select
-            v-model="theImplementingOrganisation"
-            :options="implementingOrganisations"
-            :state="theImplementingOrganisation ? true : null"
-            class="mb-1"
-            style="max-width: 200px"></b-form-select>
+              v-model="theImplementingOrganisation"
+              :options="implementingOrganisations"
+              :state="theImplementingOrganisation ? true : null"
+              class="mb-1"
+              style="max-width: 200px" />
           </b-form-group>
         </b-form>
       </b-col>
@@ -51,62 +51,62 @@
 export default {
   components: {
   },
-  props: ["displaySummary", "summaryLabelField",
-    "implementingOrganisation", "implementingOrganisations",
-    "fundingOrganisation", "fundingOrganisations"],
-  data() {
+  props: ['displaySummary', 'summaryLabelField',
+    'implementingOrganisation', 'implementingOrganisations',
+    'fundingOrganisation', 'fundingOrganisations'],
+  data () {
     return {
       summaryLabelOptions: [
-        {'value': 'fundingOrganisation', 'text': 'Funder'},
-        {'value': 'implementingOrganisation', 'text': 'Implementer'}
+        { 'value': 'fundingOrganisation', 'text': 'Funder' },
+        { 'value': 'implementingOrganisation', 'text': 'Implementer' }
       ],
       summaryDisplayOptions: [
-        {'value': 'chart', 'text': 'Chart'},
-        {'value': 'table', 'text': 'Table'}
+        { 'value': 'chart', 'text': 'Chart' },
+        { 'value': 'table', 'text': 'Table' }
       ]
     }
   },
   computed: {
     summary: {
-     // getter
-      get: function () {
+      // getter
+      get () {
         return this.displaySummary
       },
       // setter
-      set: function (newValue) {
+      set (newValue) {
         this.$emit('update:displaySummary', newValue)
       }
     },
     summaryLabel: {
-     // getter
-      get: function () {
+      // getter
+      get () {
         return this.summaryLabelField
       },
       // setter
-      set: function (newValue) {
+      set (newValue) {
         this.$emit('update:summaryLabelField', newValue)
       }
     },
     theImplementingOrganisation: {
-     // getter
-      get: function () {
+      // getter
+      get () {
         return this.implementingOrganisation
       },
       // setter
-      set: function (newValue) {
+      set (newValue) {
         this.$emit('update:implementingOrganisation', newValue)
       }
     },
     theFundingOrganisation: {
-     // getter
-      get: function () {
+      // getter
+      get () {
         return this.fundingOrganisation
       },
       // setter
-      set: function (newValue) {
+      set (newValue) {
         this.$emit('update:fundingOrganisation', newValue)
       }
-    },
+    }
   }
 }
 </script>

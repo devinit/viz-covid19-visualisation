@@ -4,14 +4,24 @@
       <h2>About</h2>
       <p>Today we are facing an unprecedented crisis with devastating health, economic and social effects which are being felt around the world. The response from the international community to the Covid-19 pandemic has been extraordinary and vast: different appeals have been launched, substantial financing is being provided, and projects are being implemented. All of this calls for greater data-driven transparency of humanitarian and development financing and activities. We as an international community need to better track this information to enable a more coordinated and effective response towards affected populations.</p>
       <p>This new Covid-19 tracking prototype has been developed through the <a href="https://interagencystandingcommittee.org/greater-transparency">Grand Bargain transparency workstream</a> to visualise the response to Covid-19 as a pathway towards more comprehensive tracking, including what activities are being financed in affected countries. This visualisation is initially based on the UN Office for the Coordination of Humanitarian Affairs (UNOCHA)'s <a href="https://fts.unocha.org/">Financial Tracking Service</a> (FTS) and <a href="https://iatistandard.org/en/">International Aid Transparency Initiative (IATI)</a> data and will be updated daily as new data becomes available through each source.</p>
-      <hr />
+      <hr>
       <h2>Data</h2>
-      <p>The visualisation contains data on <nuxt-link :to="{name: 'index'}" no-prefetch>contributions</nuxt-link>, demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}" no-prefetch>activities</nuxt-link> (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from UNOCHA's FTS. The activity level data comes from IATI.</p>
+      <p>
+        The visualisation contains data on <nuxt-link :to="{name: 'index'}" no-prefetch>
+          contributions
+        </nuxt-link>, demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}" no-prefetch>
+          activities
+        </nuxt-link> (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from UNOCHA's FTS. The activity level data comes from IATI.
+      </p>
       <p>The contributions page is most useful for understanding total aggregate funding, and the activities page most useful for understanding how funding is broken down by project.</p>
-      <b-alert variant="secondary" show>The two datasets cannot easily be compared, particularly due to the different coverage of the two data sources. UNOCHA FTS contains data on humanitarian contributions as reported to FTS. IATI contains activity (or project) level data on humanitarian and development activities, but the availability and quality of data will vary depending on what data each organisation has published.</b-alert>
+      <b-alert variant="secondary" show>
+        The two datasets cannot easily be compared, particularly due to the different coverage of the two data sources. UNOCHA FTS contains data on humanitarian contributions as reported to FTS. IATI contains activity (or project) level data on humanitarian and development activities, but the availability and quality of data will vary depending on what data each organisation has published.
+      </b-alert>
       <h4>Contributions</h4>
       <p>The contributions page contains a summary of total funding to date against the <a href="https://fts.unocha.org/appeals/952/summary">Covid-19 Global Humanitarian Response Plan</a>. This page also contains an aggregation and detailed breakdown of funding against the <a href="https://fts.unocha.org/emergencies/911/summary/2020">Covid-19 emergency</a>.</p>
-      <b-alert variant="secondary" show>Note: Funding to the emergency will generally contain a significantly broader selection of contributions than funding to the plan. For this reason, the total amount of funding under the plan should not be compared with the total amount of funding under the emergency.</b-alert>
+      <b-alert variant="secondary" show>
+        Note: Funding to the emergency will generally contain a significantly broader selection of contributions than funding to the plan. For this reason, the total amount of funding under the plan should not be compared with the total amount of funding under the emergency.
+      </b-alert>
       <p>The visualisation does not contain any double-counting, though it does currently contain funding at different stages of the process. The dataset contains pledges, commitments, and paid contributions (see the status column in the detailed data). The status of an individual contribution is updated as it progresses through these stages.</p>
       <p>The contributions data is extracted from the <a href="https://fts.unocha.org/content/fts-public-api">FTS Public API</a>.</p>
       <h4>Activities</h4>
@@ -25,7 +35,9 @@
         <li><code>humanitarian-scope</code> matches the Humanitarian Response Plan code "HCOVD20"</li>
         <li><code>tag/@code</code> "COVID-19"</li>
       </ul>
-      <b-alert variant="info" show>More detailed data notes, and a number of data files behind this visualisation, are available from <a href="https://github.com/OCHA-DAP/covid19-data/tree/gh-pages">the <code>covid19-data</code> github repository</a>. The data files are automatically updated every 24 hours.</b-alert>
+      <b-alert variant="info" show>
+        More detailed data notes, and a number of data files behind this visualisation, are available from <a href="https://github.com/OCHA-DAP/covid19-data/tree/gh-pages">the <code>covid19-data</code> github repository</a>. The data files are automatically updated every 24 hours.
+      </b-alert>
       <p>The activity data is extracted from the <a href="https://d-portal.org">d-portal API</a> using the above criteria.</p>
       <h4>Flows</h4>
       <p>The flows page contains the same selection of activities as the activities page. Data is filtered to a particular organisation type (e.g. government, multilateral, NGO), which is initially set to "Government" but can be changed by the user at the top of the page.</p>
@@ -37,7 +49,7 @@
         <li>including data from partner organisations: this will include data reported by implementing partners of the selected publishing organisation. Note that this may lead to double-counting if both the publisher and one of their implementing partners are providing data on the same funding at different points in the chain.</li>
       </ul>
       <p>The tables below the visualisation show the same data as the visualisation, but in tabular format. They also contain more detail as the visualisation is limited to displaying the top 10 largest entries.</p>
-      <hr />
+      <hr>
       <h2>Technical details</h2>
       <p>The front end of the prototype is built in Vue.JS and hosted as a static site on Github pages. The data is extracted from the FTS and D-Portal APIs, and reprocessed and condensed daily, using scripts written in Python and run on Travis.</p>
       <p>All of the tools we have developed are shared as open source software:</p>
@@ -46,11 +58,13 @@
         <li><a href="https://github.com/OCHA-DAP/covid19-data">The data processing scripts (in Python)</a></li>
         <li><a href="https://github.com/OCHA-DAP/covid19-data/tree/gh-pages">The reprocessed data (automatically generated every 24 hours</a>)</li>
       </ul>
-      <hr />
+      <hr>
       <h2>Privacy Policy and Cookies</h2>
-      <p>View <a href="/Privacy-Policy.pdf">our privacy policy and cookies policy</a>. If you have any further
-        questions, please get in touch with us via <a href="mailto:humportal@devinit.org">humportal@devinit.org</a>.</p>
-      <hr />
+      <p>
+        View <a href="/Privacy-Policy.pdf">our privacy policy and cookies policy</a>. If you have any further
+        questions, please get in touch with us via <a href="mailto:humportal@devinit.org">humportal@devinit.org</a>.
+      </p>
+      <hr>
       <b-row class="logos-section">
         <b-col>
           <a href="http://devinit.org/" target="_blank"><img src="~/assets/logos/devinit.png" width="100%" height="auto" alt="Development Initiatives Logo"></a>
@@ -82,7 +96,7 @@ import config from '../nuxt.config'
 export default {
   components: {
   },
-  data() {
+  data () {
     return {
       title: config.head.title
     }

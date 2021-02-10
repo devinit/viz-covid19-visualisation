@@ -1,14 +1,15 @@
 <template>
   <div>
-    <p class="text-muted">Funding against Emergency <b>Coronavirus disease Outbreak - Covid-19</b></p>
+    <p class="text-muted">
+      Funding against Emergency <b>Coronavirus disease Outbreak - Covid-19</b>
+    </p>
     <BarChart
       v-if="displaySummary==='chart'"
       :barChartData="contributionsSummary"
       :labelField="summaryLabelField"
-      valueLabel="Funding (USDm)"
-      valueField="value"
-      valuePrecision="2">
-    </BarChart>
+      value-label="Funding (USDm)"
+      value-field="value"
+      value-precision="2" />
     <b-table
       v-if="displaySummary==='table'"
       :items="contributionsSummary"
@@ -17,8 +18,7 @@
       asort-desc="true"
       small
       head-variant="dark"
-      bordered>
-    </b-table>
+      bordered />
   </div>
 </template>
 <script>
@@ -29,37 +29,37 @@ export default {
     BarChart
   },
   props: ['displaySummary', 'summaryLabelField', 'contributions'],
-  data() {
+  data () {
     return {
     }
   },
   computed: {
-    contributionsBusy() {
-      return this.$store.state.contributions.length == 0
+    contributionsBusy () {
+      return this.$store.state.contributions.length === 0
     },
-    contributionsSummary() {
-      return Object.values(this.contributions.reduce((summary, item)=> {
-        if (this.summaryLabelField == "fundingOrganisation") {
-          var target = summary[item.source] ?
-            summary[item.source] :
-            summary[item.source] = {
-             'fundingOrganisation': item.source
+    contributionsSummary () {
+      return Object.values(this.contributions.reduce((summary, item) => {
+        if (this.summaryLabelField === 'fundingOrganisation') {
+          var target = summary[item.source]
+            ? summary[item.source]
+            : summary[item.source] = {
+              'fundingOrganisation': item.source
             }
-        } else if (this.summaryLabelField == "implementingOrganisation") {
-          var target = summary[item.destination] ?
-            summary[item.destination] :
-            summary[item.destination] = {
-             'implementingOrganisation': item.destination
+        } else if (this.summaryLabelField === 'implementingOrganisation') {
+          var target = summary[item.destination]
+            ? summary[item.destination]
+            : summary[item.destination] = {
+              'implementingOrganisation': item.destination
             }
         }
-        target.value ? target.value += (item.amountUSD/1000000.0) : target.value = (item.amountUSD/1000000.0)
+        target.value ? target.value += (item.amountUSD / 1000000.0) : target.value = (item.amountUSD / 1000000.0)
 
         return summary
       }, {}))
-      .sort((a,b) => a.value > b.value ? 1 : -1
-      ).reverse()
+        .sort((a, b) => a.value > b.value ? 1 : -1
+        ).reverse()
     },
-    summaryFields() {
+    summaryFields () {
       const out = [
         {
           key: this.summaryLabelField,
@@ -69,8 +69,8 @@ export default {
           key: 'value',
           label: 'Value (USDm)',
           sortable: true,
-          thClass: "text-right",
-          tdClass: "text-right",
+          thClass: 'text-right',
+          tdClass: 'text-right',
           formatter: 'valueFormatter'
         }
       ]
@@ -79,11 +79,11 @@ export default {
     }
   },
   methods: {
-    valueFormatter(value) {
+    valueFormatter (value) {
       return value ? value.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2
-        }) : 0
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+      }) : 0
     }
   }
 }

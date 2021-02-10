@@ -14,7 +14,7 @@ export const state = () => ({
     'sectors': [],
     'reportingOrgs': [],
     'reportingOrgNames': {},
-    'reportingOrgTypes': {},
+    'reportingOrgTypes': {}
   },
   originalActivityData: [],
   originalActivityTransactionData: [],
@@ -29,37 +29,37 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setContributions(state, contributions) {
+  setContributions (state, contributions) {
     state.contributions = contributions
   },
-  setPlanRequirements(state, value) {
+  setPlanRequirements (state, value) {
     state.planRequirements = value
   },
-  setPlanFunded(state, value) {
+  setPlanFunded (state, value) {
     state.planFunded = value
   },
-  setCodelistsCountry(state, codelists) {
+  setCodelistsCountry (state, codelists) {
     Vue.set(state.codelists, 'countries', codelists)
   },
-  setCodelistsSector(state, codelists) {
+  setCodelistsSector (state, codelists) {
     Vue.set(state.codelists, 'sectors', codelists)
   },
-  setCodelistsOrganisationType(state, codelists) {
+  setCodelistsOrganisationType (state, codelists) {
     Vue.set(state.codelists, 'organisationTypes', codelists)
   },
-  setM49Codelists(state, codelists) {
+  setM49Codelists (state, codelists) {
     state.m49Codelists = codelists
   },
-  setActivityUsedCodelists(state, codelists) {
+  setActivityUsedCodelists (state, codelists) {
     state.activityUsedCodelists = codelists
   },
-  setOriginalActivityData(state, activities) {
+  setOriginalActivityData (state, activities) {
     state.originalActivityData = activities
   },
-  setOriginalActivityTransactionData(state, activityTransactions) {
+  setOriginalActivityTransactionData (state, activityTransactions) {
     state.originalActivityTransactionData = activityTransactions
   },
-  setOriginalFlows(state, flows) {
+  setOriginalFlows (state, flows) {
     state.originalFlows = flows
   }
 }

@@ -1,14 +1,22 @@
 <template>
   <div>
     <template v-if="barChartData.length > 0">
-      <BarChart :data="chartData" :options="barChartOptions" class="bar-chart" v-if="barChartData" />
-      <p class="text-muted mb-3 mt-3" v-if="barChartData.length > 20">
-        Showing the top 20 entries. Change view to <b>Table</b> to view all entries.
+      <BarChart
+        v-if="barChartData"
+        :data="chartData"
+        :options="barChartOptions"
+        class="bar-chart"
+      />
+      <p v-if="barChartData.length > 20" class="text-muted mb-3 mt-3">
+        Showing the top 20 entries. Change view to <b>Table</b> to view all
+        entries.
       </p>
     </template>
     <template v-else>
       <div class="bar-chart">
-        <b-alert show variant="secondary" class="text-center">No data to display. Try adjusting the filters.</b-alert>
+        <b-alert show variant="secondary" class="text-center">
+          No data to display. Try adjusting the filters.
+        </b-alert>
       </div>
     </template>
   </div>
@@ -25,13 +33,19 @@ export default {
   components: {
     BarChart
   },
-  props: ['barChartData', 'labelField', 'valueField', 'valueLabel', 'valuePrecision', 'step'],
-  data() {
-    return {
-    }
+  props: [
+    'barChartData',
+    'labelField',
+    'valueField',
+    'valueLabel',
+    'valuePrecision',
+    'step'
+  ],
+  data () {
+    return {}
   },
   computed: {
-    barChartOptions(){
+    barChartOptions () {
       return {
         maintainAspectRatio: false,
         legend: {
@@ -39,14 +53,14 @@ export default {
         },
         tooltips: {
           callbacks: {
-            title: ((tooltipItem, data) => {
+            title: (tooltipItem, data) => {
               return this.chartData.labels[tooltipItem[0].index]
-            }),
-            label: ((tooltipItem, data) => {
-              var label = this.valueLabel || '';
+            },
+            label: (tooltipItem, data) => {
+              let label = this.valueLabel || ''
 
               if (label) {
-                  label += ': ';
+                label += ': '
               }
               if (this.valuePrecision) {
                 label += tooltipItem.yLabel.toLocaleString(undefined, {
@@ -56,8 +70,8 @@ export default {
               } else {
                 label += tooltipItem.yLabel
               }
-              return label;
-            })
+              return label
+            }
           }
         },
         scales: {
@@ -67,7 +81,7 @@ export default {
                 beginAtZero: true,
                 precision: this.valuePrecision,
                 stepSize: this.step ? this.step : undefined,
-                callback: function(tick) {
+                callback (tick) {
                   return tick.toLocaleString(undefined, {
                     maximumFractionDigits: this.valuePrecision,
                     minimumFractionDigits: this.valuePrecision
@@ -83,7 +97,7 @@ export default {
           xAxes: [
             {
               ticks: {
-                callback: function(tick) {
+                callback (tick) {
                   const characterLimit = 20
                   if (tick.length >= characterLimit) {
                     return (
@@ -101,20 +115,23 @@ export default {
         }
       }
     },
-    chartData() {
+    chartData () {
       const colours = [
-        "#6e40aa", "#6849b9", "#6153c7", "#585fd2", "#4e6cda", "#4479df", "#3988e1", "#2f96e0", "#26a5db", "#1fb3d3", "#1bc1c8", "#19cdbb", "#1bd9ac", "#20e29d", "#28ea8d", "#34f07e", "#44f470", "#56f665", "#6bf75c", "#81f558",
-        "#98f357", "#aff05b"
+        '#6e40aa', '#6849b9', '#6153c7', '#585fd2',
+        '#4e6cda', '#4479df', '#3988e1', '#2f96e0',
+        '#26a5db', '#1fb3d3', '#1bc1c8', '#19cdbb',
+        '#1bd9ac', '#20e29d', '#28ea8d', '#34f07e',
+        '#44f470', '#56f665', '#6bf75c', '#81f558',
+        '#98f357', '#aff05b'
       ]
-
       return {
         datasets: [{
           label: this.labelField,
           fill: true,
-          data: this.barChartData.map((ds) => { return ds[this.valueField] }).slice(0,20),
+          data: this.barChartData.map((ds) => { return ds[this.valueField] }).slice(0, 20),
           backgroundColor: colours
         }],
-        labels: this.barChartData.map((ds) => { return ds[this.labelField] }).slice(0,20),
+        labels: this.barChartData.map((ds) => { return ds[this.labelField] }).slice(0, 20)
       }
     }
   }
