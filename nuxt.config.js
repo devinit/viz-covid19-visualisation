@@ -57,8 +57,16 @@ export default {
   */
   buildModules: [
     [
-      '@nuxtjs/gtm',
-    ]
+      '@nuxtjs/gtm'
+    ],
+
+    // Doc: https://github.com/nuxt-community/eslint-module
+    // Uncomment the below lines to enable linting
+    /*
+    ['@nuxtjs/eslint-module', {
+      fix: true
+    }]
+    */
   ],
   gtm: {
     id: 'GTM-KHMLMZX'
