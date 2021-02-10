@@ -67,3 +67,13 @@ The Flows tab contains data from IATI, and displays the following information (w
 
 The About tab contains a description and background of the visualisation. It describes data sources and provides some high-level technical details.
 
+## Tooltips
+
+Tooltips can be used throughout the site to provide more information where required.
+
+* Currently, they are only enabled in `activities.vue`.
+* Tooltips should be saved as a CSV file, with a unique `key` column and a `tooltip` column. You might want to namespace the `key` column (e.g. prefix all existing tooltips with `activities_table__`)
+* Tooltips are loaded when `activities.vue` loads and stored in the Vuex store. This means they are available to all other parts of the visualisation through `this.$store.state.tooltips`.
+
+Tooltips are currently only loaded when `activities.vue` is loaded. You could easily make them load for other tabs too by adding relevant functionality within the `loadData()` method of each tab. Alternatively, you could consider moving this retrieval to the Vuex store and call it from within the [nuxtServerInit](https://nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action) action, though this is a bit fiddly.
+
