@@ -73,7 +73,17 @@ Tooltips can be used throughout the site to provide more information where requi
 
 * Currently, they are only enabled in `activities.vue`.
 * Tooltips should be saved as a CSV file, with a unique `key` column and a `tooltip` column. You might want to namespace the `key` column (e.g. prefix all existing tooltips with `activities_table__`)
-* Tooltips are loaded when `activities.vue` loads and stored in the Vuex store. This means they are available to all other parts of the visualisation through `this.$store.state.tooltips`.
+* Tooltips are loaded when `activities.vue` loads and stored in the Vuex store. This means they are available to all other parts of the visualisation through `this.$store.state.tooltips` - for the example below, the value of this is assigned to the computed property `tooltips`.
+* You can add a tooltip wherever you want using something like the following code:
+```
+<b-badge
+  v-b-tooltip.hover
+  variant="secondary"
+  pill
+  :title="tooltips[theTooltipKey]">
+  ?
+</b-badge>
+```
 
 Tooltips are currently only loaded when `activities.vue` is loaded. You could easily make them load for other tabs too by adding relevant functionality within the `loadData()` method of each tab. Alternatively, you could consider moving this retrieval to the Vuex store and call it from within the [nuxtServerInit](https://nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action) action, though this is a bit fiddly.
 
