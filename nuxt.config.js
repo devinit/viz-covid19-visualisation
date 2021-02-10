@@ -45,7 +45,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     'nuxt-vue-select',
-    '@nuxtjs/markdownit',
+    '@nuxtjs/markdownit'
   ],
   /*
   ** Axios module configuration
@@ -63,11 +63,9 @@ export default {
 
     // Doc: https://github.com/nuxt-community/eslint-module
     // Uncomment the below lines to enable linting
-    /*
     ['@nuxtjs/eslint-module', {
       fix: true
     }]
-    */
   ],
   gtm: {
     id: 'GTM-KHMLMZX'
