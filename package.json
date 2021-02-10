@@ -19,6 +19,7 @@
     "autoprefixer": "^9.8.6",
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^2.9.3",
+    "csvtojson": "^2.0.10",
     "d3": "^5.16.0",
     "d3-sankey": "^0.12.3",
     "nuxt": "^2.14.12",
