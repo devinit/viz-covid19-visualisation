@@ -1,0 +1,8 @@
+key,label,tooltip
+title,Title,The name of the IATI activity
+reportingOrg,Reported by,The name of the organisation that published this IATI data
+implementingOrganisations,Implemented by,The name of the organisation(s) implementing this activity
+countriesRegions,Country/Region,"The name of the country or region for this activity. Note: when an IATI activity has multiple country/regions, the first ten countries/regions will be displayed here. You can download the detailed data from the Download link above."
+totalAmountUSD,Total Amount (USD),The total sum of the commitment transactions for this activity
+commitmentsCOVID,Covid-19-specific (USD),The total sum of commitment transactions that are specifically flagged as COVID-19 related.
+humanitarianDevelopment,Humanitarian?,Whether this activity is flagged as being humanitarian, development, or a mix.
