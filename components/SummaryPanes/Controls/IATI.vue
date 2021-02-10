@@ -90,7 +90,7 @@
         </b-form-group>
         <b-form-group
           :state="country.length > 0 ? true : null"
-          label="Country">
+          label="Recipient Country">
           <v-select
             :options="countries"
             :getOptionKey="option => option.value"
