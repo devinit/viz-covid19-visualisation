@@ -57,12 +57,12 @@ export default {
   data () {
     return {
       summaryLabelOptions: [
-        { 'value': 'fundingOrganisation', 'text': 'Funder' },
-        { 'value': 'implementingOrganisation', 'text': 'Implementer' }
+        { value: 'fundingOrganisation', text: 'Funder' },
+        { value: 'implementingOrganisation', text: 'Implementer' }
       ],
       summaryDisplayOptions: [
-        { 'value': 'chart', 'text': 'Chart' },
-        { 'value': 'table', 'text': 'Table' }
+        { value: 'chart', text: 'Chart' },
+        { value: 'table', text: 'Table' }
       ]
     }
   },

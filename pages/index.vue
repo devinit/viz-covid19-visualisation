@@ -5,6 +5,7 @@
       variant="warning">
       This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's
       <a href="https://fts.unocha.org/">FTS</a>. Read more on the
+      <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
       <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
     </b-alert>
     <h2>Contributions</h2>
@@ -40,7 +41,7 @@
           <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
             <b-dropdown-item
               v-for="downloadURL in downloadURLs"
-              v-bind:key="downloadURL.format"
+              :key="downloadURL.format"
               :href="downloadURL.url"
               target="_blank">
               {{ downloadURL.format }}
@@ -86,15 +87,15 @@
         :per-page="perPage"
         sort-by="date"
         responsive>
-        <template v-slot:cell(source)="data">
+        <template #cell(source)="data">
           {{ data.item.source }}
         </template>
-        <template v-slot:cell(destination)="data">
+        <template #cell(destination)="data">
           <template v-if="data.item.destination in organisations">
             <nuxt-link
+              v-b-tooltip.hover
               :to="{name:'activities', query: { organisation: organisations[data.item.destination] }}"
-              :title="`View activities reported by ${data.item.destination}`"
-              v-b-tooltip.hover>
+              :title="`View activities reported by ${data.item.destination}`">
               {{ data.item.destination }}
             </nuxt-link>
           </template>
@@ -102,10 +103,10 @@
             {{ data.item.destination }}
           </template>
         </template>
-        <template v-slot:cell(date)="data">
+        <template #cell(date)="data">
           {{ data.item.date.substr(0, 10) }}
         </template>
-        <template v-slot:cell(details)="data">
+        <template #cell(details)="data">
           <small>
             <a
               :href="`https://fts.unocha.org/flows/${data.item.id}?destination=emergencies/${emergencyID}/flows/2020`"
@@ -181,12 +182,12 @@ export default {
       implementingOrganisation: null,
       downloadURLs: [
         {
-          'format': 'Excel',
-          'url': 'https://ocha-dap.github.io/covid19-data/xlsx/contributions.xlsx?raw=true'
+          format: 'Excel',
+          url: 'https://ocha-dap.github.io/covid19-data/xlsx/contributions.xlsx?raw=true'
         },
         {
-          'format': 'JSON',
-          'url': 'https://ocha-dap.github.io/covid19-data/fts-emergency-911.json'
+          format: 'JSON',
+          url: 'https://ocha-dap.github.io/covid19-data/fts-emergency-911.json'
         }
       ],
       currentPage: 1,
@@ -232,14 +233,13 @@ export default {
     },
     fields () {
       return [
-        { key: 'id', 'label': 'ID', sortable: true },
-        { key: 'source', 'label': 'Funder', sortable: true },
-        { key: 'destination', 'label': 'Implementer', sortable: true },
-        { key: 'status', 'label': 'Status', sortable: true },
-        { key: 'date', 'label': 'Date', sortable: true },
-        { key: 'amountUSD', 'label': 'Amount (USD)', sortable: true, formatter: 'numberFormatter'
-        },
-        { key: 'details', 'label': 'Details' }
+        { key: 'id', label: 'ID', sortable: true },
+        { key: 'source', label: 'Funder', sortable: true },
+        { key: 'destination', label: 'Implementer', sortable: true },
+        { key: 'status', label: 'Status', sortable: true },
+        { key: 'date', label: 'Date', sortable: true },
+        { key: 'amountUSD', label: 'Amount (USD)', sortable: true, formatter: 'numberFormatter' },
+        { key: 'details', label: 'Details' }
       ]
     },
     originalContributions () {
@@ -262,6 +262,7 @@ export default {
           } else if (this.implementingOrganisation !== null) {
             return contribution.destination === this.implementingOrganisation
           }
+          return true
         })
       }
     },
@@ -324,10 +325,12 @@ export default {
   },
   methods: {
     numberFormatter (value) {
-      return value ? value.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2
-      }) : ''
+      return value
+        ? value.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2
+        })
+        : ''
     },
     getOrganisationName (organisation) {
       const organisations = organisation.filter((item) => {

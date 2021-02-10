@@ -62,7 +62,7 @@ export default {
     })
   },
   methods: {
-    async loadRequirements () {
+    loadRequirements () {
       return axios.get(`${this.urls.PLAN_URL}`).then((response) => {
         this.$store.commit('setPlanRequirements', response.data.data.revisedRequirements)
         this.$store.commit('setPlanFunded', response.data.data.fundedRequirements)

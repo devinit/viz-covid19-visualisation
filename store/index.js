@@ -10,21 +10,21 @@ export const state = () => ({
     sectors: {}
   },
   activityUsedCodelists: {
-    'countriesRegions': [],
-    'sectors': [],
-    'reportingOrgs': [],
-    'reportingOrgNames': {},
-    'reportingOrgTypes': {}
+    countriesRegions: [],
+    sectors: [],
+    reportingOrgs: [],
+    reportingOrgNames: {},
+    reportingOrgTypes: {}
   },
   originalActivityData: [],
   originalActivityTransactionData: [],
   originalFlows: [],
   m49Codelists: {
-    'leastDeveloped': [],
-    'landLockedDeveloping': [],
-    'smallIslandDeveloping': [],
-    'developing': [],
-    'developed': []
+    leastDeveloped: [],
+    landLockedDeveloping: [],
+    smallIslandDeveloping: [],
+    developing: [],
+    developed: []
   }
 })
 

@@ -52,28 +52,26 @@ export default {
         }
         return value
       }
-      const getProvider = (item, transaction_type_code) => {
-        if (['3', '4'].includes(transaction_type_code)) {
+      const getProvider = (item, transactionTypeCode) => {
+        if (['3', '4'].includes(transactionTypeCode)) {
           return `${trimName(item.provider_text) || trimName(item.reporting_org_text) || 'UNKNOWN'} »`
-        } else if (['1'].includes(transaction_type_code)) {
+        } else if (['1'].includes(transactionTypeCode)) {
           return `${trimName(item.provider_text)}`
         }
       }
-      const getReceiver = (item, transaction_type_code) => {
-        if (['3', '4'].includes(transaction_type_code)) {
+      const getReceiver = (item, transactionTypeCode) => {
+        if (['3', '4'].includes(transactionTypeCode)) {
           return `» ${trimName(item.receiver_text)}`
-        } else if (['1'].includes(transaction_type_code)) {
+        } else if (['1'].includes(transactionTypeCode)) {
           return `${trimName(item.receiver_text)} »`
         }
       }
-      const items = this.items.sort((a, b) =>
+      const items = [...this.items].sort((a, b) =>
         a.value_USD > b.value_USD ? -1 : 1
       ).slice(0, this.maximumVisibleItems)
       const nodes = items.reduce((summary, item) => {
-        var provider, receiver
-
-        var provider = getProvider(item, item.transaction_type_code)
-        var receiver = getReceiver(item, item.transaction_type_code)
+        const provider = getProvider(item, item.transaction_type_code)
+        const receiver = getReceiver(item, item.transaction_type_code)
         if (!summary.includes(provider)) {
           summary.push(provider)
         }

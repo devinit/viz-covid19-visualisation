@@ -21,7 +21,7 @@
           <b-col>
             <p v-if="filterText" class="filter-text">
               Filtered to activities
-              <span v-for="filter in filterText">
+              <span v-for="filter in filterText" :key="filter.filter">
                 {{ filter.text }} <b v-b-toggle.controls-sidebar>{{ filter.filter }}</b>
               </span>.
             </p>
@@ -69,7 +69,7 @@
             <h4>Filters</h4>
           </b-col>
           <b-col v-if="filterText" class="text-right">
-            <b-btn @click="resetFilters" variant="danger" size="sm">
+            <b-btn variant="danger" size="sm" @click="resetFilters">
               Reset
             </b-btn>
           </b-col>
@@ -80,8 +80,8 @@
           <v-select
             v-model="organisation"
             :options="reportingOrgs"
-            :getOptionKey="option => option.value"
-            :getOptionLabel="option => option.text"
+            :get-option-key="option => option.value"
+            :get-option-label="option => option.text"
             :reduce="option => option.value"
             label="text"
             placeholder="All organisations"
@@ -92,11 +92,11 @@
           :state="country.length > 0 ? true : null"
           label="Recipient Country">
           <v-select
-            :options="countries"
-            :getOptionKey="option => option.value"
-            :getOptionLabel="option => option.text"
-            :reduce="option => option.value"
             v-model="country"
+            :options="countries"
+            :get-option-key="option => option.value"
+            :get-option-label="option => option.text"
+            :reduce="option => option.value"
             label="text"
             placeholder="All countries"
             multiple />
@@ -107,8 +107,8 @@
           <v-select
             v-model="sector"
             :options="sectors"
-            :getOptionKey="option => option.value"
-            :getOptionLabel="option => option.text"
+            :get-option-key="option => option.value"
+            :get-option-label="option => option.text"
             :reduce="option => option.value"
             label="text"
             placeholder="All sectors"
@@ -141,10 +141,10 @@
           label="Least developed countries"
           class="mb-1"
         >
-          <b-btn @click="selectCountries('leastDeveloped', true)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('leastDeveloped', true)">
             Include
           </b-btn>
-          <b-btn @click="selectCountries('leastDeveloped', false)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('leastDeveloped', false)">
             Exclude
           </b-btn>
         </b-form-group>
@@ -152,10 +152,10 @@
           label="Land locked developing countries"
           class="mb-1"
         >
-          <b-btn @click="selectCountries('landLockedDeveloping', true)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('landLockedDeveloping', true)">
             Include
           </b-btn>
-          <b-btn @click="selectCountries('landLockedDeveloping', false)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('landLockedDeveloping', false)">
             Exclude
           </b-btn>
         </b-form-group>
@@ -163,27 +163,27 @@
           label="Small island developing states"
           class="mb-1"
         >
-          <b-btn @click="selectCountries('smallIslandDeveloping', true)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('smallIslandDeveloping', true)">
             Include
           </b-btn>
-          <b-btn @click="selectCountries('smallIslandDeveloping', false)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('smallIslandDeveloping', false)">
             Exclude
           </b-btn>
         </b-form-group>
         <b-form-group
           label="Developed or developing"
         >
-          <b-btn @click="selectCountries('developed', true)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('developed', true)">
             Developed
           </b-btn>
-          <b-btn @click="selectCountries('developing', true)" size="sm" variant="outline-secondary">
+          <b-btn size="sm" variant="outline-secondary" @click="selectCountries('developing', true)">
             Developing
           </b-btn>
         </b-form-group>
         <h5>Select reporting organisations based on type</h5>
         <b-select
-          :options="organisationType"
           v-model="selectedOrganisationType"
+          :options="organisationType"
           class="mb-2" />
       </div>
     </b-sidebar>
@@ -212,24 +212,24 @@ export default {
   data () {
     return {
       summaryLabelOptions: [
-        { 'value': 'organisation', 'text': 'Reporting organisation' },
-        { 'value': 'country', 'text': 'Country' },
-        { 'value': 'sector', 'text': 'Sector' }
+        { value: 'organisation', text: 'Reporting organisation' },
+        { value: 'country', text: 'Country' },
+        { value: 'sector', text: 'Sector' }
       ],
       summaryDisplayOptions: [
-        { 'value': 'chart', 'text': 'Chart' },
-        { 'value': 'table', 'text': 'Table' }
+        { value: 'chart', text: 'Chart' },
+        { value: 'table', text: 'Table' }
       ],
       summaryTypeOptions: [
-        { 'value': 'number_of_projects', 'text': 'Number of projects' },
-        { 'value': 'commitments', 'text': 'Commitments' },
-        { 'value': 'disbursements', 'text': 'Disbursements' }
+        { value: 'number_of_projects', text: 'Number of projects' },
+        { value: 'commitments', text: 'Commitments' },
+        { value: 'disbursements', text: 'Disbursements' }
       ],
       humanitarianDevelopmentOptions: [
-        { 'value': 'humanitarian', 'text': 'Humanitarian' },
-        { 'value': 'humanitarian / development', 'text': 'Humanitarian / Development' },
-        { 'value': 'development', 'text': 'Development' },
-        { 'value': 'unspecified', 'text': 'Unspecified' }
+        { value: 'humanitarian', text: 'Humanitarian' },
+        { value: 'humanitarian / development', text: 'Humanitarian / Development' },
+        { value: 'development', text: 'Development' },
+        { value: 'unspecified', text: 'Unspecified' }
       ],
       selectedOrganisationType: null,
       organisationType: [
@@ -246,12 +246,12 @@ export default {
         { value: '90', text: 'Other' }
       ],
       COVIDMatchesOptions: [
-        { 'value': 'title', 'text': 'Activity Title' },
-        { 'value': 'description', 'text': 'Activity Description' },
-        { 'value': 'GLIDE', 'text': 'GLIDE Code' },
-        { 'value': 'HRP', 'text': 'HRP Code' },
-        { 'value': 'tag', 'text': 'Tag' },
-        { 'value': 'transaction-description', 'text': 'Transaction Description' }
+        { value: 'title', text: 'Activity Title' },
+        { value: 'description', text: 'Activity Description' },
+        { value: 'GLIDE', text: 'GLIDE Code' },
+        { value: 'HRP', text: 'HRP Code' },
+        { value: 'tag', text: 'Tag' },
+        { value: 'transaction-description', text: 'Transaction Description' }
       ]
     }
   },
@@ -259,19 +259,19 @@ export default {
     filterText () {
       const filters = []
       if (this.country.length > 0) {
-        filters.push({ 'text': 'in ', 'filter': this.countryText })
+        filters.push({ text: 'in ', filter: this.countryText })
       }
       if (this.organisation.length > 0) {
-        filters.push({ 'text': 'reported by ', 'filter': this.organisationText })
+        filters.push({ text: 'reported by ', filter: this.organisationText })
       }
       if (this.sector.length > 0) {
-        filters.push({ 'text': 'in the sector ', 'filter': this.sectorText })
+        filters.push({ text: 'in the sector ', filter: this.sectorText })
       }
       if (this.humanitarianDevelopment.length !== 4) {
-        filters.push({ 'text': 'classified as ', 'filter': this.humanitarianDevelopment.join(', ') })
+        filters.push({ text: 'classified as ', filter: this.humanitarianDevelopment.join(', ') })
       }
       if (this.COVIDMatches.length !== 6) {
-        filters.push({ 'text': 'matching IATI Publishing Guidance by ', 'filter': this.COVIDMatchesText.join(', ') })
+        filters.push({ text: 'matching IATI Publishing Guidance by ', filter: this.COVIDMatchesText.join(', ') })
       }
       if (filters.length === 0) { return null }
       return filters

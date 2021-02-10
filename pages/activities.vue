@@ -3,6 +3,7 @@
     <b-alert show variant="warning">
       This is a prototype visualisation to track the Covid-19 response. The data on this page comes from
       <a href="https://iatistandard.org">IATI</a>. Read more on the
+      <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
       <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
     </b-alert>
     <h2>Activities</h2>
@@ -28,17 +29,17 @@
         :summary-type.sync="summaryType"
         :m49-codelists="m49Codelists"
         :activity-used-codelists="activityUsedCodelists"
-        :selectedCOVIDMatches.sync="selectedCOVIDMatches" />
+        :selected-c-o-v-i-d-matches.sync="selectedCOVIDMatches" />
       <IATISummaryPane
         v-if="activities"
-        :activityData="activities"
-        :activityTransactionsData="activityTransactions"
-        :displaySummary="displaySummary"
-        :summaryLabelField="summaryLabelField"
+        :activity-data="activities"
+        :activity-transactions-data="activityTransactions"
+        :display-summary="displaySummary"
+        :summary-label-field="summaryLabelField"
         :codelists="codelists"
-        :getCountryName="getCountryName"
-        :getSectorName="getSectorName"
-        :summaryType="summaryType" />
+        :get-country-name="getCountryName"
+        :get-sector-name="getSectorName"
+        :summary-type="summaryType" />
       <b-alert :show="displayDoubleCountingWarning" variant="warning" class="text-muted mb-3 mt-3">
         The above results may include double counting. <a v-b-modal.double-counting-modal href="#">Read more</a>.
       </b-alert>
@@ -67,7 +68,7 @@
           <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
             <b-dropdown-item
               v-for="downloadURL in downloadURLs"
-              v-bind:key="downloadURL.format"
+              :key="downloadURL.format"
               :href="downloadURL.url"
               target="_blank">
               {{ downloadURL.format }}
@@ -114,20 +115,20 @@
         sortable
         responsive
       >
-        <template v-slot:cell(title)="data">
+        <template #cell(title)="data">
           <a
             :href="`http://d-portal.org/q.html?aid=${data.item.iatiIdentifier}`"
             target="_blank">{{ data.item.title }}</a>
         </template>
-        <template v-slot:cell(reportingOrg)="data">
+        <template #cell(reportingOrg)="data">
           {{ data.item.reportingOrg.text }}
         </template>
-        <template v-slot:cell(implementingOrganisations)="data">
+        <template #cell(implementingOrganisations)="data">
           <span v-for="(org, orgindex) in data.item.participatingOrganisation[4]" :key="`${data.index}-${org.text}-${orgindex}`">
             {{ org.text }}
           </span>
         </template>
-        <template v-slot:cell(countriesRegions)="data">
+        <template #cell(countriesRegions)="data">
           <template v-if="data.item.countriesRegions.length > 10">
             <span>Multiple countries</span>
           </template>
@@ -190,14 +191,14 @@ export default {
       summaryType: 'number_of_projects',
       summaryLabelField: 'organisation',
       summaryLabelFields: [
-        { 'value': 'organisation', 'text': 'Reporting organisation' },
-        { 'value': 'country', 'text': 'Country' }
+        { value: 'organisation', text: 'Reporting organisation' },
+        { value: 'country', text: 'Country' }
       ],
       transactionType: '2',
       transactionTypes: {
-        '2': 'Commitments',
-        '3': 'Disbursements',
-        '4': 'Expenditure'
+        2: 'Commitments',
+        3: 'Disbursements',
+        4: 'Expenditure'
       },
       selectedCountry: [],
       selectedReportingOrg: [],
@@ -205,24 +206,24 @@ export default {
       selectedHumanitarianDevelopment: ['humanitarian', 'humanitarian / development', 'development', 'unspecified'],
       downloadURLs: [
         {
-          'format': 'Excel (activities)',
-          'url': 'https://ocha-dap.github.io/covid19-data/xlsx/activities.xlsx'
+          format: 'Excel (activities)',
+          url: 'https://ocha-dap.github.io/covid19-data/xlsx/activities.xlsx'
         },
         {
-          'format': 'Excel (transactions)',
-          'url': 'https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx'
+          format: 'Excel (transactions)',
+          url: 'https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx'
         },
         {
-          'format': 'Excel (transactions - by country and sector)',
-          'url': 'https://ocha-dap.github.io/covid19-data/traceability/transactions_sectors_countries_regions.xlsx'
+          format: 'Excel (transactions - by country and sector)',
+          url: 'https://ocha-dap.github.io/covid19-data/traceability/transactions_sectors_countries_regions.xlsx'
         },
         {
-          'format': 'JSON',
-          'url': 'https://ocha-dap.github.io/covid19-data/activities.json'
+          format: 'JSON',
+          url: 'https://ocha-dap.github.io/covid19-data/activities.json'
         },
         {
-          'format': 'XML',
-          'url': 'https://ocha-dap.github.io/covid19-data/xml/activities.xml'
+          format: 'XML',
+          url: 'https://ocha-dap.github.io/covid19-data/xml/activities.xml'
         }
       ],
       currentPage: 1,
@@ -245,49 +246,49 @@ export default {
       return {
         DATA_URL: 'https://ocha-dap.github.io/covid19-data/activities.json',
         ACTIVITY_TRANSACTIONS_DATA_URL: 'https://ocha-dap.github.io/covid19-data/traceability/transactions_sector_country.json',
-        COUNTRIES_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Country.json`,
-        REGIONS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Region.json`,
-        SECTORS_CODELIST_URL: `https://codelists.codeforiati.org/api/json/en/Sector.json`,
-        M49_CODELIST_URL: `https://ocha-dap.github.io/covid19-data/m49_countries_simplified.json`
+        COUNTRIES_CODELIST_URL: 'https://codelists.codeforiati.org/api/json/en/Country.json',
+        REGIONS_CODELIST_URL: 'https://codelists.codeforiati.org/api/json/en/Region.json',
+        SECTORS_CODELIST_URL: 'https://codelists.codeforiati.org/api/json/en/Sector.json',
+        M49_CODELIST_URL: 'https://ocha-dap.github.io/covid19-data/m49_countries_simplified.json'
       }
     },
     fields () {
       return [
         {
-          'key': 'title',
-          'sortable': true
+          key: 'title',
+          sortable: true
         },
         {
-          'key': 'reportingOrg',
-          'label': 'Reported by',
-          'sortable': true
+          key: 'reportingOrg',
+          label: 'Reported by',
+          sortable: true
         },
         {
-          'key': 'implementingOrganisations',
-          'label': 'Implemented by',
-          'sortable': true
+          key: 'implementingOrganisations',
+          label: 'Implemented by',
+          sortable: true
         },
         {
-          'key': 'countriesRegions',
-          'label': 'Country/Region',
-          'sortable': true
+          key: 'countriesRegions',
+          label: 'Country/Region',
+          sortable: true
         },
         {
-          'key': 'totalAmountUSD',
-          'label': 'Total Amount (USD)',
-          'sortable': true,
+          key: 'totalAmountUSD',
+          label: 'Total Amount (USD)',
+          sortable: true,
           formatter: 'numberFormatter'
         },
         {
-          'key': 'commitmentsCOVID',
-          'label': 'Covid-19-specific (USD)',
-          'sortable': true,
+          key: 'commitmentsCOVID',
+          label: 'Covid-19-specific (USD)',
+          sortable: true,
           formatter: 'numberFormatter'
         },
         {
-          'key': 'humanitarianDevelopment',
-          'label': 'Humanitarian?',
-          'sortable': true
+          key: 'humanitarianDevelopment',
+          label: 'Humanitarian?',
+          sortable: true
         }]
     },
     codelists () {
@@ -301,7 +302,7 @@ export default {
     },
     countries () {
       return this.activityUsedCodelists.countriesRegions.reduce((summary, countryRegion) => {
-        summary.push({ value: countryRegion, text: this.getCountryName({ 'code': countryRegion }) })
+        summary.push({ value: countryRegion, text: this.getCountryName({ code: countryRegion }) })
         return summary
       }, []).sort((a, b) =>
         a.text < b.text ? -1 : 1
@@ -318,7 +319,7 @@ export default {
     },
     sectors () {
       return this.activityUsedCodelists.sectors.reduce((summary, sector) => {
-        summary.push({ value: sector, text: this.getSectorName({ 'code': sector }) })
+        summary.push({ value: sector, text: this.getSectorName({ code: sector }) })
         return summary
       }, []).sort((a, b) =>
         a.text < b.text ? -1 : 1
@@ -346,11 +347,11 @@ export default {
       const _checkHumanitarianDevelopment = (activityTransaction) => {
         if (this.selectedHumanitarianDevelopment.length === 4) { return true }
         const _trans = {
-          '0': 'development',
-          '1': 'humanitarian',
-          'false': 'development',
-          'true': 'humanitarian',
-          'UNSPECIFIED': 'unspecified'
+          0: 'development',
+          1: 'humanitarian',
+          false: 'development',
+          true: 'humanitarian',
+          UNSPECIFIED: 'unspecified'
         }
         return this.selectedHumanitarianDevelopment.includes(_trans[activityTransaction.humanitarian])
       }
@@ -507,15 +508,17 @@ export default {
   },
   methods: {
     numberFormatter (value) {
-      return value ? value.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2
-      }) : ''
+      return value
+        ? value.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2
+        })
+        : ''
     },
-    getCountryName (recipient_country) {
-      if (recipient_country.code === '') { return 'Unspecified' }
-      const _countryName = this.codelists.countries[recipient_country.code]
-      return _countryName || `Unknown: ${recipient_country.code}`
+    getCountryName (recipientCountry) {
+      if (recipientCountry.code === '') { return 'Unspecified' }
+      const _countryName = this.codelists.countries[recipientCountry.code]
+      return _countryName || `Unknown: ${recipientCountry.code}`
     },
     getSectorName (sector) {
       const _sectorName = this.codelists.sectors[sector.code]
@@ -552,7 +555,7 @@ export default {
     processActivityData (data) {
       return data.map((activity) => {
         activity.totalAmountUSD = activity.commitmentsUSD ? activity.commitmentsUSD : activity.budgetsUSD
-        activity._cellVariants = { 'commitmentsCOVID': activity.COVIDComponent ? 'info' : null }
+        activity._cellVariants = { commitmentsCOVID: activity.COVIDComponent ? 'info' : null }
         return activity
       })
     },

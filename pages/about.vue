@@ -83,7 +83,6 @@ All of the tools we have developed are shared as open source software:
 
 View [our privacy policy and cookies policy](/Privacy-Policy.pdf). If you have any further questions, please get in touch with us via [humportal@devinit.org](mailto:humportal@devinit.org).
 
-
   <b-row class="logos-section mt-5">
     <b-col>
       <a href="http://devinit.org/" target="_blank"><img src="~/assets/logos/devinit.png" width="100%" height="auto" alt="Development Initiatives Logo"></a>

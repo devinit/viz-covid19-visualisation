@@ -11,9 +11,9 @@
       </pattern>
       <g>
         <rect
+          v-for="(node) in nodes"
           v-bind="nodes"
-          v-for="(node, index) in nodes"
-          v-bind:key="node.index"
+          :key="node.index"
           :x="node.x0"
           :y="node.y0"
           :height="Math.max(node.y1-node.y0, 0)"
@@ -23,10 +23,10 @@
       </g>
       <g>
         <g
+          v-for="(link) in links"
           v-bind="links"
-          v-for="(link, index) in links"
-          v-bind:key="link.index"
           :id="`link-${link.index}`"
+          :key="link.index"
           :class="selectedLink == link.index ? 'link linkHover' : 'link'"
           style="mix-blend-mode: multiply;">
           <linearGradient
@@ -52,9 +52,9 @@
       </g>
       <g font-family="sans-serif" font-size="12">
         <text
+          v-for="(node) in nodes"
           v-bind="nodes"
-          v-for="(node, index) in nodes"
-          v-bind:key="node.index"
+          :key="node.index"
           :x="node.x0 < width / 2 ? node.x1 + 6 : node.x0 - 6"
           :y="(node.y1 + node.y0) / 2"
           :text-anchor="node.x0 < width / 2 ? 'start' : 'end'"
@@ -64,13 +64,13 @@
       </g>
       <g font-family="sans-serif" font-size="12">
         <g
+          v-for="(link) in links"
           v-bind="links"
-          v-for="(link, index) in links"
+          :key="`${link.index}-label`"
           :style="selectedLink == link.index ? 'display: block;' : 'display: none;'"
+          class="linkText"
           @mouseover="mouseoverLink(link.index)"
-          @mouseleave="mouseleaveLink(link.index)"
-          v-bind:key="`${link.index}-label`"
-          class="linkText">
+          @mouseleave="mouseleaveLink(link.index)">
           <text
             :x="link.source.x1+(link.target.x0-link.source.x1)/2"
             :y="(link.y1 + link.y0) / 2"
@@ -129,7 +129,6 @@
 }
 </style>
 <script>
-/* eslint-disable */
 import { select as d3Select } from 'd3-selection'
 import { scaleOrdinal as d3ScaleOrdinal, schemeCategory10 as d3SchemeCategory10 } from 'd3'
 import { sankey as d3Sankey, sankeyLinkHorizontal as d3SsankeyLinkHorizontal } from 'd3-sankey'
@@ -184,22 +183,22 @@ export default {
       this.selectedLink = null
     },
     sankeyLinkPath (d) {
-      return sankeyLinkPaths(d)
+      return this.sankeyLinkPaths(d)
     },
     numberFormatter (value) {
-      if (value == 0) { return '0' }
-      return value ? value.toLocaleString(undefined, {
-        maximumFractionDigits: 0
-      }) : ''
+      if (value === 0) { return '0' }
+      return value
+        ? value.toLocaleString(undefined, {
+          maximumFractionDigits: 0
+        })
+        : ''
     },
     color (d) {
-      if (d.name == '» Direct Expenditure') { return '#bbbbbb' }
+      if (d.name === '» Direct Expenditure') { return '#bbbbbb' }
       return this.colors(d.name)
     },
     makeChart () {
-      const { nodes, links } = this.sankey
-
-      const svg = d3Select('#sankeyChart')
+      d3Select('#sankeyChart')
         .append('svg')
         .attr('width', this.width)
         .attr('height', this.height)

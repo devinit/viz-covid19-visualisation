@@ -2,10 +2,10 @@
   <div>
     <BarChart
       v-if="displaySummary==='chart'"
-      :barChartData="summaryData"
-      :labelField="summaryLabelField"
-      :valueLabel="valueLabel"
-      :valueField="valueField"
+      :bar-chart-data="summaryData"
+      :label-field="summaryLabelField"
+      :value-label="valueLabel"
+      :value-field="valueField"
       value-precision="0"
     />
     <b-table
@@ -38,9 +38,9 @@ export default {
     },
     valueLabel () {
       const _options = {
-        'number_of_projects': 'Number of projects',
-        'commitments': 'Commitments (USD)',
-        'disbursements': 'Disbursements (USD)'
+        number_of_projects: 'Number of projects',
+        commitments: 'Commitments (USD)',
+        disbursements: 'Disbursements (USD)'
       }
       return _options[this.summaryType]
     },
@@ -64,26 +64,26 @@ export default {
           const target = summary[getOrg(activity)]
             ? summary[getOrg(activity)]
             : summary[getOrg(activity)] = {
-              'organisation': getOrg(activity)
+              organisation: getOrg(activity)
             }
           target[this.valueField] ? target[this.valueField] += 1 : target[this.valueField] = 1
         } else if (this.summaryLabelField === 'country') {
-          const countryRegions = activity.countriesRegions.length > 0 ? activity.countriesRegions : [{ 'code': '' }]
+          const countryRegions = activity.countriesRegions.length > 0 ? activity.countriesRegions : [{ code: '' }]
           countryRegions.forEach((countryRegion) => {
             const target = summary[getCountry(countryRegion)]
               ? summary[getCountry(countryRegion)]
               : summary[getCountry(countryRegion)] = {
-                'country': getCountry(countryRegion)
+                country: getCountry(countryRegion)
               }
             target[this.valueField] ? target[this.valueField] += 1 : target[this.valueField] = 1
           })
         } else if (this.summaryLabelField === 'sector') {
-          const sectors = activity.sectors.length > 0 ? activity.sectors : [{ 'code': '' }]
+          const sectors = activity.sectors.length > 0 ? activity.sectors : [{ code: '' }]
           sectors.forEach((sector) => {
             const target = summary[getSector(sector)]
               ? summary[getSector(sector)]
               : summary[getSector(sector)] = {
-                'sector': getSector(sector)
+                sector: getSector(sector)
               }
             target[this.valueField] ? target[this.valueField] += 1 : target[this.valueField] = 1
           })
@@ -107,28 +107,31 @@ export default {
       }
       return Object.values(this.activityTransactionsData.reduce((summary, activityTransaction) => {
         if (this.summaryLabelField === 'organisation') {
+          // eslint-disable-next-line no-var
           var target = summary[getOrg(activityTransaction)]
             ? summary[getOrg(activityTransaction)]
             : summary[getOrg(activityTransaction)] = {
-              'organisation': getOrg(activityTransaction),
-              'commitments': 0,
-              'disbursements': 0
+              organisation: getOrg(activityTransaction),
+              commitments: 0,
+              disbursements: 0
             }
         } else if (this.summaryLabelField === 'country') {
+          // eslint-disable-next-line no-var, no-redeclare
           var target = summary[getCountry(activityTransaction)]
             ? summary[getCountry(activityTransaction)]
             : summary[getCountry(activityTransaction)] = {
-              'country': getCountry(activityTransaction),
-              'commitments': 0,
-              'disbursements': 0
+              country: getCountry(activityTransaction),
+              commitments: 0,
+              disbursements: 0
             }
         } else if (this.summaryLabelField === 'sector') {
+          // eslint-disable-next-line no-var, no-redeclare
           var target = summary[getSector(activityTransaction)]
             ? summary[getSector(activityTransaction)]
             : summary[getSector(activityTransaction)] = {
-              'sector': getSector(activityTransaction),
-              'commitments': 0,
-              'disbursements': 0
+              sector: getSector(activityTransaction),
+              commitments: 0,
+              disbursements: 0
             }
         }
         if (activityTransaction.transaction_type_code === '2') {

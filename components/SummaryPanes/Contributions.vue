@@ -5,8 +5,8 @@
     </p>
     <BarChart
       v-if="displaySummary==='chart'"
-      :barChartData="contributionsSummary"
-      :labelField="summaryLabelField"
+      :bar-chart-data="contributionsSummary"
+      :label-field="summaryLabelField"
       value-label="Funding (USDm)"
       value-field="value"
       value-precision="2" />
@@ -40,16 +40,18 @@ export default {
     contributionsSummary () {
       return Object.values(this.contributions.reduce((summary, item) => {
         if (this.summaryLabelField === 'fundingOrganisation') {
+          // eslint-disable-next-line no-var
           var target = summary[item.source]
             ? summary[item.source]
             : summary[item.source] = {
-              'fundingOrganisation': item.source
+              fundingOrganisation: item.source
             }
-        } else if (this.summaryLabelField === 'implementingOrganisation') {
+        } else {
+          // eslint-disable-next-line no-var, no-redeclare
           var target = summary[item.destination]
             ? summary[item.destination]
             : summary[item.destination] = {
-              'implementingOrganisation': item.destination
+              implementingOrganisation: item.destination
             }
         }
         target.value ? target.value += (item.amountUSD / 1000000.0) : target.value = (item.amountUSD / 1000000.0)
@@ -80,10 +82,12 @@ export default {
   },
   methods: {
     valueFormatter (value) {
-      return value ? value.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2
+        })
+        : 0
     }
   }
 }

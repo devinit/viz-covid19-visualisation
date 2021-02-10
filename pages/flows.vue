@@ -1,8 +1,14 @@
+<script>
+/* eslint-disable vue/no-unused-vars */
+// eslint was throwing this error on the following line:
+// <template #foot(reportingOrg)="data">
+</script>
 <template>
   <div>
     <b-alert show variant="warning">
       This is a prototype visualisation to track the Covid-19 response. The data on this page comes from
       <a href="https://iatistandard.org">IATI</a>. Read more on the
+      <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
       <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
     </b-alert>
     <template v-if="isBusy">
@@ -17,14 +23,14 @@
       <b-row>
         <b-col sm="7" md="9">
           <b-form-group label="Publisher Type">
-            <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType" />
+            <b-form-select v-model="selectedReportingOrgType" :options="reportingOrgTypes" />
           </b-form-group>
         </b-col>
         <b-col sm="5" md="3" class="text-sm-right">
           <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
             <b-dropdown-item
               v-for="downloadURL in downloadURLs"
-              v-bind:key="downloadURL.format"
+              :key="downloadURL.format"
               :href="downloadURL.url"
               target="_blank">
               {{ downloadURL.format }}
@@ -47,30 +53,30 @@
         responsive
         foot-clone
       >
-        <template v-slot:cell(disbursements_pct)="data">
+        <template #cell(disbursements_pct)="data">
           <span v-b-tooltip :title="`USD ${numberFormatter(data.item.disbursements_USD)}`">
             {{ numberFormatter(data.item.disbursements_pct) }}
           </span>
         </template>
-        <template v-slot:cell(expenditure_pct)="data">
+        <template #cell(expenditure_pct)="data">
           <span v-b-tooltip :title="`USD ${numberFormatter(data.item.expenditure_USD)}`">
             {{ numberFormatter(data.item.expenditure_pct) }}
           </span>
         </template>
         <!-- Default fall-back custom formatted footer cell -->
-        <template v-slot:foot(reportingOrg)="data">
+        <template #foot(reportingOrg)="data">
           Total
         </template>
-        <template v-slot:foot(total_USD)="data">
+        <template #foot(total_USD)="data">
           {{ numberFormatter(flowsTotalSpend) }}
         </template>
-        <template v-slot:foot(disbursements_pct)="data">
+        <template #foot(disbursements_pct)="data">
           {{ numberFormatter(flowsAverageDisbursementsPCT) }}
         </template>
-        <template v-slot:foot(expenditure_pct)="data">
+        <template #foot(expenditure_pct)="data">
           {{ numberFormatter(flowsAverageExpenditurePCT) }}
         </template>
-        <template v-slot:foot()="data">
+        <template #foot()="data">
           {{ data.label }}
         </template>
       </b-table>
@@ -86,29 +92,29 @@
       <b-row>
         <b-col md="9">
           <b-form-group label="Publisher Type">
-            <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType" />
+            <b-form-select v-model="selectedReportingOrgType" :options="reportingOrgTypes" />
           </b-form-group>
           <b-form-group label="Publisher">
             <b-form-select
-              :options="reportingOrgs"
-              v-model="selectedOrganisation" />
+              v-model="selectedOrganisation"
+              :options="reportingOrgs" />
           </b-form-group>
         </b-col>
         <b-col md="3">
           <b-alert variant="secondary" show>
             <b-form-checkbox
-              :options="[true,false]"
               v-model="showIncomingFunds"
               v-b-tooltip
+              :options="[true,false]"
               size="sm"
               switch
               title="Show or hide incoming funds to this organisation.">
               Show incoming funds
             </b-form-checkbox>
             <b-form-checkbox
-              :options="[true,false]"
               v-model="showRelatedOrganisations"
               v-b-tooltip
+              :options="[true,false]"
               size="sm"
               switch
               title="Including data from partner organisations may lead to double-counting.">
@@ -141,7 +147,7 @@
         sort-by="reporting_org_text"
         fixed
         show-empty>
-        <template v-slot:empty="scope">
+        <template #empty="scope">
           <b-alert show class="text-muted text-center" variant="info">
             No disbursements or direct expenditure published so far for this organisation.
           </b-alert>
@@ -154,7 +160,7 @@
         sort-by="reporting_org_text"
         fixed
         show-empty>
-        <template v-slot:empty="scope">
+        <template #empty="scope">
           <b-alert show class="text-muted text-center" variant="info">
             No incoming funds published so far for this organisation.
           </b-alert>
