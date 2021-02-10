@@ -1,8 +1,3 @@
-<script>
-/* eslint-disable vue/no-unused-vars */
-// eslint was throwing this error on the following line:
-// <template #foot(reportingOrg)="data">
-</script>
 <template>
   <div>
     <b-alert show variant="warning">
@@ -64,6 +59,7 @@
           </span>
         </template>
         <!-- Default fall-back custom formatted footer cell -->
+        <!-- eslint-disable vue/no-unused-vars -->
         <template #foot(reportingOrg)="data">
           Total
         </template>
@@ -79,6 +75,7 @@
         <template #foot()="data">
           {{ data.label }}
         </template>
+        <!-- eslint-enable vue/no-unused-vars -->
       </b-table>
       <hr>
       <h3>Flows for each organisation</h3>
@@ -147,11 +144,13 @@
         sort-by="reporting_org_text"
         fixed
         show-empty>
+        <!-- eslint-disable vue/no-unused-vars -->
         <template #empty="scope">
           <b-alert show class="text-muted text-center" variant="info">
             No disbursements or direct expenditure published so far for this organisation.
           </b-alert>
         </template>
+        <!-- eslint-enable -->
       </b-table>
       <h4>Incoming funds</h4>
       <b-table
@@ -160,11 +159,13 @@
         sort-by="reporting_org_text"
         fixed
         show-empty>
+        <!-- eslint-disable vue/no-unused-vars -->
         <template #empty="scope">
           <b-alert show class="text-muted text-center" variant="info">
             No incoming funds published so far for this organisation.
           </b-alert>
         </template>
+        <!-- eslint-enable -->
       </b-table>
     </template>
   </div>
@@ -184,9 +185,9 @@ export default {
       title: config.head.title,
       transactionType: '2',
       transactionTypes: {
-        '2': 'Commitments',
-        '3': 'Disbursements',
-        '4': 'Expenditure'
+        2: 'Commitments',
+        3: 'Disbursements',
+        4: 'Expenditure'
       },
       fieldsOrganisations: [
         {
@@ -217,16 +218,16 @@ export default {
       showRelatedOrganisations: false,
       downloadURLs: [
         {
-          'format': 'Excel (transactional data)',
-          'url': 'https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx?raw=true'
+          format: 'Excel (transactional data)',
+          url: 'https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx?raw=true'
         },
         {
-          'format': 'Excel (simplified data)',
-          'url': 'https://ocha-dap.github.io/covid19-data/traceability/traceability_grouped.xlsx?raw=true'
+          format: 'Excel (simplified data)',
+          url: 'https://ocha-dap.github.io/covid19-data/traceability/traceability_grouped.xlsx?raw=true'
         },
         {
-          'format': 'JSON (simplified data)',
-          'url': 'https://ocha-dap.github.io/covid19-data/traceability/traceability.json'
+          format: 'JSON (simplified data)',
+          url: 'https://ocha-dap.github.io/covid19-data/traceability/traceability.json'
         }
       ]
     }
@@ -244,28 +245,28 @@ export default {
     fields () {
       return [
         {
-          'key': 'reportingOrg',
-          'label': 'Reported by',
-          'sortable': true
+          key: 'reportingOrg',
+          label: 'Reported by',
+          sortable: true
         },
         {
-          'key': 'total_USD',
-          'label': 'Total Spend USD',
-          'sortable': true,
+          key: 'total_USD',
+          label: 'Total Spend USD',
+          sortable: true,
           formatter: 'numberFormatter',
           class: 'number-value'
         },
         {
-          'key': 'disbursements_pct',
-          'label': 'Disbursements %',
-          'sortable': true,
+          key: 'disbursements_pct',
+          label: 'Disbursements %',
+          sortable: true,
           formatter: 'numberFormatter',
           class: 'number-value'
         },
         {
-          'key': 'expenditure_pct',
-          'label': 'Direct Expenditure %',
-          'sortable': true,
+          key: 'expenditure_pct',
+          label: 'Direct Expenditure %',
+          sortable: true,
           formatter: 'numberFormatter',
           class: 'number-value'
         }]
@@ -308,12 +309,12 @@ export default {
       return Object.values(this.flows.reduce((summary, item) => {
         if (!(item.reporting_org_text in summary)) {
           summary[item.reporting_org_text] = {
-            'reportingOrg': item.reporting_org_text,
-            'total_USD': 0.0,
-            'disbursements_USD': 0.0,
-            'disbursements_pct': 0.0,
-            'expenditure_USD': 0.0,
-            'expenditure_pct': 0.0
+            reportingOrg: item.reporting_org_text,
+            total_USD: 0.0,
+            disbursements_USD: 0.0,
+            disbursements_pct: 0.0,
+            expenditure_USD: 0.0,
+            expenditure_pct: 0.0
           }
         }
         const target = summary[item.reporting_org_text]
@@ -350,16 +351,16 @@ export default {
           (item.transaction_type_code === '1')
         }).map((item) => {
           return {
-            'reporting_org_text': item.reporting_org_text,
-            'provider_text': item.provider_text,
-            'provider_ref': item.provider_ref,
-            'provider_type': item.provider_type,
-            'transaction_type': 'Disbursement',
-            'transaction_type_code': '4',
-            'value_USD': item.value_USD,
-            'receiver_text': item.receiver_text,
-            'receiver_ref': item.receiver_ref,
-            'receiver_type': item.receiver_type
+            reporting_org_text: item.reporting_org_text,
+            provider_text: item.provider_text,
+            provider_ref: item.provider_ref,
+            provider_type: item.provider_type,
+            transaction_type: 'Disbursement',
+            transaction_type_code: '4',
+            value_USD: item.value_USD,
+            receiver_text: item.receiver_text,
+            receiver_ref: item.receiver_ref,
+            receiver_type: item.receiver_type
           }
         }))
       }
@@ -476,9 +477,11 @@ export default {
   methods: {
     numberFormatter (value) {
       if (value === 0) { return '0' }
-      return value ? value.toLocaleString(undefined, {
-        maximumFractionDigits: 0
-      }) : ''
+      return value
+        ? value.toLocaleString(undefined, {
+          maximumFractionDigits: 0
+        })
+        : ''
     },
     processFlows (flows) {
       return flows
@@ -487,8 +490,8 @@ export default {
       await axios.get(`${this.urls.ORGANISATION_TYPES}`).then((response) => {
         const data = response.data.data.map((item) => {
           return {
-            'value': item.code,
-            'text': item.name
+            value: item.code,
+            text: item.name
           }
         })
         this.$store.commit('setCodelistsOrganisationType', data)
