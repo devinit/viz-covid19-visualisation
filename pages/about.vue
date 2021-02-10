@@ -7,11 +7,9 @@
       <hr>
       <h2>Data</h2>
       <p>
-        The visualisation contains data on <nuxt-link :to="{name: 'index'}" no-prefetch>
-          contributions
-        </nuxt-link>, demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}" no-prefetch>
-          activities
-        </nuxt-link> (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from UNOCHA's FTS. The activity level data comes from IATI.
+        The visualisation contains data on <nuxt-link :to="{name: 'index'}" no-prefetch>contributions</nuxt-link>,
+        demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}" no-prefetch>activities</nuxt-link>
+        (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from UNOCHA's FTS. The activity level data comes from IATI.
       </p>
       <p>The contributions page is most useful for understanding total aggregate funding, and the activities page most useful for understanding how funding is broken down by project.</p>
       <b-alert variant="secondary" show>

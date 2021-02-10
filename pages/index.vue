@@ -4,9 +4,9 @@
       <b-alert
         show
         variant="warning">
-        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's <a href="https://fts.unocha.org/">FTS</a>. Read more on the <nuxt-link :to="{name: 'about'}" no-prefetch>
-          about page
-        </nuxt-link>.
+        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's
+        <a href="https://fts.unocha.org/">FTS</a>. Read more on the
+        <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
       </b-alert>
       <h2>Contributions</h2>
       <hr>

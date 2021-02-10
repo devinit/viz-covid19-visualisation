@@ -2,9 +2,9 @@
   <b-container fluid class="mt-4">
     <div>
       <b-alert show variant="warning">
-        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from <a href="https://iatistandard.org">IATI</a>. Read more on the <nuxt-link :to="{name: 'about'}" no-prefetch>
-          about page
-        </nuxt-link>.
+        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from
+        <a href="https://iatistandard.org">IATI</a>. Read more on the
+        <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
       </b-alert>
       <h2>Activities</h2>
       <hr>
