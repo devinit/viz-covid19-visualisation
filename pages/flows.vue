@@ -1,169 +1,167 @@
 <template>
-  <b-container fluid class="mt-4">
-    <div>
-      <b-alert show variant="warning">
-        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from
-        <a href="https://iatistandard.org">IATI</a>. Read more on the
-        <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
+  <div>
+    <b-alert show variant="warning">
+      This is a prototype visualisation to track the Covid-19 response. The data on this page comes from
+      <a href="https://iatistandard.org">IATI</a>. Read more on the
+      <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
+    </b-alert>
+    <template v-if="isBusy">
+      <div class="text-center text-secondary">
+        <b-spinner class="align-middle" />
+        <strong>Loading...</strong>
+      </div>
+    </template>
+    <template
+      v-if="!isBusy">
+      <h2>Flows between organisations</h2>
+      <b-row>
+        <b-col sm="7" md="9">
+          <b-form-group label="Publisher Type">
+            <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType" />
+          </b-form-group>
+        </b-col>
+        <b-col sm="5" md="3" class="text-sm-right">
+          <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
+            <b-dropdown-item
+              v-for="downloadURL in downloadURLs"
+              v-bind:key="downloadURL.format"
+              :href="downloadURL.url"
+              target="_blank">
+              {{ downloadURL.format }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-col>
+      </b-row>
+      <hr>
+      <h3>Summary of disbursements and direct expenditure</h3>
+      <b-alert show>
+        Some organisations disburse on to other organisations, whereas others
+        spend money directly. The below table shows the proportion of funds each
+        organisation is disbursing to others versus spending directly.
       </b-alert>
-      <template v-if="isBusy">
-        <div class="text-center text-secondary">
-          <b-spinner class="align-middle" />
-          <strong>Loading...</strong>
-        </div>
-      </template>
-      <template
-        v-if="!isBusy">
-        <h2>Flows between organisations</h2>
-        <b-row>
-          <b-col sm="7" md="9">
-            <b-form-group label="Publisher Type">
-              <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="5" md="3" class="text-sm-right">
-            <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
-              <b-dropdown-item
-                v-for="downloadURL in downloadURLs"
-                v-bind:key="downloadURL.format"
-                :href="downloadURL.url"
-                target="_blank">
-                {{ downloadURL.format }}
-              </b-dropdown-item>
-            </b-dropdown>
-          </b-col>
-        </b-row>
-        <hr>
-        <h3>Summary of disbursements and direct expenditure</h3>
-        <b-alert show>
-          Some organisations disburse on to other organisations, whereas others
-          spend money directly. The below table shows the proportion of funds each
-          organisation is disbursing to others versus spending directly.
-        </b-alert>
-        <b-table
-          v-if="flowsSummary"
-          :items="flowsSummary"
-          :fields="fields"
-          sortable
-          responsive
-          foot-clone
-        >
-          <template v-slot:cell(disbursements_pct)="data">
-            <span v-b-tooltip :title="`USD ${numberFormatter(data.item.disbursements_USD)}`">
-              {{ numberFormatter(data.item.disbursements_pct) }}
-            </span>
-          </template>
-          <template v-slot:cell(expenditure_pct)="data">
-            <span v-b-tooltip :title="`USD ${numberFormatter(data.item.expenditure_USD)}`">
-              {{ numberFormatter(data.item.expenditure_pct) }}
-            </span>
-          </template>
-          <!-- Default fall-back custom formatted footer cell -->
-          <template v-slot:foot(reportingOrg)="data">
-            Total
-          </template>
-          <template v-slot:foot(total_USD)="data">
-            {{ numberFormatter(flowsTotalSpend) }}
-          </template>
-          <template v-slot:foot(disbursements_pct)="data">
-            {{ numberFormatter(flowsAverageDisbursementsPCT) }}
-          </template>
-          <template v-slot:foot(expenditure_pct)="data">
-            {{ numberFormatter(flowsAverageExpenditurePCT) }}
-          </template>
-          <template v-slot:foot()="data">
-            {{ data.label }}
-          </template>
-        </b-table>
-        <hr>
-        <h3>Flows for each organisation</h3>
-        <b-alert show>
-          The below visualisation allows you to see the flows reported by each
-          organisation. Select a reporting organisation from the drop down list below.
-          You will then see all of the organisations that they disburse money to on the
-          right hand side (generally, their implementing organisation). The greater the size
-          of the implementing organisation, the more money is being disbursed to that organisation.
-        </b-alert>
-        <b-row>
-          <b-col md="9">
-            <b-form-group label="Publisher Type">
-              <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType" />
-            </b-form-group>
-            <b-form-group label="Publisher">
-              <b-form-select
-                :options="reportingOrgs"
-                v-model="selectedOrganisation" />
-            </b-form-group>
-          </b-col>
-          <b-col md="3">
-            <b-alert variant="secondary" show>
-              <b-form-checkbox
-                :options="[true,false]"
-                v-model="showIncomingFunds"
-                v-b-tooltip
-                size="sm"
-                switch
-                title="Show or hide incoming funds to this organisation.">
-                Show incoming funds
-              </b-form-checkbox>
-              <b-form-checkbox
-                :options="[true,false]"
-                v-model="showRelatedOrganisations"
-                v-b-tooltip
-                size="sm"
-                switch
-                title="Including data from partner organisations may lead to double-counting.">
-                Include data from partner organisations
-              </b-form-checkbox>
-            </b-alert>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <b-badge variant="dark">
-              Funded by
-            </b-badge>
-          </b-col>
-          <b-col class="text-right">
-            <b-badge variant="dark">
-              Implemented by
-            </b-badge>
-          </b-col>
-        </b-row>
-        <SankeyChart :items="flowsOrganisationsChart" />
-        <p>
-          Note: the chart above is generated from the organisation's own IATI
-          data. However, some data processing was required to standardise the data.
-        </p>
-        <h4>Disbursements and Direct Expenditure</h4>
-        <b-table
-          :fields="fieldsOrganisations"
-          :items="flowsOrganisationsTableDisbursementsExpenditure"
-          sort-by="reporting_org_text"
-          fixed
-          show-empty>
-          <template v-slot:empty="scope">
-            <b-alert show class="text-muted text-center" variant="info">
-              No disbursements or direct expenditure published so far for this organisation.
-            </b-alert>
-          </template>
-        </b-table>
-        <h4>Incoming funds</h4>
-        <b-table
-          :fields="fieldsOrganisations"
-          :items="flowsOrganisationsTableIncomingFunds"
-          sort-by="reporting_org_text"
-          fixed
-          show-empty>
-          <template v-slot:empty="scope">
-            <b-alert show class="text-muted text-center" variant="info">
-              No incoming funds published so far for this organisation.
-            </b-alert>
-          </template>
-        </b-table>
-      </template>
-    </div>
-  </b-container>
+      <b-table
+        v-if="flowsSummary"
+        :items="flowsSummary"
+        :fields="fields"
+        sortable
+        responsive
+        foot-clone
+      >
+        <template v-slot:cell(disbursements_pct)="data">
+          <span v-b-tooltip :title="`USD ${numberFormatter(data.item.disbursements_USD)}`">
+            {{ numberFormatter(data.item.disbursements_pct) }}
+          </span>
+        </template>
+        <template v-slot:cell(expenditure_pct)="data">
+          <span v-b-tooltip :title="`USD ${numberFormatter(data.item.expenditure_USD)}`">
+            {{ numberFormatter(data.item.expenditure_pct) }}
+          </span>
+        </template>
+        <!-- Default fall-back custom formatted footer cell -->
+        <template v-slot:foot(reportingOrg)="data">
+          Total
+        </template>
+        <template v-slot:foot(total_USD)="data">
+          {{ numberFormatter(flowsTotalSpend) }}
+        </template>
+        <template v-slot:foot(disbursements_pct)="data">
+          {{ numberFormatter(flowsAverageDisbursementsPCT) }}
+        </template>
+        <template v-slot:foot(expenditure_pct)="data">
+          {{ numberFormatter(flowsAverageExpenditurePCT) }}
+        </template>
+        <template v-slot:foot()="data">
+          {{ data.label }}
+        </template>
+      </b-table>
+      <hr>
+      <h3>Flows for each organisation</h3>
+      <b-alert show>
+        The below visualisation allows you to see the flows reported by each
+        organisation. Select a reporting organisation from the drop down list below.
+        You will then see all of the organisations that they disburse money to on the
+        right hand side (generally, their implementing organisation). The greater the size
+        of the implementing organisation, the more money is being disbursed to that organisation.
+      </b-alert>
+      <b-row>
+        <b-col md="9">
+          <b-form-group label="Publisher Type">
+            <b-form-select :options="reportingOrgTypes" v-model="selectedReportingOrgType" />
+          </b-form-group>
+          <b-form-group label="Publisher">
+            <b-form-select
+              :options="reportingOrgs"
+              v-model="selectedOrganisation" />
+          </b-form-group>
+        </b-col>
+        <b-col md="3">
+          <b-alert variant="secondary" show>
+            <b-form-checkbox
+              :options="[true,false]"
+              v-model="showIncomingFunds"
+              v-b-tooltip
+              size="sm"
+              switch
+              title="Show or hide incoming funds to this organisation.">
+              Show incoming funds
+            </b-form-checkbox>
+            <b-form-checkbox
+              :options="[true,false]"
+              v-model="showRelatedOrganisations"
+              v-b-tooltip
+              size="sm"
+              switch
+              title="Including data from partner organisations may lead to double-counting.">
+              Include data from partner organisations
+            </b-form-checkbox>
+          </b-alert>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-badge variant="dark">
+            Funded by
+          </b-badge>
+        </b-col>
+        <b-col class="text-right">
+          <b-badge variant="dark">
+            Implemented by
+          </b-badge>
+        </b-col>
+      </b-row>
+      <SankeyChart :items="flowsOrganisationsChart" />
+      <p>
+        Note: the chart above is generated from the organisation's own IATI
+        data. However, some data processing was required to standardise the data.
+      </p>
+      <h4>Disbursements and Direct Expenditure</h4>
+      <b-table
+        :fields="fieldsOrganisations"
+        :items="flowsOrganisationsTableDisbursementsExpenditure"
+        sort-by="reporting_org_text"
+        fixed
+        show-empty>
+        <template v-slot:empty="scope">
+          <b-alert show class="text-muted text-center" variant="info">
+            No disbursements or direct expenditure published so far for this organisation.
+          </b-alert>
+        </template>
+      </b-table>
+      <h4>Incoming funds</h4>
+      <b-table
+        :fields="fieldsOrganisations"
+        :items="flowsOrganisationsTableIncomingFunds"
+        sort-by="reporting_org_text"
+        fixed
+        show-empty>
+        <template v-slot:empty="scope">
+          <b-alert show class="text-muted text-center" variant="info">
+            No incoming funds published so far for this organisation.
+          </b-alert>
+        </template>
+      </b-table>
+    </template>
+  </div>
 </template>
 <style>
 </style>

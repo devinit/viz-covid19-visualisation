@@ -24,7 +24,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-container>
+    <b-container class="mt-4">
       <nuxt />
     </b-container>
   </div>

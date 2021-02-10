@@ -1,154 +1,152 @@
 <template>
-  <b-container fluid class="mt-4">
-    <div>
-      <b-alert
-        show
-        variant="warning">
-        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's
-        <a href="https://fts.unocha.org/">FTS</a>. Read more on the
-        <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
-      </b-alert>
-      <h2>Contributions</h2>
+  <div>
+    <b-alert
+      show
+      variant="warning">
+      This is a prototype visualisation to track the Covid-19 response. The data on this page comes from UNOCHA's
+      <a href="https://fts.unocha.org/">FTS</a>. Read more on the
+      <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
+    </b-alert>
+    <h2>Contributions</h2>
+    <hr>
+
+    <HRPSummaryPane :urls="urls" />
+
+    <template v-if="busy">
+      <div class="text-center text-secondary mb-4">
+        <b-spinner class="align-middle" />
+        <strong>Loading...</strong>
+      </div>
+    </template>
+    <template v-else>
+      <ContributionsSummaryPaneControls
+        :display-summary.sync="displaySummary"
+        :summary-label-field.sync="summaryLabelField"
+        :funding-organisation.sync="fundingOrganisation"
+        :funding-organisations="fundingOrganisations"
+        :implementing-organisation.sync="implementingOrganisation"
+        :implementing-organisations="implementingOrganisations" />
       <hr>
-
-      <HRPSummaryPane :urls="urls" />
-
-      <template v-if="busy">
-        <div class="text-center text-secondary mb-4">
-          <b-spinner class="align-middle" />
-          <strong>Loading...</strong>
-        </div>
-      </template>
-      <template v-else>
-        <ContributionsSummaryPaneControls
-          :display-summary.sync="displaySummary"
-          :summary-label-field.sync="summaryLabelField"
-          :funding-organisation.sync="fundingOrganisation"
-          :funding-organisations="fundingOrganisations"
-          :implementing-organisation.sync="implementingOrganisation"
-          :implementing-organisations="implementingOrganisations" />
-        <hr>
-        <ContributionsSummaryPane
-          :display-summary="displaySummary"
-          :summary-label-field="summaryLabelField"
-          :contributions="contributions" />
-        <hr>
-        <b-row>
-          <b-col sm="7" md="9">
-            <h3>{{ contributions.length }} Contributions</h3>
-          </b-col>
-          <b-col sm="5" md="3" class="text-sm-right">
-            <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
-              <b-dropdown-item
-                v-for="downloadURL in downloadURLs"
-                v-bind:key="downloadURL.format"
-                :href="downloadURL.url"
-                target="_blank">
-                {{ downloadURL.format }}
-              </b-dropdown-item>
-            </b-dropdown>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col sm="5" md="6" class="my-1">
-            <b-form-group
-              label="Contributions per page"
-              label-cols-sm="7"
-              label-cols-md="7"
-              label-cols-lg="5"
-              label-cols-xl="4"
-              label-align-sm="right"
-              label-size="sm"
-              label-for="perPageSelect">
-              <b-form-select
-                id="perPageSelect"
-                v-model="perPage"
-                :options="[50,100,500,1000]"
-                size="sm"
-              />
-            </b-form-group>
-          </b-col>
-          <b-col sm="7" md="6" class="my-1">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              align="fill"
+      <ContributionsSummaryPane
+        :display-summary="displaySummary"
+        :summary-label-field="summaryLabelField"
+        :contributions="contributions" />
+      <hr>
+      <b-row>
+        <b-col sm="7" md="9">
+          <h3>{{ contributions.length }} Contributions</h3>
+        </b-col>
+        <b-col sm="5" md="3" class="text-sm-right">
+          <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
+            <b-dropdown-item
+              v-for="downloadURL in downloadURLs"
+              v-bind:key="downloadURL.format"
+              :href="downloadURL.url"
+              target="_blank">
+              {{ downloadURL.format }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="5" md="6" class="my-1">
+          <b-form-group
+            label="Contributions per page"
+            label-cols-sm="7"
+            label-cols-md="7"
+            label-cols-lg="5"
+            label-cols-xl="4"
+            label-align-sm="right"
+            label-size="sm"
+            label-for="perPageSelect">
+            <b-form-select
+              id="perPageSelect"
+              v-model="perPage"
+              :options="[50,100,500,1000]"
               size="sm"
-              class="my-0"
             />
-          </b-col>
-        </b-row>
-        <b-table
-          :items="contributions"
-          :fields="fields"
-          :sort-desc="true"
-          :current-page="currentPage"
-          :per-page="perPage"
-          sort-by="date"
-          responsive>
-          <template v-slot:cell(source)="data">
-            {{ data.item.source }}
-          </template>
-          <template v-slot:cell(destination)="data">
-            <template v-if="data.item.destination in organisations">
-              <nuxt-link
-                :to="{name:'activities', query: { organisation: organisations[data.item.destination] }}"
-                :title="`View activities reported by ${data.item.destination}`"
-                v-b-tooltip.hover>
-                {{ data.item.destination }}
-              </nuxt-link>
-            </template>
-            <template v-else>
+          </b-form-group>
+        </b-col>
+        <b-col sm="7" md="6" class="my-1">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          />
+        </b-col>
+      </b-row>
+      <b-table
+        :items="contributions"
+        :fields="fields"
+        :sort-desc="true"
+        :current-page="currentPage"
+        :per-page="perPage"
+        sort-by="date"
+        responsive>
+        <template v-slot:cell(source)="data">
+          {{ data.item.source }}
+        </template>
+        <template v-slot:cell(destination)="data">
+          <template v-if="data.item.destination in organisations">
+            <nuxt-link
+              :to="{name:'activities', query: { organisation: organisations[data.item.destination] }}"
+              :title="`View activities reported by ${data.item.destination}`"
+              v-b-tooltip.hover>
               {{ data.item.destination }}
-            </template>
+            </nuxt-link>
           </template>
-          <template v-slot:cell(date)="data">
-            {{ data.item.date.substr(0, 10) }}
+          <template v-else>
+            {{ data.item.destination }}
           </template>
-          <template v-slot:cell(details)="data">
-            <small>
-              <a
-                :href="`https://fts.unocha.org/flows/${data.item.id}?destination=emergencies/${emergencyID}/flows/2020`"
-                target="_blank">
-                FTS
-              </a>
-            </small>
-          </template>
-        </b-table>
-        <b-row>
-          <b-col sm="5" md="6" class="my-1">
-            <b-form-group
-              label="Contributions per page"
-              label-cols-sm="7"
-              label-cols-md="7"
-              label-cols-lg="5"
-              label-cols-xl="4"
-              label-align-sm="right"
-              label-size="sm"
-              label-for="perPageSelect">
-              <b-form-select
-                id="perPageSelect"
-                v-model="perPage"
-                :options="[50,100,500,1000]"
-                size="sm"
-              />
-            </b-form-group>
-          </b-col>
-          <b-col sm="7" md="6" class="my-1">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              align="fill"
+        </template>
+        <template v-slot:cell(date)="data">
+          {{ data.item.date.substr(0, 10) }}
+        </template>
+        <template v-slot:cell(details)="data">
+          <small>
+            <a
+              :href="`https://fts.unocha.org/flows/${data.item.id}?destination=emergencies/${emergencyID}/flows/2020`"
+              target="_blank">
+              FTS
+            </a>
+          </small>
+        </template>
+      </b-table>
+      <b-row>
+        <b-col sm="5" md="6" class="my-1">
+          <b-form-group
+            label="Contributions per page"
+            label-cols-sm="7"
+            label-cols-md="7"
+            label-cols-lg="5"
+            label-cols-xl="4"
+            label-align-sm="right"
+            label-size="sm"
+            label-for="perPageSelect">
+            <b-form-select
+              id="perPageSelect"
+              v-model="perPage"
+              :options="[50,100,500,1000]"
               size="sm"
-              class="my-0"
             />
-          </b-col>
-        </b-row>
-      </template>
-    </div>
-  </b-container>
+          </b-form-group>
+        </b-col>
+        <b-col sm="7" md="6" class="my-1">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          />
+        </b-col>
+      </b-row>
+    </template>
+  </div>
 </template>
 <style>
 </style>

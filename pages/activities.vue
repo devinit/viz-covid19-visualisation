@@ -1,177 +1,175 @@
 <template>
-  <b-container fluid class="mt-4">
-    <div>
-      <b-alert show variant="warning">
-        This is a prototype visualisation to track the Covid-19 response. The data on this page comes from
-        <a href="https://iatistandard.org">IATI</a>. Read more on the
-        <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
+  <div>
+    <b-alert show variant="warning">
+      This is a prototype visualisation to track the Covid-19 response. The data on this page comes from
+      <a href="https://iatistandard.org">IATI</a>. Read more on the
+      <nuxt-link :to="{name: 'about'}" no-prefetch>about page</nuxt-link>.
+    </b-alert>
+    <h2>Activities</h2>
+    <hr>
+    <template v-if="isBusy">
+      <div class="text-center text-secondary">
+        <b-spinner class="align-middle" />
+        <strong>Loading...</strong>
+      </div>
+    </template>
+    <template
+      v-if="!isBusy">
+      <IATISummaryPaneControls
+        :display-summary.sync="displaySummary"
+        :summary-label-field.sync="summaryLabelField"
+        :selected-country.sync="selectedCountry"
+        :countries="countries"
+        :selected-reporting-org.sync="selectedReportingOrg"
+        :reporting-orgs="reportingOrgs"
+        :sectors="sectors"
+        :selected-sector.sync="selectedSector"
+        :selected-humanitarian-development.sync="selectedHumanitarianDevelopment"
+        :summary-type.sync="summaryType"
+        :m49-codelists="m49Codelists"
+        :activity-used-codelists="activityUsedCodelists"
+        :selectedCOVIDMatches.sync="selectedCOVIDMatches" />
+      <IATISummaryPane
+        v-if="activities"
+        :activityData="activities"
+        :activityTransactionsData="activityTransactions"
+        :displaySummary="displaySummary"
+        :summaryLabelField="summaryLabelField"
+        :codelists="codelists"
+        :getCountryName="getCountryName"
+        :getSectorName="getSectorName"
+        :summaryType="summaryType" />
+      <b-alert :show="displayDoubleCountingWarning" variant="warning" class="text-muted mb-3 mt-3">
+        The above results may include double counting. <a v-b-modal.double-counting-modal href="#">Read more</a>.
       </b-alert>
-      <h2>Activities</h2>
+      <b-modal id="double-counting-modal" title="Double counting" ok-only>
+        <p>
+          The visualisation may show double counting, if multiple organisations have published data
+          about the same flows at multiple points in the chain.
+        </p>
+        <p>
+          For example, DFID could publish a contribution to a project managed by the World Health
+          Organisation. The WHO could in turn publish the project they are managing. At the moment,
+          the DFID contribution and the WHO's spend on this project would be added together; in reality
+          they should not be added together.
+        </p>
+        <p>
+          We are developing methodologies to reduce the scope for this kind of double counting in
+          the visualisation.
+        </p>
+      </b-modal>
       <hr>
-      <template v-if="isBusy">
-        <div class="text-center text-secondary">
-          <b-spinner class="align-middle" />
-          <strong>Loading...</strong>
-        </div>
-      </template>
-      <template
-        v-if="!isBusy">
-        <IATISummaryPaneControls
-          :display-summary.sync="displaySummary"
-          :summary-label-field.sync="summaryLabelField"
-          :selected-country.sync="selectedCountry"
-          :countries="countries"
-          :selected-reporting-org.sync="selectedReportingOrg"
-          :reporting-orgs="reportingOrgs"
-          :sectors="sectors"
-          :selected-sector.sync="selectedSector"
-          :selected-humanitarian-development.sync="selectedHumanitarianDevelopment"
-          :summary-type.sync="summaryType"
-          :m49-codelists="m49Codelists"
-          :activity-used-codelists="activityUsedCodelists"
-          :selectedCOVIDMatches.sync="selectedCOVIDMatches" />
-        <IATISummaryPane
-          v-if="activities"
-          :activityData="activities"
-          :activityTransactionsData="activityTransactions"
-          :displaySummary="displaySummary"
-          :summaryLabelField="summaryLabelField"
-          :codelists="codelists"
-          :getCountryName="getCountryName"
-          :getSectorName="getSectorName"
-          :summaryType="summaryType" />
-        <b-alert :show="displayDoubleCountingWarning" variant="warning" class="text-muted mb-3 mt-3">
-          The above results may include double counting. <a v-b-modal.double-counting-modal href="#">Read more</a>.
-        </b-alert>
-        <b-modal id="double-counting-modal" title="Double counting" ok-only>
-          <p>
-            The visualisation may show double counting, if multiple organisations have published data
-            about the same flows at multiple points in the chain.
-          </p>
-          <p>
-            For example, DFID could publish a contribution to a project managed by the World Health
-            Organisation. The WHO could in turn publish the project they are managing. At the moment,
-            the DFID contribution and the WHO's spend on this project would be added together; in reality
-            they should not be added together.
-          </p>
-          <p>
-            We are developing methodologies to reduce the scope for this kind of double counting in
-            the visualisation.
-          </p>
-        </b-modal>
-        <hr>
-        <b-row>
-          <b-col sm="7" md="9">
-            <h3>{{ activities.length }} Activities</h3>
-          </b-col>
-          <b-col sm="5" md="3" class="text-sm-right">
-            <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
-              <b-dropdown-item
-                v-for="downloadURL in downloadURLs"
-                v-bind:key="downloadURL.format"
-                :href="downloadURL.url"
-                target="_blank">
-                {{ downloadURL.format }}
-              </b-dropdown-item>
-            </b-dropdown>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col sm="5" md="6" class="my-1">
-            <b-form-group
-              label="Activities per page"
-              label-cols-sm="7"
-              label-cols-md="7"
-              label-cols-lg="4"
-              label-cols-xl="3"
-              label-align-sm="right"
-              label-size="sm"
-              label-for="perPageSelect">
-              <b-form-select
-                id="perPageSelect"
-                v-model="perPage"
-                :options="[50,100,500,1000]"
-                size="sm"
-              />
-            </b-form-group>
-          </b-col>
-          <b-col sm="7" md="6" class="my-1">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              align="fill"
+      <b-row>
+        <b-col sm="7" md="9">
+          <h3>{{ activities.length }} Activities</h3>
+        </b-col>
+        <b-col sm="5" md="3" class="text-sm-right">
+          <b-dropdown text="Download" right variant="primary" style="width:100%" class="mb-2">
+            <b-dropdown-item
+              v-for="downloadURL in downloadURLs"
+              v-bind:key="downloadURL.format"
+              :href="downloadURL.url"
+              target="_blank">
+              {{ downloadURL.format }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="5" md="6" class="my-1">
+          <b-form-group
+            label="Activities per page"
+            label-cols-sm="7"
+            label-cols-md="7"
+            label-cols-lg="4"
+            label-cols-xl="3"
+            label-align-sm="right"
+            label-size="sm"
+            label-for="perPageSelect">
+            <b-form-select
+              id="perPageSelect"
+              v-model="perPage"
+              :options="[50,100,500,1000]"
               size="sm"
-              class="my-0"
             />
-          </b-col>
-        </b-row>
-        <b-table
-          v-if="activities"
-          :items="activities"
-          :fields="fields"
-          :current-page="currentPage"
-          :per-page="perPage"
-          sortable
-          responsive
-        >
-          <template v-slot:cell(title)="data">
-            <a
-              :href="`http://d-portal.org/q.html?aid=${data.item.iatiIdentifier}`"
-              target="_blank">{{ data.item.title }}</a>
+          </b-form-group>
+        </b-col>
+        <b-col sm="7" md="6" class="my-1">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          />
+        </b-col>
+      </b-row>
+      <b-table
+        v-if="activities"
+        :items="activities"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        sortable
+        responsive
+      >
+        <template v-slot:cell(title)="data">
+          <a
+            :href="`http://d-portal.org/q.html?aid=${data.item.iatiIdentifier}`"
+            target="_blank">{{ data.item.title }}</a>
+        </template>
+        <template v-slot:cell(reportingOrg)="data">
+          {{ data.item.reportingOrg.text }}
+        </template>
+        <template v-slot:cell(implementingOrganisations)="data">
+          <span v-for="(org, orgindex) in data.item.participatingOrganisation[4]" :key="`${data.index}-${org.text}-${orgindex}`">
+            {{ org.text }}
+          </span>
+        </template>
+        <template v-slot:cell(countriesRegions)="data">
+          <template v-if="data.item.countriesRegions.length > 10">
+            <span>Multiple countries</span>
           </template>
-          <template v-slot:cell(reportingOrg)="data">
-            {{ data.item.reportingOrg.text }}
-          </template>
-          <template v-slot:cell(implementingOrganisations)="data">
-            <span v-for="(org, orgindex) in data.item.participatingOrganisation[4]" :key="`${data.index}-${org.text}-${orgindex}`">
-              {{ org.text }}
+          <template v-else>
+            <span v-for="countryRegion in data.item.countriesRegions" :key="`${data.index}-${countryRegion.code}`">
+              {{ getCountryName(countryRegion) }}
             </span>
           </template>
-          <template v-slot:cell(countriesRegions)="data">
-            <template v-if="data.item.countriesRegions.length > 10">
-              <span>Multiple countries</span>
-            </template>
-            <template v-else>
-              <span v-for="countryRegion in data.item.countriesRegions" :key="`${data.index}-${countryRegion.code}`">
-                {{ getCountryName(countryRegion) }}
-              </span>
-            </template>
-          </template>
-        </b-table>
-        <b-row>
-          <b-col sm="5" md="6" class="my-1">
-            <b-form-group
-              label="Activities per page"
-              label-cols-sm="7"
-              label-cols-md="7"
-              label-cols-lg="4"
-              label-cols-xl="3"
-              label-align-sm="right"
-              label-size="sm"
-              label-for="perPageSelect">
-              <b-form-select
-                id="perPageSelect"
-                v-model="perPage"
-                :options="[50,100,500,1000]"
-                size="sm"
-              />
-            </b-form-group>
-          </b-col>
-          <b-col sm="7" md="6" class="my-1">
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              align="fill"
+        </template>
+      </b-table>
+      <b-row>
+        <b-col sm="5" md="6" class="my-1">
+          <b-form-group
+            label="Activities per page"
+            label-cols-sm="7"
+            label-cols-md="7"
+            label-cols-lg="4"
+            label-cols-xl="3"
+            label-align-sm="right"
+            label-size="sm"
+            label-for="perPageSelect">
+            <b-form-select
+              id="perPageSelect"
+              v-model="perPage"
+              :options="[50,100,500,1000]"
               size="sm"
-              class="my-0"
             />
-          </b-col>
-        </b-row>
-      </template>
-    </div>
-  </b-container>
+          </b-form-group>
+        </b-col>
+        <b-col sm="7" md="6" class="my-1">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          />
+        </b-col>
+      </b-row>
+    </template>
+  </div>
 </template>
 <style>
 </style>
