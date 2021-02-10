@@ -171,7 +171,6 @@ export default {
       },
       planID: 952,
       emergencyID: 911,
-      CORS_ANYWHERE: this.$store.state.CORSAnywhere,
       displaySummary: 'chart',
       summaryLabelField: "fundingOrganisation",
       fundingOrganisation: null,
