@@ -11,7 +11,8 @@
     <h2>Contributions</h2>
     <hr>
 
-    <HRPSummaryPane :urls="urls" />
+    <!-- FIXME this is temporarily hidden via v-show='false' - consider removing or replacing in future -->
+    <HRPSummaryPane v-show="false" :urls="urls" />
 
     <template v-if="busy">
       <div class="text-center text-secondary mb-4">
