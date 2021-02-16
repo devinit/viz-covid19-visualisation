@@ -6,9 +6,11 @@ Today we are facing an unprecedented crisis with devastating health, economic an
 
 This new Covid-19 tracking prototype has been developed through the [Grand Bargain transparency workstream](https://interagencystandingcommittee.org/greater-transparency) to visualise the response to Covid-19 as a pathway towards more comprehensive tracking, including what activities are being financed in affected countries. This visualisation is initially based on the UN Office for the Coordination of Humanitarian Affairs (UNOCHA)'s [Financial Tracking Service](https://fts.unocha.org/) (FTS) and [International Aid Transparency Initiative (IATI)](https://iatistandard.org/en/) data and will be updated daily as new data becomes available through each source.
 
+(Jump to <a href="#faq">Frequently-asked questions</a>.)
+
 ---
 
-### Data
+### <a name="data">Data</a>
 
 The visualisation contains data on <nuxt-link :to="{name: 'index'}" no-prefetch>contributions</nuxt-link>, demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}" no-prefetch>activities</nuxt-link> (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from UNOCHA's FTS. The activity level data comes from IATI.
 
@@ -18,7 +20,7 @@ The contributions page is most useful for understanding total aggregate funding,
   The two datasets cannot easily be compared, particularly due to the different coverage of the two data sources. UNOCHA FTS contains data on humanitarian contributions as reported to FTS. IATI contains activity (or project) level data on humanitarian and development activities, but the availability and quality of data will vary depending on what data each organisation has published.
 </b-alert>
 
-#### Contributions
+#### <a name="contributions">Contributions</a>
 
 The contributions page contains a summary of total funding to date against the [Covid-19 Global Humanitarian Response Plan](https://fts.unocha.org/appeals/952/summary). This page also contains an aggregation and detailed breakdown of funding against the [Covid-19 emergency](https://fts.unocha.org/emergencies/911/summary/2020).
 
@@ -30,7 +32,7 @@ The visualisation does not contain any double-counting, though it does currently
 
 The contributions data is extracted from the [FTS Public API](https://fts.unocha.org/content/fts-public-api).
 
-#### Activities
+#### <a name="activities">Activities</a>
 
 The activities page lists activities that various organisations are involved in. 'Activity' can have multiple meanings, depending on the business processes of the respective organisation. Often, it is synonymous with a 'project', but it can also contain country-wide programmes, budget support, or contributions to other organisations.
 
@@ -50,7 +52,7 @@ Only COVID-19 activities are captured and displayed in the visualisation and the
 
 The activity data is extracted from the [d-portal API](https://d-portal.org) using the above criteria.
 
-#### Flows
+#### <a name="flows">Flows</a>
 
 The flows page contains the same selection of activities as the activities page. Data is filtered to a particular organisation type (e.g. government, multilateral, NGO), which is initially set to "Government" but can be changed by the user at the top of the page.
 
@@ -67,6 +69,98 @@ The tables below the visualisation show the same data as the visualisation, but 
 
 ---
 
+### <a name="faq">Frequently-asked questions</a>
+
+##### Why are contributions and activities figures different?
+
+The data for Contributions is sourced from the UN Financial Tracking System (FTS), whereas Contributions is from publishers of the International Aid Transparency Initiative (IATI).  These are two different systems, with varying data requirements.  In addition, the FTS data focusses specically on humanitarian appeals and emergencies - IATI data has a wider scope and set of publishers from a range of contexts.
+
+##### How often is this updated?
+
+The tool is updated every day.  Data is pulled and processed from the two sources at midnight (GMT) each day, leading to a new version of the tool.  No updates are applied during the day.
+
+##### Are these tools inclusive of humanitarian and development data?
+
+Yes.  This is most clear with the IATI data, in that publishing organisatons can specifically flag if any part of their data is explicitly humanitarian.  If an IATI publisher does not flag data in this way, then it is assumed it is development in nature.
+
+##### Is there any missing data?
+
+There are over 1,200 organisations that current publish IATI data.  This list is growing all the time.  However, it should not be assumed that this is a complete representation of all humanitarian and development actors in the world.
+
+##### What IATI data is and is not included?
+
+This tool focused on financial aspects of IATI data.  IATI data can also include results, links to documents and sub-national location data.  These are not used in this tool - but a link to d-portal is provided, to find out more about a specific IATI activity.
+
+##### Where can I learn more about this data?
+
+The IATI standard website provides lots of background and contextual material about the data: https://iatistandard.org/en/
+
+##### How can I get in touch with feedback?
+
+Feedback on this tool can be sent to the team at The Centre for Humanitarian data....
+
+##### Who built this tool?
+
+This tool was first built in May 2020 by Development Initiatives, as part of the Grand Bargain transparency work stream.  Since January 2021, The Centre for Humanitarian Data (part of United Nations Office for Coordination of Humanitarian Affairs (UN OCHA)) manage and develop it.
+
+##### What is IATI?
+
+The International Aid Transparency Initiative (IATI) is a multi-stakeholder programme to further the sharing of open data by humanitarian and development cooperation actors.  IATI has been in operation since 2010.  A core part of IATI is a data standard, that helps organisations to publish data in a common format and structure - so that it can more easily be used and shared.
+
+##### Can I access historical data?
+
+Each nightly download of the data is stored and available for access via the project GitHub repository.  A script is also available for technical users who wish to process this.
+
+##### What's a Commitment?
+
+A Commitment is a specific type of transaction in the IATI data standard.  A commitment represents a legal agreement from one party to another, in terms of making funds available.
+
+##### What's a Disbursement?
+
+A Disbursement is a specific type of transaction in the IATI data standard.  A disbursement represents a specific or aggrement transfer of funds from one party to another.
+
+##### Are Commitments and Disbursements related?
+
+When in a single IATI activity, a Commitment will usually preceed a Disbursement.  In many instances, there could be severel Commitments and Disbursements in an IATI activity, and they may not follow a strict chronological order.
+
+##### What's the difference between a Recipient Country and a Country?
+
+None!
+
+##### Can I access a list of all Countries?
+
+IATI has a centralised list of countries and their codes, using the ISO 3166-1 standard: https://iatistandard.org/en/iati-standard/203/codelists/country/
+
+##### What is an IATI activity?
+
+An IATI activity is the unit via which any IATI publisher structures and groups their data.  This can range according to any publisher - it can be a specific project, programme or prortfolio (for example).  Some IATI publishers may use activities to represent a mix of their business and operational units.
+
+##### What's a Sector?
+
+IATI has a centralise list of sectors, which are based on the OECD DAC "Purpose Codes".  These are thematic codes used in the development sector, to classify funding and projects: https://iatistandard.org/en/iati-standard/203/codelists/sector/
+
+##### What is the IATI COVID-19 Guidance?
+
+The IATI Secretariat published this guidance document to assist IATI publishers in describing their COVID-19 actions in a common way.  The guidance details various ways in which COVID-19 can be added to IATI data.
+
+##### Does this tool use the IAT COVID-19 Guiance?
+
+Yes.  When data is retreived each night, it must satisfy any of the options that are available to organisations publishing IATI data.
+
+##### Are the Flows the same as the FTS Flows?
+
+No.  These flows are constructed from IATI data, and do no use any FTS sources.
+
+##### Why are there different Excel formats to download the Activities data?
+
+There are three Excel download formats, which provide the data in different spreadsheet formats.  The "activities" format details the activity - level data, and aggregates the transactions; the "transactions" download provides all transations, each in a new speadsheet row; the "transactions - by country and sector" provides further segmentation, when activities have multiple sectors and/or countris. In this case, the top ten are presented a different rows in the download file, according to the percentage provided in the original IATI data.
+
+##### What is JSON and XML (in the download options)?
+
+Alongside the spreadsheet formats for download, data is available in the original IATI format (XML) and an alternative format known as JSON.  These formats are useful for those that seek data for analysis and use in tools that work with machine-readible data
+
+---
+
 ### Technical details
 
 The front end of the prototype is built in Vue.JS and hosted as a static site on Github pages. The data is extracted from the FTS and D-Portal APIs, and reprocessed and condensed daily, using scripts written in Python and run on Travis.
@@ -79,7 +173,7 @@ All of the tools we have developed are shared as open source software:
 
 ---
 
-### Privacy Policy and Cookies
+### <a name="privacy">Privacy Policy and Cookies</a>
 
 View [our privacy policy and cookies policy](/Privacy-Policy.pdf). If you have any further questions, please get in touch with us via [humportal@devinit.org](mailto:humportal@devinit.org).
 
