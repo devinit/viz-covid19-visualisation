@@ -73,59 +73,57 @@ The tables below the visualisation show the same data as the visualisation, but 
 
 ##### Why are contributions and activities figures different?
 
-The data for Contributions is sourced from the UN Financial Tracking System (FTS), whereas Contributions is from publishers of the International Aid Transparency Initiative (IATI).  These are two different systems, with varying data requirements.  In addition, the FTS data focusses specically on humanitarian appeals and emergencies - IATI data has a wider scope and set of publishers from a range of contexts.
+The data for the Contributions tab is from the UN Financial Tracking Service (FTS), while the data for the Activities and Flows tabs is from organisations participating in the International Aid Transparency Initiative (IATI).  These are two different information ecosystems, with different goals and procedures, so the results will usually differ as well: for example, the FTS data is curated and focusses specifically on humanitarian appeals and emergencies within the UN system and its partners, while the IATI data is self-reported includes a wider variety of aid-related organisations.
 
 ##### How often is this updated?
 
-The tool is updated every day.  Data is pulled and processed from the two sources at midnight (GMT) each day, leading to a new version of the tool.  No updates are applied during the day.
+The data is updated daily, using the latest available from FTS and IATI.
 
 ##### Are these tools inclusive of humanitarian and development data?
 
-Yes.  This is most clear with the IATI data, in that publishing organisatons can specifically flag if any part of their data is explicitly humanitarian.  If an IATI publisher does not flag data in this way, then it is assumed it is development in nature.
+The FTS Contributions tab contains exclusively humanitarian data. The IATI Activities and Flows tabs contain both humanitarian and development data (IATI participants self-declare which activities are humanitarian).  The visualisation allows you to filter to see only humanitarian, only development, or both.
 
 ##### Is there any missing data?
 
-There are over 1,200 organisations that current publish IATI data.  This list is growing all the time.  However, it should not be assumed that this is a complete representation of all humanitarian and development actors in the world.
+Yes. FTS data includes the primary humanitarian actors who work in or with the UN system, but there are many aid organisations not included. The IATI ecosystem includes over 1,200 aid-related organisations (humanitarian and development) but there are still some organisations who choose not to publish their activities and financial data, and they will be missing from the visualisation.
 
 ##### What IATI data is and is not included?
 
-This tool focused on financial aspects of IATI data.  IATI data can also include results, links to documents and sub-national location data.  These are not used in this tool - but a link to d-portal is provided, to find out more about a specific IATI activity.
+This tool focuses on the activity and financial aspects of IATI data.  IATI data can also include results, links to documents and sub-national location data, and budget and organisation data. You can find more of this information at https://d-portal.org
 
 ##### Where can I learn more about this data?
 
-The IATI standard website provides lots of background and contextual material about the data: https://iatistandard.org/en/
+Information about FTS data and methodology is available at https://fts.unocha.org/content/about-fts-what-fts
+
+You can learn more about IATI at https://iatistandard.org/
 
 ##### How can I get in touch with feedback?
 
-Feedback on this tool can be sent to the team at The Centre for Humanitarian data....
+We welcome feedback on this tool. Please send your comments to centrehumdata@un.org
 
 ##### Who built this tool?
 
-This tool was first built in May 2020 by Development Initiatives, as part of the Grand Bargain transparency work stream.  Since January 2021, The OCHA Centre for Humanitarian Data manage and develop it.
-
-##### What is IATI?
-
-The International Aid Transparency Initiative (IATI) is a multi-stakeholder programme to further the sharing of open data by humanitarian and development cooperation actors.  IATI has been in operation since 2010.  A core part of IATI is a data standard, that helps organisations to publish data in a common format and structure - so that it can more easily be used and shared.
+Development Initiatives originally built this tool in May 2020 as part of the Grand Bargain Transparency work stream.  Since January 2021, The OCHA Centre for Humanitarian Data has maintained and enhanced it.
 
 ##### Can I access historical data?
 
-Each nightly download of the data is stored and available for access via the project GitHub repository.  A script is also available for technical users who wish to process this.
+Each nightly download of the data is stored and available for access via the project GitHub repository at https://github.com/OCHA-DAP/covid19-data/tree/gh-pages  A script is also available for technical users.
 
 ##### What's a Commitment?
 
-A Commitment is a specific type of transaction in the IATI data standard.  A commitment represents a legal agreement from one party to another, in terms of making funds available.
+A Commitment is a specific type of transaction in the IATI data standard.  A commitment represents a legal agreement from one party to another to make funds available.
 
 ##### What's a Disbursement?
 
-A Disbursement is a specific type of transaction in the IATI data standard.  A disbursement represents a specific or aggrement transfer of funds from one party to another.
+A Disbursement is a specific type of transaction in the IATI data standard.  A disbursement represents the actual transfer of funds from one party to another.
 
 ##### Are Commitments and Disbursements related?
 
-When in a single IATI activity, a Commitment will usually preceed a Disbursement.  In many instances, there could be severel Commitments and Disbursements in an IATI activity, and they may not follow a strict chronological order.
+Within a single IATI activity, a Commitment will usually preceed a Disbursement.  In many instances, there could be several Commitments and Disbursements in an IATI activity, and they may not follow a strict chronological order.
 
 ##### What's the difference between a Recipient Country and a Country?
 
-None!
+None! IATI data uses the terms interchangeably.
 
 ##### Can I access a list of all Countries?
 
@@ -133,31 +131,29 @@ IATI has a centralised list of countries and their codes, using the ISO 3166-1 s
 
 ##### What is an IATI activity?
 
-An IATI activity is the unit via which any IATI publisher structures and groups their data.  This can range according to any publisher - it can be a specific project, programme or prortfolio (for example).  Some IATI publishers may use activities to represent a mix of their business and operational units.
+An IATI activity represents a portfolio, programme, project, activity, or any other way that aid organisations publishing to IATI choose to divide up their work.  Some IATI publishers may use activities to represent a mix of their business and operational units.
 
 ##### What's a Sector?
 
-IATI has a centralise list of sectors, which are based on the OECD DAC "Purpose Codes".  These are thematic codes used in the development sector, to classify funding and projects: https://iatistandard.org/en/iati-standard/203/codelists/sector/
+IATI has a master list of sectors for development work, which are based on the OECD DAC "Purpose Codes".  These are thematic codes used in the development sector, to classify funding and projects: https://iatistandard.org/en/iati-standard/203/codelists/sector/
+
+For humanitarian classification, some IATI publishers also use the cluster and area-of-interest classification at https://data.humdata.org/dataset/global-coordination-groups-beta
 
 ##### What is the IATI COVID-19 Guidance?
 
-The IATI Secretariat published this guidance document to assist IATI publishers in describing their COVID-19 actions in a common way.  The guidance details various ways in which COVID-19 can be added to IATI data.
+The IATI Secretariat published this guidance document to assist IATI publishers in describing their COVID-19 actions in a common way.  The guidance details various ways in which COVID-19 can be added to IATI data: https://iatistandard.org/en/guidance/standard-guidance/covid-19/
 
-##### Does this tool use the IAT COVID-19 Guiance?
-
-Yes.  When data is retreived each night, it must satisfy any of the options that are available to organisations publishing IATI data.
-
-##### Are the Flows the same as the FTS Flows?
+##### Are the IATI Flows the same as the "flows" that the FTS web site publishes?
 
 No.  These flows are constructed from IATI data, and do no use any FTS sources.
 
-##### Why are there different Excel formats to download the Activities data?
+##### Why are there different Excel files to download the Activities data?
 
-There are three Excel download formats, which provide the data in different spreadsheet formats.  The "activities" format details the activity - level data, and aggregates the transactions; the "transactions" download provides all transations, each in a new speadsheet row; the "transactions - by country and sector" provides further segmentation, when activities have multiple sectors and/or countris. In this case, the top ten are presented a different rows in the download file, according to the percentage provided in the original IATI data.
+The three Excel files present different views of the COVID-19-related IATI activity data.  The "activities" file details the activity-level data, and aggregates the transactions; the "transactions" file provides all transations, each in a new speadsheet row; the "transactions - by country and sector" file provides further segmentation for the top activities, when activities have multiple sectors and/or countries.
 
-##### What is JSON and XML (in the download options)?
+##### What are the JSON and XML download options?
 
-Alongside the spreadsheet formats for download, data is available in the original IATI format (XML) and an alternative format known as JSON.  These formats are useful for those that seek data for analysis and use in tools that work with machine-readible data
+Alongside the spreadsheet formats for download, data is available in the original IATI format (XML) and an alternative format known as JSON.  These formats are useful for technical specialists who want to perform more-advanced analysis of the data.
 
 ---
 
