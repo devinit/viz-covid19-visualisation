@@ -4,7 +4,7 @@
 
 Today we are facing an unprecedented crisis with devastating health, economic and social effects which are being felt around the world. The response from the international community to the Covid-19 pandemic has been extraordinary and vast: different appeals have been launched, substantial financing is being provided, and projects are being implemented. All of this calls for greater data-driven transparency of humanitarian and development financing and activities. We as an international community need to better track this information to enable a more coordinated and effective response towards affected populations.
 
-This new Covid-19 tracking prototype has been developed through the [Grand Bargain transparency workstream](https://interagencystandingcommittee.org/greater-transparency) to visualise the response to Covid-19 as a pathway towards more comprehensive tracking, including what activities are being financed in affected countries. This visualisation is initially based on the UN Office for the Coordination of Humanitarian Affairs (UNOCHA)'s [Financial Tracking Service](https://fts.unocha.org/) (FTS) and [International Aid Transparency Initiative (IATI)](https://iatistandard.org/en/) data and will be updated daily as new data becomes available through each source.
+This new Covid-19 tracking prototype has been developed through the <a href="https://interagencystandingcommittee.org/greater-transparency" target="_blank">Grand Bargain transparency workstream</a> to visualise the response to Covid-19 as a pathway towards more comprehensive tracking, including what activities are being financed in affected countries. This visualisation is based on the United Nations Office for the Coordination of Humanitarian Affairs (OCHA)'s <a href="https://fts.unocha.org/" target="_blank">Financial Tracking Service</a> (FTS) and <a href="https://iatistandard.org" target="_blank">International Aid Transparency Initiative</a> (IATI) data and will be updated daily as new data becomes available through each source.
 
 (Jump to <a href="#faq">Frequently-asked questions</a>.)
 
@@ -12,12 +12,12 @@ This new Covid-19 tracking prototype has been developed through the [Grand Barga
 
 ### <a name="data">Data</a>
 
-The visualisation contains data on <nuxt-link :to="{name: 'index'}" no-prefetch>contributions</nuxt-link>, demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}" no-prefetch>activities</nuxt-link> (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from UNOCHA's FTS. The activity level data comes from IATI.
+The visualisation contains data on <nuxt-link :to="{name: 'index'}" no-prefetch>contributions</nuxt-link>, demonstrating international resource mobilisation efforts, and <nuxt-link :to="{name: 'activities'}" no-prefetch>activities</nuxt-link> (generally speaking, projects), containing more detailed information that could be useful in analysing the country-level response. The contributions data comes from OCHA's FTS. The activity level data comes from IATI.
 
 The contributions page is most useful for understanding total aggregate funding, and the activities page most useful for understanding how funding is broken down by project.
 
 <b-alert variant="secondary" show>
-  The two datasets cannot easily be compared, particularly due to the different coverage of the two data sources. UNOCHA FTS contains data on humanitarian contributions as reported to FTS. IATI contains activity (or project) level data on humanitarian and development activities, but the availability and quality of data will vary depending on what data each organisation has published.
+  The two datasets cannot easily be compared, particularly due to the different coverage of the two data sources. OCHA FTS contains data on humanitarian contributions as reported to FTS. IATI contains activity (or project) level data on humanitarian and development activities, but the availability and quality of data will vary depending on what data each organisation has published.
 </b-alert>
 
 #### <a name="contributions">Contributions</a>
@@ -103,7 +103,7 @@ We welcome feedback on this tool. Please send your comments to centrehumdata@un.
 
 ##### Who built this tool?
 
-Development Initiatives originally built this tool in May 2020 as part of the Grand Bargain Transparency work stream.  Since January 2021, The Centre for Humanitarian Data (part of UNOCHA, the United Nations Office for Coordination of Humanitarian Affairs) has maintained and enhanced it.
+Development Initiatives originally built this tool in May 2020 as part of the Grand Bargain Transparency work stream.  Since January 2021, The OCHA Centre for Humanitarian Data has maintained and enhanced it.
 
 ##### Can I access historical data?
 
@@ -187,7 +187,7 @@ View [our privacy policy and cookies policy](/Privacy-Policy.pdf). If you have a
       <a href="https://iatistandard.org" target="_blank"><img src="~/assets/logos/iati.svg" width="100%" height="auto" alt="Powered by IATI data"></a>
     </b-col>
     <b-col>
-      <a href="https://fts.unocha.org/" target="_blank"><img src="~/assets/logos/fts.png" width="100%" height="auto" alt="UNOCHA FTS Logo"></img></a>
+      <a href="https://fts.unocha.org/" target="_blank"><img src="~/assets/logos/fts.png" width="100%" height="auto" alt="OCHA FTS Logo"></img></a>
     </b-col>
   </b-row>
 </template>
