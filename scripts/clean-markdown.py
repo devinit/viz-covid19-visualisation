@@ -68,6 +68,13 @@ def fix_links (s):
     return re.sub("\[([^\]]+)\]\(([^\)]+)\)", linkify, s, flags=re.MULTILINE)
 
 
+def add_template_info (s):
+    """ Add the VueJS template declaration to the top, removing any extra blank lines """
+
+    # Note: not using multiline matching here
+    return re.sub("^[\s\n\r]+", "<template lang=\"md\">\n\n", s)
+
+
 #
 # Main entry point
 #
@@ -77,6 +84,7 @@ def clean_markdown (s):
     s = remove_comments(s)
     s = fix_headers(s)
     s = fix_links(s)
+    s = add_template_info(s)
     return s
 
 
