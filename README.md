@@ -87,3 +87,10 @@ Tooltips can be used throughout the site to provide more information where requi
 
 Tooltips are currently only loaded when `activities.vue` is loaded. You could easily make them load for other tabs too by adding relevant functionality within the `loadData()` method of each tab. Alternatively, you could consider moving this retrieval to the Vuex store and call it from within the [nuxtServerInit](https://nuxtjs.org/docs/2.x/directory-structure/store#the-nuxtserverinit-action) action, though this is a bit fiddly.
 
+
+## Exporting content from Google Docs
+
+To export content from Google Docs (e.g. for the About page), install the "Docs to Markdown" add on, then run the scripts/clean-markdown.py Python3 script on the output:
+
+```
+$ python3 clean-markdown.py < raw.md > pages/About.md
