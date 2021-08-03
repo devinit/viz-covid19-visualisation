@@ -1,5 +1,12 @@
 <template>
   <div>
+    <b-alert show dismissible variant="warning" class="mb-0 text-center">
+      This visualisation is no longer maintained. OCHA's Centre for Humanitarian Data
+      has developed a new IATI COVID-19 Funding Dashboard.
+      <b-btn href="https://data.humdata.org/viz-iati-c19-dashboard/" size="sm" variant="warning">
+        Visit the IATI COVID-19 Funding Dashboard
+      </b-btn>
+    </b-alert>
     <b-navbar toggleable="lg" type="dark" variant="primary">
       <b-navbar-brand :to="'/'">
         Covid-19 Response
