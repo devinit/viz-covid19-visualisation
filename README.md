@@ -30,6 +30,10 @@ $ npm run generate
 $ npm run deploy
 ```
 
+**Note:**
+Pushing to the `main` branch will now automatically build and deploy the site to Github Pages, under the `gh-pages` branch, using Github Actions.
+
+
 ## Linting
 
 Note that linting is enabled, and will automatically fix a number of issues in your code. However, sometimes this can feel a bit aggressive or annoying while you are working through something, so if you want to disable linting, you can comment out the 3 indicated lines in `nuxt.config.js`.
