@@ -219,15 +219,15 @@ export default {
       downloadURLs: [
         {
           format: 'Excel (transactional data)',
-          url: 'https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx?raw=true'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/traceability/transactions.xlsx?raw=true'
         },
         {
           format: 'Excel (simplified data)',
-          url: 'https://ocha-dap.github.io/covid19-data/traceability/traceability_grouped.xlsx?raw=true'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/traceability/traceability_grouped.xlsx?raw=true'
         },
         {
           format: 'JSON (simplified data)',
-          url: 'https://ocha-dap.github.io/covid19-data/traceability/traceability.json'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/traceability/traceability.json'
         }
       ]
     }
@@ -238,7 +238,7 @@ export default {
     },
     urls () {
       return {
-        DATA_URL: 'https://ocha-dap.github.io/covid19-data/traceability/traceability.json',
+        DATA_URL: 'https://devinit.github.io/iati-covid19-first-prototype/traceability/traceability.json',
         ORGANISATION_TYPES: 'https://codelists.codeforiati.org/api/json/en/OrganisationType.json'
       }
     },

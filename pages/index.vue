@@ -184,11 +184,11 @@ export default {
       downloadURLs: [
         {
           format: 'Excel',
-          url: 'https://ocha-dap.github.io/covid19-data/xlsx/contributions.xlsx?raw=true'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/xlsx/contributions.xlsx?raw=true'
         },
         {
           format: 'JSON',
-          url: 'https://ocha-dap.github.io/covid19-data/fts-emergency-911.json'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/fts-emergency-911.json'
         }
       ],
       currentPage: 1,
@@ -227,9 +227,9 @@ export default {
     },
     urls () {
       return {
-        EMERGENCY_URL: `https://ocha-dap.github.io/covid19-data/fts-emergency-${this.emergencyID}.json`,
-        PLAN_URL: `https://ocha-dap.github.io/covid19-data/fts-plan-${this.planID}.json`,
-        FLOW_URL: `https://ocha-dap.github.io/covid19-data/fts-flow-plan-${this.planID}.json`
+        EMERGENCY_URL: `https://devinit.github.io/iati-covid19-first-prototype/fts-emergency-${this.emergencyID}.json`,
+        PLAN_URL: `https://devinit.github.io/iati-covid19-first-prototype/fts-plan-${this.planID}.json`,
+        FLOW_URL: `https://devinit.github.io/iati-covid19-first-prototype/fts-flow-plan-${this.planID}.json`
       }
     },
     fields () {

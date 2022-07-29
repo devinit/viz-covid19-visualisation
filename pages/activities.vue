@@ -217,23 +217,23 @@ export default {
       downloadURLs: [
         {
           format: 'Excel (activities)',
-          url: 'https://ocha-dap.github.io/covid19-data/xlsx/activities.xlsx'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/xlsx/activities.xlsx'
         },
         {
           format: 'Excel (transactions)',
-          url: 'https://ocha-dap.github.io/covid19-data/traceability/transactions.xlsx'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/traceability/transactions.xlsx'
         },
         {
           format: 'Excel (transactions - by country and sector)',
-          url: 'https://ocha-dap.github.io/covid19-data/traceability/transactions_sectors_countries_regions.xlsx'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/traceability/transactions_sectors_countries_regions.xlsx'
         },
         {
           format: 'JSON',
-          url: 'https://ocha-dap.github.io/covid19-data/activities.json'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/activities.json'
         },
         {
           format: 'XML',
-          url: 'https://ocha-dap.github.io/covid19-data/xml/activities.xml'
+          url: 'https://devinit.github.io/iati-covid19-first-prototype/xml/activities.xml'
         }
       ],
       currentPage: 1,
@@ -254,12 +254,12 @@ export default {
     },
     urls () {
       return {
-        DATA_URL: 'https://ocha-dap.github.io/covid19-data/activities.json',
-        ACTIVITY_TRANSACTIONS_DATA_URL: 'https://ocha-dap.github.io/covid19-data/traceability/transactions_sector_country.json',
+        DATA_URL: 'https://devinit.github.io/iati-covid19-first-prototype/activities.json',
+        ACTIVITY_TRANSACTIONS_DATA_URL: 'https://devinit.github.io/iati-covid19-first-prototype/traceability/transactions_sector_country.json',
         COUNTRIES_CODELIST_URL: 'https://codelists.codeforiati.org/api/json/en/Country.json',
         REGIONS_CODELIST_URL: 'https://codelists.codeforiati.org/api/json/en/Region.json',
         SECTORS_CODELIST_URL: 'https://codelists.codeforiati.org/api/json/en/Sector.json',
-        M49_CODELIST_URL: 'https://ocha-dap.github.io/covid19-data/m49_countries_simplified.json'
+        M49_CODELIST_URL: 'https://devinit.github.io/iati-covid19-first-prototype/m49_countries_simplified.json'
       }
     },
     fields () {
