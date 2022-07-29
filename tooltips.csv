@@ -1,0 +1,10 @@
+location,key,label,tooltip,status
+Activities table header,title,Title,The name of the IATI activity,live
+Activities table header,reportingOrg,Reported by,The name of the organisation that published this IATI data,live
+Activities table header,implementingOrganisations,Implemented by,The name of the organisation(s) implementing this activity ,live
+Activities table header,countriesRegions,Country/Region,"The name of the country or region for this activity.  Note: when an IATI activity has multiple country/regions, the first ten countries/regions will be displayed here. You can download the detailed data from the Download link above.",live
+Activities table header,totalAmountUSD,Total Amount (USD),The total sum of the commitment transactions for this activity,live
+Activities table header,commitmentsCOVID,Covid-19-specific (USD),The total sum of commitment transactions that are specifically flagged as COVID-19 related.,live
+Activities table header,humanitarianDevelopment,Humanitarian?,"Whether this activity is flagged as being humanitarian, development, or a mix.  ",live
+Customise data sidebase,Reporting organisation,,This is the organisation that provided the IATI data,
+Customise data sidebase,HRP Code,,HRP = Humanitarian Response Plan,
