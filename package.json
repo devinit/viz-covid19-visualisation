@@ -13,19 +13,19 @@
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/gtm": "^2.4.0",
     "@nuxtjs/markdownit": "^2.0.0",
-    "autoprefixer": "^9.8.6",
-    "bootstrap-vue": "^2.21.2",
-    "chart.js": "^2.9.3",
+    "bootstrap-vue": "^2.22.0",
+    "chart.js": "^2.9.4",
     "csvtojson": "^2.0.10",
     "d3": "^5.16.0",
     "d3-sankey": "^0.12.3",
-    "nuxt": "^2.14.12",
+    "nuxt": "^2.15.8",
     "nuxt-vue-select": "^0.1.4",
+    "vue-select": "^2.5.1",
     "popper.js": "^1.16.1",
-    "vue": "^2.6.12",
+    "vue": "2.7.8",
     "vue-chartjs": "^3.5.1"
   },
   "devDependencies": {
