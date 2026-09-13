@@ -21,7 +21,7 @@
     "csvtojson": "^2.0.10",
     "d3": "^5.16.0",
     "d3-sankey": "^0.12.3",
-    "nuxt": "^2.15.8",
+    "nuxt": "^2.18.1",
     "nuxt-vue-select": "^0.1.4",
     "vue-select": "^2.5.1",
     "popper.js": "^1.16.1",
